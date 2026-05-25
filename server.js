@@ -94,6 +94,8 @@ function startServer(port, attempts = 0) {
   });
 }
 
-const BASE_PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+// Use port 3000 for Railway service domain compatibility
+const BASE_PORT = 3000;
+console.log('[startup] Starting server on port:', BASE_PORT);
 startServer(BASE_PORT);
 
