@@ -79,5 +79,5 @@ function startServer(port, attempts = 0) {
   });
 }
 
-const BASE_PORT = process.env.PORT ? parseInt(process.env.PORT) : 3002;
+const BASE_PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 startServer(BASE_PORT);
