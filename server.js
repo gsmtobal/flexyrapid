@@ -1,16 +1,31 @@
 // server.js - Simple proxy server for Ooredoo Ahla API
 
+console.log('[startup] server.js loading...');
+console.log('[startup] Node.js version:', process.version);
+console.log('[startup] PORT env:', process.env.PORT);
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path'); // added for static serving
+const fs = require('fs');
+
+console.log('[startup] Loading AhlaAPI client...');
 const AhlaAPI = require('./ahla_api_client.js'); // reuse the client class
+console.log('[startup] AhlaAPI client loaded.');
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-// Serve static files (web assets) so the app can be opened in a browser without emulator
-app.use(express.static(path.join(__dirname, 'ahla_decoded', 'assets', 'www')));
+
+// Serve static files only if the directory exists (it may not be present in all deployments)
+const staticDir = path.join(__dirname, 'ahla_decoded', 'assets', 'www');
+if (fs.existsSync(staticDir)) {
+  console.log('[startup] Serving static files from:', staticDir);
+  app.use(express.static(staticDir));
+} else {
+  console.log('[startup] Static directory not found, skipping static file serving:', staticDir);
+}
 
 const api = new AhlaAPI();
 
