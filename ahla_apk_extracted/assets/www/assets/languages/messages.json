@@ -1,0 +1,12 @@
+{
+  "en": {
+    "HOME": "Home",
+    "YOUR_BALANCE_IS": "Your Balance is {balance}",
+    "SUBSCRIPTIONS": "Subscriptions"
+  },
+  "bg": {
+    "HOME": "Начало",
+    "YOUR_BALANCE_IS": "Вашият баланс е {balance}",
+    "SUBSCRIPTIONS": "Абонаменти"
+  }
+}

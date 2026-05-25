@@ -1,0 +1,19 @@
+runtime: nodejs20
+env: standard
+
+# If you need to serve the Cloud_Portal_Ready statically, App Engine does this via handlers:
+handlers:
+  - url: /assets
+    static_dir: Cloud_Portal_Ready/assets
+  - url: /css
+    static_dir: Cloud_Portal_Ready/css
+  - url: /js
+    static_dir: Cloud_Portal_Ready/js
+  - url: /
+    static_files: Cloud_Portal_Ready/index.html
+    upload: Cloud_Portal_Ready/index.html
+  - url: /login
+    static_files: Cloud_Portal_Ready/login.html
+    upload: Cloud_Portal_Ready/login.html
+  - url: /.*
+    script: auto

@@ -1,0 +1,135 @@
+<!DOCTYPE html><html><head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Algérie Télécom - Paiement et Rechargement</title>
+	<link href="css/styles.css" rel="stylesheet" type="text/css">
+	<link href="css/responsive.css" rel="stylesheet" type="text/css">
+	<link href="css/forms.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="scripts/jQuery-3.7.1.js"></script>
+	<script type="text/javascript" src="scripts/functions.js"></script>
+	<script type="text/javascript" src="scripts/js-css-navigateurs.js"></script><style type="text/css">
+
+</style>
+
+
+	<script>
+		$(document).ready(function(e) {
+			var checkpass = $('#checkpass');
+			var passwordp1 = $('#password-p1');
+			var passwordp2 = $('#password-p2');
+			checkpass.click(function(e) {
+				if (checkpass.prop("checked")) {
+					passwordp1.attr("type", "text"), passwordp2.attr("type", "text");
+					$('.eye-pass').css('background', 'url(images/icone-eye-open.png) no-repeat');
+				} else {
+					passwordp1.attr("type", "password"), passwordp2.attr("type", "password");
+					$('.eye-pass').css('background', 'url(images/icone-eye-close.png) no-repeat');
+				}
+			});
+			$('.togglebtn').click(function() {
+				$('.left').toggleClass('toright');
+			});
+		});
+	</script>
+</head>
+
+<body id="page-Paiement-factures">
+
+	<section class="container-header"><!--*************MAIN HEADER****************-->
+		<header class="main-header">
+			<div class="banner">
+				<img src="images/logo-at.png" width="136" height="64" alt="logo-at">
+				<hgroup>
+					<h2 class="c-blanc">Paiement en ligne</h2>
+				</hgroup>
+			</div>
+			<nav class="language"><a href="AR/index.php?p=voucher_internet">العربية</a></nav>
+			<nav class="language"><a href="EN/index.php?p=voucher_internet">English</a></nav>
+		</header>
+		<button class="togglebtn"></button>
+	</section><!--*************END MAIN HEADER****************-->
+
+
+
+	<section class="container-envelope"><!--*************MAIN CONTENT*************-->
+
+		<section class="main-envelope"><!--****************CONTENT****************-->
+
+
+
+
+			<div class="left">
+
+
+
+				<p class="content-box">Cartes et Tickets</p>
+				<nav class="main-menu">
+					<a href="?p=voucher_internet&amp;produit=in">Idoom Internet</a>
+					<a href="?p=voucher_internet&amp;produit=4g">Idoom 4G</a>
+				</nav>
+
+
+				<p class="content-box">Paiement Electronique</p>
+				<nav class="main-menu">
+					<a href="?p=facture_paiement">Paiement des factures</a>
+					<a href="?p=dette_paiement">Paiement des dûs</a>
+					<a href="?p=internet_recharge&amp;pr=in">Idoom Internet</a>
+					<a href="?p=internet_recharge&amp;pr=4g">Idoom 4G</a>
+				</nav>
+			</div>
+
+
+			<div class="right"><!--LE CONTENU ICI-->
+
+				﻿		
+		
+				<center><h3>Recharge Internet - Carte de Recharge</h3></center>
+		<br>
+        <form action="?p=voucher_internet" method="post" class="forms" role="formulaire">
+			<input type="text" name="nd" class="champ" id="nd" placeholder="N° de téléphone" maxlength="9" onkeypress="if(event.keyCode &lt;= 47 || event.keyCode &gt; 57 ) event.returnValue = false;">
+			<input type="text" name="userCode" class="champ" placeholder="Tapez le code qui s'affiche">
+			<div class="container-captcha">	
+				<img src="captcha/captcha.php" alt="Captcha" id="captcha"> 
+				<a style="cursor:pointer;" onclick="document.images.captcha.src='captcha/captcha.php?id='+Math.round(Math.random(0)*1000)+1" class="lien-recherger"> 
+				<img src="images/icone-captcha.png" alt=""></a>
+			</div>
+			<br>
+			
+			<nav class="container-btns">
+			<input type="submit" name="validerADSL" value="Confirmer" class="btn-green">
+			<a href="https://paiement.algerietelecom.dz/portail.php" class="btn-blue">Retour</a>
+			</nav>
+			
+			<nav class="int-links">
+		    <a href="#" role="lien-cib"></a>
+			<a href="#" role="lien-dahabia"></a>
+		    </nav>
+		</form>
+	</div><!--FIN CONTENU-->
+</section><!--FIN BANDEAU CONTENU-->	
+
+			<!--FIN DU CONTENU-->
+
+
+
+		</section><!--****************FIN CONTENT****************-->
+
+		<footer class="main-footer">
+			<hgroup>
+				<p class="p-petit c-gris">Algérie Télécom © 2026</p>
+			</hgroup>
+			<nav class="footer-menu">
+				<a href="https://www.facebook.com/algerietelecomgroupe/" target="_blank" role="facebook"></a>
+				<a href="https://twitter.com/Algerie_Telecom" target="_blank" role="twitter"></a>
+				<a href="http://www.youtube.com/tvalgerietelecom" target="_blank" role="youtube"></a>
+				<a href="http://www.instagram.com/algerietelecom" target="_blank" role="instagram"></a>
+				<a href="http://www.linkedin.com/company/algerie-telecom" target="_blank" role="linkedin"></a>
+			</nav>
+		</footer>
+
+	<!--*****************FIN MAIN CONTENT**************-->
+
+
+
+
+</body></html>

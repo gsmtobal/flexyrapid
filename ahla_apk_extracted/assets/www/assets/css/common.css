@@ -1,0 +1,83 @@
+.ooredoo-color {
+    color: #ed1c24;
+}
+
+.white-color {
+    color: #ffffff;
+}
+
+.black-color {
+    color: black;
+}
+
+.ooredoo-regular-font {
+    font-family: ooredoo-regular;
+}
+
+.ooredoo-light-font {
+    font-family: ooredoo-light;
+}
+
+.ooredoo-bold-font {
+    font-family: ooredoo-bold;
+}
+
+.radius-50 {
+    border-radius: 50px;
+}
+
+.rounded-2 {
+    border-radius: 25px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .ooredoo_progress {
+        animation: progress-spin infinite 800ms linear;
+    }
+}
+
+@keyframes progress-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.progress-container {
+    inset: 0px;
+    opacity: 0.85;
+    backdrop-filter: blur(2px);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    z-index: 100;
+    width: 100%;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.custom-btn {
+    border-radius: 20px;
+    background-color: #ED1C24;
+    border: 1px solid #ED1C24;
+    color: #ffff;
+    font-family: ooredoo-heavy;
+}
+
+.custom-btn:focus {
+    border: 1px solid #ED1C24;
+    background-color: #ffff;
+    color: #ED1C24;
+    box-shadow: none;
+}
+
+.modal-dialog .modal-msg {
+    font-size: 18px;
+}

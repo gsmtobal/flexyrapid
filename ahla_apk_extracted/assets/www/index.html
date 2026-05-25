@@ -1,0 +1,31 @@
+<!doctype html><html><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"><meta http-equiv=Content-Security-Policy content="default-src * data: blob: ws: wss: gap://ready file://* 'unsafe-inline' 'unsafe-eval';
+										style-src 'self' data: blob: https: 'unsafe-inline'; 
+										script-src 'self' data: blob: https: 'unsafe-inline' 'unsafe-eval';"><title>USSD Carrier App</title><script>var configs ={"app_id":"ussd_app","app_name":"USSD Carrier App","app_entry_bundle":"","app_main_page":"","version":"1.0.0","server_url":"https://ca2.devlab.opencode.com/ca","api_url":"https://ca2.devlab.opencode.com/ca/api","settings":{"code_international":213,"code_national":"5","subscriber_number_length":8,"login_types":["login_db"],"use_api":"use_nbservice","use_api_on_register":" {\"api\":\"ca2CheckAuth\", \"method\":\"*ca2CheckAuth*registration\" }","use_api_on_change_pin":" {\"api\":\"ca2CheckAuth\", \"method\":\"*ca2CheckAuth*registration\" }","use_api_on_login":"","login_tries":6,"ussd_session_duration":60,"web_session_duration":3600,"cache_duration":3600,"use_ggsn_msisdn_header":"msisdn","use_ggsn_imsi_header":"","use_cas":"","use_google":"","use_facebook":""},"revision":"1","frameworks":[],"login_type":"none","use_https":"true","msg":"start","mode":"debug","hostname":"","":"","release":{"public_path":"/ca","server_url":"https://ca2.devlab.opencode.com/ca","api_url":"/ca/api"},"debug":{"public_path":"/ca/debug","server_url":"/ca/debug","api_url":"/ca/api"},"cordova":{"public_path":"./","server_url":"https://ca2.devlab.opencode.com/ca","api_url":"https://ca2.devlab.opencode.com/ca/api"}};
+		
+		var platform ="release"; //string
+
+		/**
+		 * mark is cordova app; updated at onload cordova.js;
+		 */
+		var public_path = window.location.pathname.split('/');
+		public_path = public_path.slice(0, public_path.length - 2).join("/") + "/";
+		configs['public_path'] = public_path;//"/ca";
+		/**
+		* Notice:
+		* https://github.com/webpack/webpack/issues/2776
+		* __webpack_public_path__
+		*/
+		window['__webpack_public_path__'] = configs.public_path;// + '/'; 			// NOT USED AT PREVIEW!!! see webpack.config.js
+
+		configs['isDebug'] = ('debug' == platform);
+		configs['usingCordova'] = ('cordova' == platform);
+		configs['platform'] = platform;
+
+		if ("cordova" !== platform) {
+			configs.server_url = configs[platform].public_path;
+			configs.api_url = configs[platform].public_path + '/api';
+		}
+
+		window['ca'] = window['ca'] || { apps: {} };
+		window['ca'].apps[configs.app_id] = { configs };
+		console.log("++++++++ejs:", platform, configs['platform'], __webpack_public_path__, ca);</script><link type=text/css rel=stylesheet href=/ca/assets/libs/vue_2/plugins/fontawesome_4/dist/css/font-awesome.min.css><link type=text/css rel=stylesheet href=/ca/assets/libs/vue_2/frameworks/bootstrap_4/dist/css/bootstrap.min.css><link type=text/css rel=stylesheet href=/ca/assets/libs/vue_2/frameworks/bootstrap_4/dist/bootstrap-vue.min.css><link type=text/css rel=stylesheet href=/ca/assets/libs/vue_2/frameworks/bootstrap_4/dist/bootstrap-vue-icons.min.css><script src=/ca/assets/libs/vue_2/engine/dist/vue-2.6/dist/vue.js></script><script src=/ca/assets/libs/vue_2/engine/dist/vue-router-3/dist/vue-router.min.js></script><script src=/ca/assets/libs/vue_2/engine/dist/vuex-3/dist/vuex.min.js></script><script src=/ca/assets/libs/vue_2/engine/dist/vue-i18n-8/dist/vue-i18n.js></script><script src=/ca/assets/libs/vue_2/engine/dist/axios_0/dist/axios.min.js></script><script src=/ca/assets/libs/vue_2/plugins/ca_core/dist/ca_core.bundle.js></script><script src=/ca/assets/libs/vue_2/plugins/jquery_3/dist/jquery-3.4.1.min.js></script><script src=/ca/assets/libs/vue_2/frameworks/bootstrap_4/dist/bootstrap-vue.min.js></script><script src=/ca/assets/libs/vue_2/frameworks/bootstrap_4/dist/js/bootstrap.bundle.min.js></script><script src=/ca/assets/libs/vue_2/frameworks/bootstrap_4/dist/bootstrap-vue-icons.min.js></script></head><body><div id=app></div><script src=index.bundle.js></script></body></html>

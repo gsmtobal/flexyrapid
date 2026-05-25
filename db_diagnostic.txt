@@ -1,0 +1,33 @@
+=== DATABASE DIAGNOSTIC LOG ===
+Date: 2026-05-25T11:37:35.450Z
+Database Path: C:\Users\wahab phone\AppData\Roaming\tobal-flexy-desktop\superm_clone.db
+
+--- Settings Table ---
+[ussd_pix_balance] = "*222#"
+[meetmob_phone] = "0673837926"
+[meetmob_pin] = "0000"
+[meetmob_modem] = "192.168.41.1"
+[ooredoo_sim_pin] = "0000"
+[sort_order_Ooredoo] = "DESC"
+[idoom_auto_enabled] = "true"
+[auto_suspend_days] = "0"
+[bot_token] = "7876792336:AAER_zCY-5u1jkxpkz0WOFtYLF_Gy-l2xEg"
+[client_id] = "6320785501"
+[meetmob_idoom_sync_code] = "TOBAL_SYNC_123"
+[admin_secret] = "SUPERM123"
+[captcha_api_key] = "c524ac5fde2b1a1b3f5f2c1707639e85"
+[ussd_mobilis_balance] = "*632*01*00000#"
+[ussd_djezzy_balance] = "*766#"
+[ussd_ooredoo_balance] = "*200*0000#"
+[ussd_mobilis_transfer] = "*630*{phone}*{type}*{amount}*00000#"
+[ussd_djezzy_transfer] = "*760*{phone}*{amount}*00000#"
+[ussd_ooredoo_transfer] = "*580*{phone}*{amount}*0000#"
+[ooredoo_ahla_adb_path] = "adb"
+[ooredoo_ahla_phone] = "0558207971"
+[ooredoo_ahla_pin] = "7871"
+
+--- SIM Cards Table ---
+ID: 1 | Op: Sama | Num: 0673837926 | Method: USSD | Status: active | Addr: 192.168.41.1
+ID: 3 | Op: Djezzy | Num: 07760201 | Method: USSD | Status: active | Addr: 192.168.21.1
+ID: 13 | Op: Mobilis | Num: 0660432012 | Method: USSD | Status: active | Addr: 192.168.51.1
+ID: 14 | Op: Ooredoo | Num: 0558819814 | Method: Ahla App | Status: active | Addr: Emulator

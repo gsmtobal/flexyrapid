@@ -1,0 +1,241 @@
+@media (min-width:599px) {
+
+    #login-form small {
+        font-size: 12px;
+    }
+
+    #login-form .login-form-title {
+        margin-top: 1.5rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    #login-form h3 {
+        font-size: 35px;
+    }
+
+    .dashboard-item .card-body {
+        font-size: 2rem;
+        padding: 0.5rem !important;
+    }
+
+    .dashboard-item .card-body .card-text,
+    .page-title,
+    .nav-title,
+    .navbar-brand .fa {
+        font-size: 25px !important;
+    }
+
+    .dashboard-item {
+        margin: 0.5rem !important;
+        border-radius: 15px !important;
+        padding: 0.5rem;
+    }
+
+    .dashboard-items-container {
+        margin-top: 1rem !important;
+    }
+
+    .container-fluid {
+        padding-top: 4rem !important;
+    }
+
+    .b-sidebar {
+        width: 360px !important;
+        font-size: 22px;
+        border-radius: 0 2rem 2rem 0;
+    }
+
+    .b-sidebar .list-group-item span:first-child {
+        width: 3rem !important;
+    }
+
+    .spinner-progress {
+        height: 3rem;
+        width: 3rem;
+        font-size: 25px;
+    }
+
+    .brand-logo {
+        max-width: 45% !important;
+    }
+
+    #login-form .login-field,
+    #login-form #submit-btn,
+    #login-form i.fa,
+    .form-ussd-container .ussd-input,
+    .form-ussd-container .alert,
+    .form-ussd-container .service,
+    .form-ussd-container #submit-btn,
+    .form-ussd-container button,
+    .form-ussd-container .custom-label {
+        font-size: 22px !important;
+    }
+
+    .form-ussd-container #bundles-parent {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    #login-form .login-field,
+    #login-form .show-pwd-btn,
+    #login-form #submit-btn {
+        border: 1px solid #ED1C24;
+    }
+
+    #login-form button#submit-btn {
+        margin-top: 1.5rem !important;
+    }
+
+    #submit-btn {
+        border-radius: 25px;
+    }
+
+    .form-ussd-container .progress {
+        height: 1rem;
+        font-size: 1rem;
+    }
+
+    .form-ussd-container .purchase-bundle-btn {
+        padding: 5px 30px;
+    }
+
+    .modal-dialog {
+        max-width: 400px !important;
+    }
+
+    .modal-dialog button,
+    .modal-dialog .modal-msg,
+    .modal-dialog .modal-title,
+    .modal-dialog button.close,
+    .modal-dialog .modal-header {
+        font-size: 20px !important;
+    }
+
+}
+
+@media (min-width:1000px) {
+    #login-row {
+        margin-top: 10%;
+    }
+
+    #login-form .form-group {
+        width: 130%;
+        margin-left: -3rem;
+    }
+
+    #login-form small {
+        font-size: 25px;
+    }
+
+    #login-form .login-form-title {
+        margin-top: 3rem !important;
+        margin-bottom: 3rem !important;
+    }
+
+    #login-form h3 {
+        font-size: 70px;
+    }
+
+    .custom-nav,
+    .navbar {
+        padding: 2rem !important;
+    }
+
+    .dashboard-item .card-body {
+        font-size: 4rem;
+    }
+
+    .dashboard-item .card-body .card-text,
+    .page-title,
+    .nav-title,
+    .navbar-brand .fa {
+        font-size: 50px !important;
+    }
+
+    .dashboard-item {
+        margin: 1rem !important;
+        border-radius: 30px !important;
+        padding: 1rem;
+    }
+
+    .dashboard-items-container {
+        margin-top: 2rem !important;
+    }
+
+    .container-fluid {
+        padding-top: 8rem !important;
+    }
+
+    .b-sidebar {
+        width: 720px !important;
+        font-size: 45px;
+        border-radius: 0 4rem 4rem 0;
+    }
+
+    .b-sidebar .list-group-item span:first-child {
+        width: 6rem !important;
+    }
+
+    .spinner-progress {
+        height: 6rem;
+        width: 6rem;
+        font-size: 50px;
+    }
+
+    .brand-logo {
+        max-width: 100% !important;
+    }
+
+    #login-form .login-field,
+    #login-form #submit-btn,
+    #login-form i.fa,
+    .form-ussd-container .ussd-input,
+    .form-ussd-container .alert,
+    .form-ussd-container .service,
+    .form-ussd-container #submit-btn,
+    .form-ussd-container button,
+    .form-ussd-container .custom-label {
+        font-size: 45px !important;
+    }
+
+    .form-ussd-container #bundles-parent {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    #login-form .login-field,
+    #login-form .show-pwd-btn,
+    #login-form #submit-btn {
+        border: 2px solid #ED1C24;
+    }
+
+    #login-form button#submit-btn {
+        margin-top: 3rem !important;
+    }
+
+    #submit-btn {
+        border-radius: 50px;
+    }
+
+    .form-ussd-container .progress {
+        height: 2rem;
+        font-size: 1.75rem;
+    }
+
+    .form-ussd-container .purchase-bundle-btn {
+        padding: 10px 60px;
+    }
+
+    .modal-dialog {
+        max-width: 800px !important;
+    }
+
+    .modal-dialog button,
+    .modal-dialog .modal-msg,
+    .modal-dialog .modal-title,
+    .modal-dialog button.close,
+    .modal-dialog .modal-header {
+        font-size: 40px !important;
+    }
+
+}

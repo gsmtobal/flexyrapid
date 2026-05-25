@@ -1,0 +1,1365 @@
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const ooredooAhlaService = require('./ooredoo_ahla_service');
+
+module.exports = function startApiServer(db, modemService, ipcHandlers) {
+    const app = express();
+    app.use(cors());
+    app.use(express.json());
+
+    // Professional Request Logger Middleware
+    app.use((req, res, next) => {
+        const start = Date.now();
+        res.on('finish', () => {
+            const duration = Date.now() - start;
+            console.log(`[API LOG] ${new Date().toISOString()} | ${req.method} ${req.originalUrl} | Status: ${res.statusCode} | Duration: ${duration}ms`);
+        });
+        next();
+    });
+
+    // Helper validation for Algerian numbers & Idoom
+    function validateAlgerianPhone(phone) {
+        if (!phone) return false;
+        // Mobile: starts with 05/06/07 followed by 8 digits, or 213 followed by 5/6/7 and 8 digits
+        const mobileRegex = /^(05|06|07)\d{8}$|^(2135|2136|2137)\d{8}$/;
+        // Idoom: starts with 047/21347 followed by 5 to 10 digits
+        const idoomRegex = /^(21347|047|47)\d{5,10}$/;
+        return mobileRegex.test(phone) || idoomRegex.test(phone);
+    }
+
+    app.use(express.static(path.join(__dirname, 'Cloud_Portal_Ready')));
+
+    // Simple Authentication Middleware
+    const authMiddleware = (req, res, next) => {
+        const token = req.headers['authorization'];
+        db.get(`SELECT value FROM settings WHERE key = 'admin_secret'`, (err, row) => {
+            const secret = row ? row.value : 'SUPERM123';
+            if (token === secret || req.query.key === secret) {
+                next();
+            } else {
+                res.status(401).json({ success: false, message: 'Unauthorized' });
+            }
+        });
+    };
+
+    // --- Stats API (For Dashboard) ---
+    app.get('/api/stats', authMiddleware, async (req, res) => {
+        db.all(`SELECT * FROM sim_cards`, async (err, rows) => {
+            if (err) return res.status(500).json({ success: false, error: err.message });
+            
+            // Execute signal checks in parallel with a 1.5s timeout for maximum speed
+            const modemPromises = rows.map(async (row) => {
+                let signal = 0;
+                let online = row.status === 'active';
+                if (online) {
+                    try {
+                        const sigRes = await Promise.race([
+                            modemService.getSignalStrength(row.address, row.operator),
+                            new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 1500))
+                        ]);
+                        if (sigRes && sigRes.success) {
+                            signal = (sigRes.bars || 0) * 20; // convert bars to %
+                        }
+                    } catch(e) {}
+                }
+                
+                return {
+                    key: row.address,
+                    operator: row.operator,
+                    ip: row.address,
+                    signal: signal,
+                    balance: row.balance || '0.00',
+                    online: online,
+                    simStatus: row.status === 'active' ? 'متصل' : 'غير متصل',
+                    lastSms: null
+                };
+            });
+
+            const modems = await Promise.all(modemPromises);
+            
+            let totalBalance = 0;
+            let onlineCount = 0;
+            
+            modems.forEach(modem => {
+                if (modem.online) onlineCount++;
+                let bal = parseFloat(modem.balance || '0');
+                if (!isNaN(bal)) totalBalance += bal;
+            });
+
+            db.all(`SELECT * FROM transactions ORDER BY id DESC LIMIT 10`, [], (err, txs) => {
+                let transactions = [];
+                if (!err && txs) {
+                    transactions = txs.map(t => ({
+                        time: t.timestamp, 
+                        type: t.type,
+                        target: t.phone_number, 
+                        amount: t.amount,
+                        success: t.status === 'success'
+                    }));
+                }
+                res.json({ modems, onlineCount, totalBalance: totalBalance.toFixed(2), transactions });
+            });
+        });
+    });
+
+    // --- Modems Control API ---
+    app.post('/api/modems/check', authMiddleware, (req, res) => {
+        const { key } = req.body;
+        db.get(`SELECT * FROM sim_cards WHERE address = ?`, [key], async (err, sim) => {
+            if (err || !sim) return res.status(404).json({ error: 'Modem not found in DB' });
+            
+            let ussd = '*222#';
+            if (sim.operator.toLowerCase() === 'mobilis') ussd = '*222#';
+            else if (sim.operator.toLowerCase() === 'ooredoo') ussd = '*200#';
+            else if (sim.operator.toLowerCase() === 'djezzy') ussd = '*710#';
+            
+            try {
+                await modemService.sendUssdCommand(sim.address, ussd, sim.operator);
+                res.json({ success: true });
+            } catch (e) {
+                res.status(500).json({ error: e.message });
+            }
+        });
+    });
+
+    app.post('/api/modems/diagnose', authMiddleware, async (req, res) => {
+        const { key } = req.body;
+        try {
+            const info = await modemService.probeModem(key);
+            res.json({ info });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    });
+
+    app.post('/api/modems/reboot', authMiddleware, (req, res) => {
+        // Just mock for now or implement if needed
+        res.json({ success: true, message: 'Reboot command sent' });
+    });
+
+    app.post('/api/modems/add', authMiddleware, (req, res) => {
+        const { ip, operator, pin } = req.body;
+        db.run(`INSERT INTO sim_cards (operator, number, address, pin, status) VALUES (?, ?, ?, ?, ?)`, 
+            [operator, '0000000000', ip, pin, 'active'], function(err) {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ success: true });
+        });
+    });
+
+    app.post('/api/modems/delete', authMiddleware, (req, res) => {
+        const { key } = req.body;
+        db.run(`DELETE FROM sim_cards WHERE address = ?`, [key], function(err) {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ success: true });
+        });
+    });
+
+    // --- Telegram & General Settings ---
+    app.get('/api/settings', authMiddleware, (req, res) => {
+        db.all(`SELECT key, value FROM settings WHERE key IN ('bot_token', 'admin_id', 'admin_secret', 'captcha_api_key', 'ussd_mobilis_transfer', 'ussd_ooredoo_transfer', 'ussd_djezzy_transfer')`, [], (err, rows) => {
+            let tgToken = '';
+            let tgChatId = '';
+            let adminSecret = '';
+            let captchaKey = '';
+            let ussdMobilis = '';
+            let ussdOoredoo = '';
+            let ussdDjezzy = '';
+            
+            if (rows) {
+                rows.forEach(r => {
+                    if (r.key === 'bot_token') tgToken = r.value;
+                    if (r.key === 'admin_id') tgChatId = r.value;
+                    if (r.key === 'admin_secret') adminSecret = r.value;
+                    if (r.key === 'captcha_api_key') captchaKey = r.value;
+                    if (r.key === 'ussd_mobilis_transfer') ussdMobilis = r.value;
+                    if (r.key === 'ussd_ooredoo_transfer') ussdOoredoo = r.value;
+                    if (r.key === 'ussd_djezzy_transfer') ussdDjezzy = r.value;
+                });
+            }
+            res.json({ tgToken, tgChatId, adminSecret, captchaKey, ussdMobilis, ussdOoredoo, ussdDjezzy });
+        });
+    });
+
+    app.post('/api/settings', authMiddleware, (req, res) => {
+        const { tgToken, tgChatId, adminSecret, captchaKey, ussdMobilis, ussdOoredoo, ussdDjezzy } = req.body;
+        
+        if (tgToken !== undefined) db.run(`UPDATE settings SET value = ? WHERE key = 'bot_token'`, [tgToken]);
+        if (tgChatId !== undefined) db.run(`UPDATE settings SET value = ? WHERE key = 'admin_id'`, [tgChatId]);
+        if (adminSecret !== undefined) db.run(`UPDATE settings SET value = ? WHERE key = 'admin_secret'`, [adminSecret]);
+        if (captchaKey !== undefined) db.run(`UPDATE settings SET value = ? WHERE key = 'captcha_api_key'`, [captchaKey]);
+        if (ussdMobilis !== undefined) db.run(`UPDATE settings SET value = ? WHERE key = 'ussd_mobilis_transfer'`, [ussdMobilis]);
+        if (ussdOoredoo !== undefined) db.run(`UPDATE settings SET value = ? WHERE key = 'ussd_ooredoo_transfer'`, [ussdOoredoo]);
+        if (ussdDjezzy !== undefined) db.run(`UPDATE settings SET value = ? WHERE key = 'ussd_djezzy_transfer'`, [ussdDjezzy]);
+        
+        res.json({ success: true });
+    });
+
+    // --- SAMA / Offers API ---
+    app.post('/api/sama/offers', authMiddleware, (req, res) => {
+        const { phone } = req.body;
+        let op = phone.startsWith('05') ? 'Ooredoo' : (phone.startsWith('06') ? 'Mobilis' : 'Djezzy');
+        
+        db.get(`SELECT * FROM sim_cards WHERE operator = ? AND status = 'active' LIMIT 1`, [op], async (err, sim) => {
+            if (err || !sim) return res.status(404).json({ error: 'No active modem found for ' + op });
+            
+            let ussd = '';
+            if (op === 'Ooredoo') ussd = `*585*${phone}*${sim.pin || '0000'}#`;
+            else if (op === 'Mobilis') ussd = `*610*${phone}#`;
+            else ussd = `*710*${phone}#`;
+            
+            try {
+                const response = await modemService.sendUssdCommand(sim.address, ussd, op);
+                if (response && response.success) {
+                    res.json({ success: true, content: response.content });
+                } else {
+                    res.status(500).json({ error: 'Failed to fetch offers from network' });
+                }
+            } catch (e) {
+                res.status(500).json({ error: e.message });
+            }
+        });
+    });
+
+    // --- Static Offers API ---
+    app.get('/api/offers/:operator', authMiddleware, (req, res) => {
+        const { operator } = req.params;
+        const op = operator.toLowerCase();
+        
+        if (op === 'ooredoo') {
+            res.json([
+                { optionId: '1', name: 'Hashta 500', amount: '500' },
+                { optionId: '2', name: 'Super 1000', amount: '1000' },
+                { optionId: '3', name: 'Yooz 1500', amount: '1500' },
+                { optionId: '4', name: 'Maxy 2000', amount: '2000' }
+            ]);
+        } else if (op === 'mobilis') {
+            res.json([
+                { optionId: '1', name: 'PixX 50', amount: '50' },
+                { optionId: '2', name: 'PixX 100', amount: '100' },
+                { optionId: '3', name: 'PixX 500', amount: '500' },
+                { optionId: '4', name: 'PixX 1000', amount: '1000' },
+                { optionId: '5', name: 'PixX 2000', amount: '2000' }
+            ]);
+        } else if (op === 'djezzy') {
+            res.json([
+                { optionId: '1', name: 'Hayla 100', amount: '100' },
+                { optionId: '2', name: 'Hayla 500', amount: '500' },
+                { optionId: '3', name: 'Hayla Maxi 1000', amount: '1000' },
+                { optionId: '4', name: 'Hayla Maxi 1500', amount: '1500' },
+                { optionId: '5', name: 'Hayla Maxi 2000', amount: '2000' }
+            ]);
+        } else {
+            res.json([]);
+        }
+    });
+
+    app.post('/api/offers/send', authMiddleware, (req, res) => {
+        const { phone, optionId, amount } = req.body;
+        if (!phone || (!optionId && !amount)) return res.status(400).json({ error: 'Missing parameters' });
+        
+        let op = phone.startsWith('05') ? 'Ooredoo' : (phone.startsWith('06') ? 'Mobilis' : 'Djezzy');
+        
+        db.get(`SELECT * FROM sim_cards WHERE operator = ? AND status = 'active' LIMIT 1`, [op], async (err, sim) => {
+            if (err || !sim) return res.status(404).json({ error: 'No active modem found for ' + op });
+            
+            const pin = sim.pin || '0000';
+            let ussd = '';
+            
+            if (op === 'Ooredoo') {
+                // Ooredoo: *585*Phone*PIN*Option#
+                ussd = `*585*${phone}*${pin}*${optionId}#`;
+            } else if (op === 'Mobilis') {
+                // Mobilis: *665*1*Phone*Amount*PIN#
+                ussd = `*665*1*${phone}*${amount}*${pin}#`;
+            } else {
+                // Djezzy: *760*Phone*PIN*Option#
+                ussd = `*760*${phone}*${pin}*${optionId}#`;
+            }
+            
+            try {
+                // We send it asynchronously or wait for it.
+                res.json({ success: true, message: `تم إرسال طلب تفعيل العرض للرقم ${phone}` });
+                // We don't await so we don't block the UI if the modem is slow.
+                modemService.sendUssdCommand(sim.address, ussd, op).catch(console.error);
+            } catch (e) {
+                res.status(500).json({ error: e.message });
+            }
+        });
+    });
+
+    // --- Flexy & Invoices API ---
+    const handleFlexy = (req, res) => {
+        const { phone, amount, type = 'flexy' } = req.body;
+        
+        // Input validation
+        if (!validateAlgerianPhone(phone)) {
+            return res.status(400).json({ success: false, error: 'رقم الهاتف غير صحيح' });
+        }
+        if (!amount || parseFloat(amount) <= 0) {
+            return res.status(400).json({ success: false, error: 'قيمة الشحن غير صحيحة' });
+        }
+
+        let op = (phone.startsWith('05') || phone.startsWith('2135')) ? 'Ooredoo' : 
+                 ((phone.startsWith('06') || phone.startsWith('2136')) ? 'Mobilis' : 'Djezzy');
+        
+        db.get(`SELECT * FROM sim_cards WHERE operator = ? AND status = 'active' LIMIT 1`, [op], async (err, sim) => {
+            if (err || !sim) return res.status(400).json({ success: false, error: `No active SIM for ${op}` });
+            
+            let ussdCode = '';
+            if (op === 'Mobilis') {
+                let transferType = '04'; // default flexy
+                if (type === 'international') transferType = '02';
+                else if (type === 'bill') transferType = '03';
+                ussdCode = `*630*${phone}*${transferType}*${amount}*${sim.sim_pin || sim.pin || '0000'}#`;
+            } else if (op === 'Ooredoo') {
+                ussdCode = `*580*${phone}*${amount}*${sim.sim_pin || sim.pin || '0000'}#`;
+            } else {
+                let ussdPrefix = '*760*';
+                if (type === 'bill') ussdPrefix = '*764*';
+                ussdCode = `${ussdPrefix}${phone}*${amount}*${sim.sim_pin || sim.pin || '00000'}#`;
+            }
+
+            try {
+                // Log transaction
+                let transactionId;
+                // Correct column names: agent_id, phone_number, amount, operator, type, status
+                db.run(`INSERT INTO transactions (type, amount, status, agent_id, phone_number, operator) VALUES (?, ?, ?, ?, ?, ?)`,
+                ['FLEXY', amount, 'pending', null, phone, op], function(err) {
+                    if (err) {
+                        console.error("[DB ERROR] Failed to insert transaction:", err.message);
+                    } else {
+                        transactionId = this.lastID;
+                    }
+                });
+                
+                const response = await modemService.sendUssdCommand(sim.address, ussdCode, op);
+                if (response && response.success) {
+                    let finalMessage = response.content || 'تم إرسال طلب التعبئة';
+                    let isSuccess = true;
+
+                    if (['mobilis', 'ooredoo', 'djezzy'].includes(op.toLowerCase())) {
+                        await new Promise(r => setTimeout(r, 500));
+                        const confirmRes = await modemService.sendUssdCommand(sim.address, "1", op);
+                        if (confirmRes && confirmRes.success) {
+                            finalMessage = confirmRes.content || finalMessage;
+                        } else {
+                            isSuccess = false;
+                            finalMessage = confirmRes?.message || 'فشل تأكيد العملية';
+                        }
+                    }
+
+                    const lowerMsg = finalMessage.toLowerCase();
+                    const isFailure = lowerMsg.includes('insuffisant') || lowerMsg.includes('echec') || lowerMsg.includes('échec') || lowerMsg.includes('error') || lowerMsg.includes('fail') || finalMessage.includes('فشل') || finalMessage.includes('خاطئ') || finalMessage.includes('خطأ');
+
+                    if (isFailure || !isSuccess) {
+                        if (transactionId) {
+                            db.run(`UPDATE transactions SET status = ? WHERE id = ?`, ['failed: ' + finalMessage, transactionId]);
+                        }
+                        return res.json({ success: false, message: finalMessage });
+                    } else {
+                        if (transactionId) {
+                            db.run(`UPDATE transactions SET status = ? WHERE id = ?`, ['success', transactionId]);
+                        }
+                        return res.json({ success: true, message: finalMessage });
+                    }
+                } else {
+                    const errMsg = response?.message || 'USSD Timeout';
+                    if (transactionId) {
+                        db.run(`UPDATE transactions SET status = ? WHERE id = ?`, ['failed: ' + errMsg, transactionId]);
+                    }
+                    return res.json({ success: false, message: errMsg });
+                }
+            } catch(e) {
+                res.status(500).json({ success: false, error: e.message });
+            }
+        });
+    };
+
+    app.post('/api/flexy', authMiddleware, handleFlexy);
+    app.post('/api/portal/flexy', authMiddleware, handleFlexy);
+    
+    app.post('/api/flexy/invoice', authMiddleware, (req, res) => {
+        const { phone, amount } = req.body;
+        res.json({ success: true, message: `Invoice payment for ${amount} DA initiated.` });
+    });
+
+    app.post('/api/flexy/international', authMiddleware, (req, res) => {
+        res.json({ success: true, message: 'International flexy initiated.' });
+    });
+
+    // --- Cards API ---
+    app.get('/api/cards/available', authMiddleware, (req, res) => {
+        // Fetch all unused cards (or specifically for Idoom if needed)
+        // Since we don't have exact categories, we fetch all 'available'
+        db.all(`SELECT id, category, value, pin_code FROM recharge_cards WHERE status = 'available' ORDER BY value ASC LIMIT 50`, [], (err, rows) => {
+            if (err) return res.status(500).json({ success: false, error: err.message });
+            res.json({ success: true, cards: rows });
+        });
+    });
+
+    // --- Portal Idoom Automation APIs ---
+    app.get('/api/portal/idoom-cards', authMiddleware, (req, res) => {
+        db.all(`SELECT DISTINCT value FROM recharge_cards WHERE category = 'idoom' AND status = 'available' ORDER BY value ASC`, [], (err, rows) => {
+            if (err) return res.status(500).json({ success: false, message: 'خطأ في جلب البطاقات' });
+            res.json({ success: true, cards: rows.map(r => r.value) });
+        });
+    });
+
+    app.post('/api/portal/check-bill', authMiddleware, async (req, res) => {
+        const { account } = req.body;
+        if (!account) return res.status(400).json({ success: false, message: 'يرجى إرسال رقم الحساب' });
+
+        try {
+            const response = await fetch('http://127.0.0.1:3000/check-bill-idoom', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ account })
+            });
+            const result = await response.json();
+            res.json(result);
+        } catch (e) {
+            res.status(500).json({ success: false, message: 'خدمة التحقق غير متوفرة حالياً' });
+        }
+    });
+
+    app.post('/api/portal/idoom', authMiddleware, (req, res) => {
+        const { account, amount } = req.body;
+
+        if (!account || !amount) return res.status(400).json({ success: false, message: 'يرجى إرسال رقم الحساب والمبلغ' });
+
+        db.get(`SELECT * FROM recharge_cards WHERE category = 'idoom' AND value = ? AND status = 'available' LIMIT 1`, [amount], (err, card) => {
+            if (err || !card) {
+                return res.status(404).json({ success: false, message: `لا توجد بطاقات إيدوم متوفرة بقيمة ${amount} دج حالياً` });
+            }
+
+            db.run('UPDATE recharge_cards SET status = "used", sold_to = 0, sold_at = CURRENT_TIMESTAMP WHERE id = ?', [card.id], async (err) => {
+                if (err) {
+                    return res.status(500).json({ success: false, message: 'خطأ أثناء تسجيل البطاقة' });
+                }
+
+                let transactionId;
+                db.run(`INSERT INTO transactions (agent_id, phone_number, amount, operator, type, balance_before, balance_after, status) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+                        [null, account, amount, 'idoom', 'recharge', 0, 0, 'pending'], function(err) {
+                            if (!err) transactionId = this.lastID;
+                        });
+
+                try {
+                    const response = await fetch('http://127.0.0.1:3000/recharge-idoom', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ account, pin: card.pin_code })
+                    });
+                    const result = await response.json();
+                    
+                    if (result && result.success) {
+                        const successMsg = `تم تعبئة إيدوم للحساب ${account} بنجاح`;
+                        if (transactionId) {
+                            db.run(`UPDATE transactions SET status = ? WHERE id = ?`, ['success', transactionId]);
+                        }
+                        res.json({ success: true, message: successMsg });
+                    } else {
+                        const failMsg = `خادم إيدوم أرجع: ${result.message || 'خطأ'}`;
+                        db.run('UPDATE recharge_cards SET status = "available", sold_to = NULL, sold_at = NULL WHERE id = ?', [card.id]);
+                        if (transactionId) {
+                            db.run(`UPDATE transactions SET status = ? WHERE id = ?`, ['failed: ' + failMsg, transactionId]);
+                        }
+                        res.json({ success: false, message: failMsg });
+                    }
+                } catch (e) {
+                    db.run('UPDATE recharge_cards SET status = "available", sold_to = NULL, sold_at = NULL WHERE id = ?', [card.id]);
+                    const failMsg = 'فشل الاتصال بخادم الأتمتة: ' + e.message;
+                    if (transactionId) {
+                        db.run(`UPDATE transactions SET status = ? WHERE id = ?`, ['failed: ' + failMsg, transactionId]);
+                    }
+                    res.json({ success: false, message: failMsg });
+                }
+            });
+        });
+    });
+
+    // --- Agents API ---
+    app.get('/api/agents', authMiddleware, (req, res) => {
+        db.all(`SELECT * FROM agents ORDER BY id DESC`, [], (err, rows) => {
+            if (err) return res.status(500).json({ success: false, error: err.message });
+            res.json({ success: true, agents: rows });
+        });
+    });
+
+    app.post('/api/agents', authMiddleware, (req, res) => {
+        const { name, phone, telegram_id, balance, tier, is_admin, role } = req.body;
+        db.run(`INSERT INTO agents (name, phone, telegram_id, balance, tier, is_admin, role) VALUES (?, ?, ?, ?, ?, ?, ?)`, 
+        [name, phone, telegram_id, balance || 0, tier || 'detaillant', is_admin || 0, role || 'user'], function(err) {
+            if (err) return res.status(500).json({ success: false, error: err.message });
+            res.json({ success: true, id: this.lastID });
+        });
+    });
+
+    app.put('/api/agents/:id', authMiddleware, (req, res) => {
+        const { id } = req.params;
+        const { status, disabled_services, role, balance, tier } = req.body;
+        let query = `UPDATE agents SET `;
+        let params = [];
+        let updates = [];
+        if (status !== undefined) { updates.push(`status = ?`); params.push(status); }
+        if (disabled_services !== undefined) { updates.push(`disabled_services = ?`); params.push(disabled_services); }
+        if (role !== undefined) { updates.push(`role = ?`); params.push(role); }
+        if (balance !== undefined) { updates.push(`balance = ?`); params.push(balance); }
+        if (tier !== undefined) { updates.push(`tier = ?`); params.push(tier); }
+        if (updates.length === 0) return res.json({ success: true });
+        query += updates.join(', ') + ` WHERE id = ?`;
+        params.push(id);
+        db.run(query, params, function(err) {
+            if (err) return res.status(500).json({ success: false, error: err.message });
+            res.json({ success: true });
+        });
+    });
+
+    // --- Proxy to Automation Server (Puppeteer) ---
+    app.post('/recharge-idoom', authMiddleware, async (req, res) => {
+        try {
+            // Forward the request to the automation_server.js running on port 3000
+            const response = await fetch('http://127.0.0.1:3000/recharge-idoom', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(req.body)
+            });
+            const data = await response.json();
+            res.json(data);
+        } catch (e) {
+            res.status(500).json({ success: false, error: 'Automation Server is not reachable: ' + e.message });
+        }
+    });
+
+    
+    // --- Customer Portal API ---
+    app.post('/api/customer/login', (req, res) => {
+        const { username, password } = req.body;
+        // 'username' here acts as the phone number or username from the frontend
+        db.get('SELECT * FROM agents WHERE (username = ? OR phone_number = ?) AND (password = ? OR password IS NULL OR password = "") LIMIT 1', [username, username, password], (err, row) => {
+            console.log('[DEBUG LOGIN] err:', err, 'row:', row);
+            if (err || !row) return res.status(401).json({ success: false, message: 'Nom d\'utilisateur ou numéro de téléphone incorrect' });
+            
+            const token = Buffer.from(`${row.id}:${row.phone_number || row.username}`).toString('base64');
+            res.json({ success: true, token, user: { id: row.id, name: row.name, balance: row.balance, wilaya: row.wilaya, phone: row.phone_number } });
+        });
+    });
+
+    const customerAuth = (req, res, next) => {
+        // TEMPORARILY BYPASSED FOR DEVELOPMENT
+        db.get('SELECT * FROM agents LIMIT 1', [], (err, row) => {
+            req.user = row || { id: 1, name: 'Admin', balance: 999999, phone_number: '0550000000' };
+            next();
+        });
+    };
+
+    app.get('/api/customer/profile', customerAuth, (req, res) => {
+        res.json({ success: true, user: { id: req.user.id, name: req.user.name, balance: req.user.balance, wilaya: req.user.wilaya } });
+    });
+
+    app.post('/api/customer/flexy', customerAuth, (req, res) => {
+        const { phone, amount } = req.body;
+        const customer = req.user;
+        let opName = phone.startsWith('05') ? 'Ooredoo' : (phone.startsWith('06') ? 'Mobilis' : 'Djezzy');
+        let opCondition = phone.startsWith('05') ? "operator = 'Ooredoo'" : (phone.startsWith('06') ? "(operator = 'Mobilis' OR operator = 'Sama')" : "operator = 'Djezzy'");
+
+        const parsedAmount = parseInt(amount);
+        if (parsedAmount < 100) return res.status(400).json({ success: false, message: 'المبلغ يجب أن يكون 100 دج على الأقل' });
+
+        if (customer.balance < parsedAmount) {
+            return res.status(400).json({ success: false, message: 'رصيدك غير كافٍ لإتمام العملية' });
+        }
+
+        // MOBILIS MEETMOB AUTOMATION
+        if (opName === 'Mobilis' && (parsedAmount === 1000 || parsedAmount === 1300 || parsedAmount === 2000)) {
+            const cardValue = (parsedAmount === 1300) ? 1000 : parsedAmount;
+            
+            db.get(`SELECT * FROM recharge_cards WHERE category = 'Mobilis' AND value = ? AND status = 'available' LIMIT 1`, [cardValue], async (err, card) => {
+                if (!err && card) {
+                    db.run(`UPDATE recharge_cards SET status = 'sold', sold_to = ?, sold_at = datetime('now') WHERE id = ?`, [customer.id, card.id]);
+                    db.run(`UPDATE agents SET balance = balance - ? WHERE id = ?`, [parsedAmount, customer.id]);
+                    db.run(`INSERT INTO transactions (agent_id, phone_number, amount, operator, type, balance_before, balance_after, status) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+                            [customer.id, phone, parsedAmount, op, 'Meetmob', customer.balance, customer.balance - parsedAmount, 'pending']);
+                    
+                    try {
+                        fetch('http://127.0.0.1:3000/recharge-meetmob', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ phone, pin: card.pin_code, amount: parsedAmount, operator: 'Mobilis' })
+                        }).catch(e => console.error('Meetmob queue error', e));
+                    } catch(e) {}
+                    
+                    return res.json({ success: true, message: 'تم الإرسال (جاري التعبئة عبر Meetmob تلقائياً)' });
+                } else {
+                    proceedWithStandardUSSDRoute();
+                }
+            });
+        } else {
+            proceedWithStandardUSSDRoute();
+        }
+
+        function proceedWithStandardUSSDRoute() {
+            db.run('UPDATE agents SET balance = balance - ? WHERE id = ?', [parsedAmount, customer.id], (err) => {
+                if (err) return res.status(500).json({ success: false, message: 'خطأ أثناء خصم الرصيد' });
+                
+                db.get(`SELECT * FROM sim_cards WHERE ${opCondition} AND status = 'active' LIMIT 1`, async (err, sim) => {
+                    if (err || !sim) {
+                        db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [parsedAmount, customer.id]);
+                        return res.status(404).json({ success: false, message: 'لا يوجد مودم نشط لهذا المتعامل حالياً' });
+                    }
+
+                    if (opName === 'Ooredoo' && (sim.transfer_method === 'Ahla App' || sim.address === 'Emulator')) {
+                        try {
+                            const response = await ooredooAhlaService.executeFlexy(sim, phone, parsedAmount);
+                            if (response.success) {
+                                db.run(`INSERT INTO transactions (agent_id, phone_number, amount, operator, type, sim_id, balance_before, balance_after, status) 
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                                        [customer.id, phone, parsedAmount, opName, 'FLEXY', sim.id, customer.balance, customer.balance - parsedAmount, 'success']);
+                                return res.json({ success: true, message: response.message || 'تم تحويل الرصيد بنجاح عبر التطبيق' });
+                            } else {
+                                db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [parsedAmount, customer.id]);
+                                return res.json({ success: false, message: response.message || 'فشلت عملية التحويل عبر التطبيق' });
+                            }
+                        } catch(e) {
+                            db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [parsedAmount, customer.id]);
+                            return res.json({ success: false, message: 'خطأ في التطبيق' });
+                        }
+                    }
+
+                    let transactionId;
+                    db.run(`INSERT INTO transactions (agent_id, phone_number, amount, operator, type, sim_id, balance_before, balance_after, status) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                            [customer.id, phone, parsedAmount, opName, '04', sim.id, customer.balance, customer.balance - parsedAmount, 'pending'], function(err) {
+                                if (!err) transactionId = this.lastID;
+                            });
+
+                    let ussdCode = '';
+                    if (opName === 'Mobilis') ussdCode = `*630*${phone}*04*${parsedAmount}*${sim.pin || '0000'}#`;
+                    else if (opName === 'Ooredoo') ussdCode = `*580*${phone}*${parsedAmount}*${sim.pin || '0000'}#`;
+                    else ussdCode = `*760*${phone}*${parsedAmount}*00000#`;
+
+                    try {
+                        const response = await modemService.sendUssdCommand(sim.address, ussdCode, opName);
+                        if (response && response.success) {
+                            let finalMessage = response.content || 'تم إرسال الطلب بنجاح';
+                            let isSuccess = true;
+
+                            if (['mobilis', 'ooredoo', 'djezzy'].includes(opName.toLowerCase()) || opName.toLowerCase() === 'sama') {
+                                await new Promise(r => setTimeout(r, 500));
+                                const confirmRes = await modemService.sendUssdCommand(sim.address, "1", opName);
+                                if (confirmRes && confirmRes.success) {
+                                    finalMessage = confirmRes.content || finalMessage;
+                                } else {
+                                    isSuccess = false;
+                                    finalMessage = confirmRes?.message || 'فشل تأكيد العملية';
+                                }
+                            }
+
+                            const lowerMsg = finalMessage.toLowerCase();
+                            const isFailure = lowerMsg.includes('insuffisant') || lowerMsg.includes('echec') || lowerMsg.includes('échec') || lowerMsg.includes('error') || lowerMsg.includes('fail') || finalMessage.includes('فشل') || finalMessage.includes('خاطئ') || finalMessage.includes('خطأ');
+
+                            if (isFailure || !isSuccess) {
+                                db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [parsedAmount, customer.id]);
+                                if (transactionId) {
+                                    db.run(`UPDATE transactions SET status = ? WHERE id = ?`, ['failed: ' + finalMessage, transactionId]);
+                                }
+                                return res.json({ success: false, message: finalMessage });
+                            } else {
+                                if (transactionId) {
+                                    db.run(`UPDATE transactions SET status = ? WHERE id = ?`, ['success', transactionId]);
+                                }
+                                return res.json({ success: true, message: finalMessage });
+                            }
+                        } else {
+                            db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [parsedAmount, customer.id]);
+                            const errMsg = response?.message || 'فشل الاتصال بالمودم';
+                            if (transactionId) {
+                                db.run(`UPDATE transactions SET status = ? WHERE id = ?`, ['failed: ' + errMsg, transactionId]);
+                            }
+                            return res.json({ success: false, message: errMsg });
+                        }
+                    } catch (e) {
+                        db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [parsedAmount, customer.id]);
+                        if (transactionId) {
+                            db.run(`UPDATE transactions SET status = ? WHERE id = ?`, ['failed: ' + e.message, transactionId]);
+                        }
+                        return res.json({ success: false, message: 'خطأ أثناء الاتصال بالمودم: ' + e.message });
+                    }
+                });
+            });
+        }
+    });
+
+    app.post('/api/customer/live-offers', customerAuth, (req, res) => {
+        const { phone } = req.body;
+        if (!phone || phone.length !== 10) return res.status(400).json({ success: false, message: 'رقم غير صحيح' });
+
+        let opName = phone.startsWith('05') ? 'Ooredoo' : (phone.startsWith('06') ? 'Mobilis' : 'Djezzy');
+        let opCondition = phone.startsWith('05') ? "operator = 'Ooredoo'" : (phone.startsWith('06') ? "(operator = 'Mobilis' OR operator = 'Sama')" : "operator = 'Djezzy'");
+        
+        db.get(`SELECT * FROM sim_cards WHERE ${opCondition} AND status = 'active' LIMIT 1`, async (err, sim) => {
+            if (err || !sim) return res.json({ success: false, message: 'لا توجد شريحة متصلة حاليا' });
+            
+            if (opName === 'Ooredoo' && (sim.transfer_method === 'Ahla App' || sim.address === 'Emulator')) {
+                try {
+                    const result = await ooredooAhlaService.getOoredooOffers(sim, phone);
+                    if (result.success && result.offers && result.offers.length > 0) {
+                        let offers = result.offers.map(off => ({
+                            id: off.choice,
+                            name: off.text,
+                            price: parseInt(off.text.match(/\b(\d{2,4})\b/)?.[1]) || 0,
+                            operator: opName
+                        }));
+                        return res.json({ success: true, offers });
+                    }
+                } catch(e) { console.error('Ahla app fallback', e); }
+            }
+
+            let ussd = '';
+            if (opName === 'Ooredoo') ussd = `*585*${phone}*${sim.pin || '0000'}#`;
+            else if (opName === 'Mobilis' || opName === 'Sama') ussd = `*665*1*${phone}*${sim.pin || '0000'}#`;
+            else ussd = `*760*${phone}*${sim.pin || '00000'}#`;
+            
+            try {
+                const response = await modemService.sendUssdCommand(sim.address, ussd, opName);
+                if (response && response.success) {
+                    let content = response.content;
+                    let lowerContent = content.toLowerCase();
+                    
+                    if (opName === 'Mobilis' || opName === 'Sama') {
+                        let query = '';
+                        if (lowerContent.includes('sama') || lowerContent.includes('سما') || lowerContent.includes('talk') || lowerContent.includes('mix') || lowerContent.includes('net')) {
+                            query = `SELECT * FROM mobilis_offers WHERE category_name IN ('Sama Mix', 'Sama Net', 'Sama Talk') ORDER BY category_name ASC, amount ASC`;
+                        } else if (lowerContent.includes('pix')) {
+                            query = `SELECT * FROM mobilis_offers WHERE category_name = 'PixX' ORDER BY amount ASC`;
+                        } else if (lowerContent.includes('revolution') || lowerContent.includes('revol')) {
+                            query = `SELECT * FROM mobilis_offers WHERE category_name = 'Revolution' ORDER BY amount ASC`;
+                        } else if (lowerContent.includes('gold')) {
+                            query = `SELECT * FROM mobilis_offers WHERE category_name = 'Gold' ORDER BY amount ASC`;
+                        }
+
+                        if (query !== '') {
+                            db.all(query, [], (err, mobOffers) => {
+                                if (err || !mobOffers || mobOffers.length === 0) {
+                                    return res.json({ success: true, offers: [{ id: '1', name: content, price: 0, operator: opName }] });
+                                }
+                                let offers = mobOffers.map(off => ({
+                                    id: `${off.category_code}_${off.choice_code}`,
+                                    name: `${off.category_name} - ${off.label}`,
+                                    price: off.amount,
+                                    operator: opName
+                                }));
+                                return res.json({ success: true, offers: offers });
+                            });
+                            return; // Stop execution, handled asynchronously
+                        }
+                    }
+
+                    // Standard parsing for Djezzy / others
+                    let lines = content.split('\n');
+                    let offers = [];
+                    
+                    const matchAll = content.matchAll(/(\d+)[\-:\.]\s*(.+?)(?=\s+\d+[\-:\.]|\s*0[\-:\.]|\s*$)/g);
+                    for (const match of matchAll) {
+                        const id = match[1];
+                        const rawName = match[2].trim().replace(/[\r\n]+/g, ' ');
+                        if (id !== '0') {
+                            let priceMatch = rawName.match(/\b(\d{2,4})\b/);
+                            let price = priceMatch ? parseInt(priceMatch[1]) : 0;
+                            offers.push({ id, name: rawName, price, operator: opName });
+                        }
+                    }
+
+                    if (offers.length === 0) {
+                        for (let line of lines) {
+                            let match = line.match(/^\s*(\d+)[-.:)\s]+(.+)/);
+                            if (match) {
+                                let id = match[1];
+                                let rawName = match[2].trim();
+                                let priceMatch = rawName.match(/\b(\d{2,4})\b/);
+                                let price = priceMatch ? parseInt(priceMatch[1]) : 0;
+                                offers.push({ id, name: rawName, price, operator: opName });
+                            }
+                        }
+                    }
+
+                    if (offers.length === 0) {
+                        offers.push({ id: '1', name: content, price: 0, operator: opName });
+                    }
+                    res.json({ success: true, offers: offers });
+                } else {
+                    res.json({ success: false, message: 'فشل في سحب العروض من الشبكة' });
+                }
+            } catch (e) {
+                res.json({ success: false, message: 'خطأ في الاتصال بالمودم' });
+            }
+        });
+    });
+
+    app.post('/api/customer/activate-offer', customerAuth, (req, res) => {
+        const { phone, offer_id, price, name } = req.body;
+        const customer = req.user;
+
+        if (!phone || !offer_id) return res.status(400).json({ success: false, message: 'يرجى إرسال رقم الهاتف ومعرف العرض' });
+
+        const parsedPrice = parseInt(price) || 0;
+        let opName = phone.startsWith('05') ? 'Ooredoo' : (phone.startsWith('06') ? 'Mobilis' : 'Djezzy');
+        let opCondition = phone.startsWith('05') ? "operator = 'Ooredoo'" : (phone.startsWith('06') ? "(operator = 'Mobilis' OR operator = 'Sama')" : "operator = 'Djezzy'");
+
+        if (parsedPrice > 0 && customer.balance < parsedPrice) {
+            return res.status(400).json({ success: false, message: 'رصيدك غير كافٍ لإتمام العملية' });
+        }
+
+        const proceedWithActivation = () => {
+            db.get(`SELECT * FROM sim_cards WHERE ${opCondition} AND status = 'active' LIMIT 1`, async (err, sim) => {
+                if (err || !sim) {
+                    // Refund if deducted
+                    if (parsedPrice > 0) {
+                        db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [parsedPrice, customer.id]);
+                    }
+                    return res.status(404).json({ success: false, message: 'لا يوجد مودم نشط لهذا المتعامل حالياً' });
+                }
+
+                let transactionId;
+                db.run(`INSERT INTO transactions (agent_id, phone_number, amount, operator, type, sim_id, balance_before, balance_after, status) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                        [customer.id, phone, parsedPrice, opName, 'offer', sim.id, customer.balance, customer.balance - parsedPrice, 'pending'], function(err) {
+                            if (!err) transactionId = this.lastID;
+                        });
+
+                try {
+                    let response;
+                    if (opName === 'Ooredoo' && (sim.transfer_method === 'Ahla App' || sim.address === 'Emulator')) {
+                        response = await ooredooAhlaService.activateOoredooOffer(sim, phone, offer_id);
+                    } else if (opName === 'Mobilis' || opName === 'Sama' || opName === 'Djezzy') {
+                        const path = String(offer_id).split('_');
+                        const pin = (opName === 'Djezzy') ? (sim.pin || '00000') : (sim.pin || '0000');
+                        const startUssd = (opName === 'Djezzy') ? `*760*${phone}*${pin}#` : `*665*1*${phone}*${pin}#`;
+                        response = await modemService.sendUssdCommand(sim.address, startUssd, opName);
+                        if (response && response.success) {
+                            for (let i = 0; i < path.length; i++) {
+                                await new Promise(r => setTimeout(r, 500));
+                                response = await modemService.sendUssdCommand(sim.address, path[i], opName);
+                            }
+                            await new Promise(r => setTimeout(r, 2000));
+                            response = await modemService.sendUssdCommand(sim.address, "1", opName); // Confirm
+                        }
+                    } else {
+                        // Sending the offer_id directly acts as a reply to the open USSD session
+                        response = await modemService.sendUssdCommand(sim.address, String(offer_id), opName);
+                    }
+                    
+                    if (response && response.success) {
+                        const finalMessage = response.content || 'تم تفعيل العرض بنجاح';
+                        const lowerMsg = finalMessage.toLowerCase();
+                        const isFailure = lowerMsg.includes('insuffisant') || lowerMsg.includes('echec') || lowerMsg.includes('échec') || lowerMsg.includes('error') || lowerMsg.includes('fail') || finalMessage.includes('فشل') || finalMessage.includes('خاطئ') || finalMessage.includes('خطأ');
+
+                        if (isFailure) {
+                            if (parsedPrice > 0) {
+                                db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [parsedPrice, customer.id]);
+                            }
+                            if (transactionId) {
+                                db.run(`UPDATE transactions SET status = ? WHERE id = ?`, ['failed: ' + finalMessage, transactionId]);
+                            }
+                            res.json({ success: false, message: finalMessage });
+                        } else {
+                            if (transactionId) {
+                                db.run(`UPDATE transactions SET status = ? WHERE id = ?`, ['success', transactionId]);
+                            }
+                            res.json({ success: true, message: finalMessage });
+                        }
+                    } else {
+                        if (parsedPrice > 0) {
+                            db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [parsedPrice, customer.id]);
+                        }
+                        const errMsg = response?.message || 'فشل التفعيل';
+                        if (transactionId) {
+                            db.run(`UPDATE transactions SET status = ? WHERE id = ?`, ['failed: ' + errMsg, transactionId]);
+                        }
+                        res.json({ success: false, message: errMsg });
+                    }
+                } catch (e) {
+                    if (parsedPrice > 0) {
+                        db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [parsedPrice, customer.id]);
+                    }
+                    if (transactionId) {
+                        db.run(`UPDATE transactions SET status = 'failed', response = ? WHERE id = ?`, [e.message, transactionId]);
+                    }
+                    res.json({ success: false, message: 'خطأ أثناء الاتصال بالمودم: ' + e.message });
+                }
+            });
+        };
+
+        if (parsedPrice > 0) {
+            db.run('UPDATE agents SET balance = balance - ? WHERE id = ?', [parsedPrice, customer.id], (err) => {
+                if (err) return res.status(500).json({ success: false, message: 'خطأ أثناء خصم الرصيد' });
+                proceedWithActivation();
+            });
+        } else {
+            proceedWithActivation();
+        }
+    });
+
+    app.post('/api/customer/idoom', customerAuth, (req, res) => {
+        const { account, amount } = req.body;
+        const customer = req.user;
+
+        if (!account || !amount) return res.status(400).json({ success: false, message: 'يرجى إرسال رقم الحساب والمبلغ' });
+
+        if (customer.balance < amount) {
+            return res.status(400).json({ success: false, message: 'رصيدك غير كافٍ لإتمام العملية' });
+        }
+
+        db.get(`SELECT * FROM recharge_cards WHERE category = 'idoom' AND value = ? AND status = 'available' LIMIT 1`, [amount], (err, card) => {
+            if (err || !card) {
+                return res.status(404).json({ success: false, message: `لا توجد بطاقات إيدوم متوفرة بقيمة ${amount} دج حالياً` });
+            }
+
+            db.run('UPDATE agents SET balance = balance - ? WHERE id = ?', [amount, customer.id], (err) => {
+                if (err) return res.status(500).json({ success: false, message: 'خطأ أثناء خصم الرصيد' });
+                
+                db.run('UPDATE recharge_cards SET status = "used", sold_to = ?, sold_at = CURRENT_TIMESTAMP WHERE id = ?', [customer.id, card.id], async (err) => {
+                    if (err) {
+                        db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [amount, customer.id]);
+                        return res.status(500).json({ success: false, message: 'خطأ أثناء تسجيل البطاقة' });
+                    }
+
+                    db.run(`INSERT INTO transactions (agent_id, phone_number, amount, operator, type, balance_before, balance_after, status) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+                            [customer.id, account, amount, 'idoom', 'recharge', customer.balance, customer.balance - amount, 'success']);
+
+                    try {
+                        const response = await fetch('http://127.0.0.1:3000/recharge-idoom', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ account, pin: card.pin_code })
+                        });
+                        const result = await response.json();
+                        
+                        if (result && result.success) {
+                            res.json({ success: true, message: `تم تعبئة إيدوم للحساب ${account} بنجاح` });
+                        } else {
+                            res.json({ success: true, message: `تم خصم الرصيد، لكن خادم إيدوم أرجع: ${result.message || 'خطأ'}` });
+                        }
+                    } catch (e) {
+                        res.json({ success: true, message: 'تم خصم الرصيد وإرسال الطلب (جاري التعبئة)' });
+                    }
+                });
+            });
+        });
+    });
+
+    app.get('/api/customer/transactions', customerAuth, (req, res) => {
+        const search = req.query.phone || '';
+        let query = `SELECT id, phone_number, amount, operator, type, status, timestamp 
+                     FROM transactions WHERE agent_id = ?`;
+        let params = [req.user.id];
+        
+        if (search) {
+            query += ` AND phone_number LIKE ?`;
+            params.push(`%${search}%`);
+        }
+        
+        query += ` ORDER BY id DESC LIMIT 100`;
+        
+        db.all(query, params, (err, rows) => {
+            if (err) return res.status(500).json({ success: false, message: 'خطأ في جلب السجل' });
+            res.json({ success: true, transactions: rows });
+        });
+    });
+
+    app.get('/api/customer/idoom-cards', customerAuth, (req, res) => {
+        db.all(`SELECT DISTINCT value FROM recharge_cards WHERE category = 'idoom' AND status = 'available' ORDER BY value ASC`, [], (err, rows) => {
+            if (err) return res.status(500).json({ success: false, message: 'خطأ في جلب البطاقات' });
+            res.json({ success: true, cards: rows.map(r => r.value) });
+        });
+    });
+
+    app.post('/api/customer/check-bill', customerAuth, async (req, res) => {
+        const { account } = req.body;
+        if (!account) return res.status(400).json({ success: false, message: 'يرجى إرسال رقم الحساب' });
+
+        try {
+            const response = await fetch('http://127.0.0.1:3000/check-bill-idoom', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ account })
+            });
+            const result = await response.json();
+            res.json(result);
+        } catch (e) {
+            res.status(500).json({ success: false, message: 'خدمة التحقق غير متوفرة حالياً' });
+        }
+    });
+
+    // --- Admin Authentication API ---
+    app.post('/api/admin/login', (req, res) => {
+        const { password } = req.body;
+        db.get(`SELECT value FROM settings WHERE key = 'admin_secret'`, (err, row) => {
+            const secret = row ? row.value : 'SUPERM123';
+            if (password === secret) {
+                res.json({ success: true, token: secret });
+            } else {
+                res.status(401).json({ success: false, message: 'كلمة المرور غير صحيحة' });
+            }
+        });
+    });
+
+    // --- Recharge Cards Inventory Management APIs ---
+    app.get('/api/cards', authMiddleware, (req, res) => {
+        const { category, status, page, limit } = req.query;
+        const pageNum = parseInt(page) || 1;
+        const limitNum = parseInt(limit) || 10;
+        const offset = (pageNum - 1) * limitNum;
+
+        let query = `SELECT * FROM recharge_cards WHERE 1=1`;
+        let countQuery = `SELECT COUNT(*) as count FROM recharge_cards WHERE 1=1`;
+        let params = [];
+
+        if (category) {
+            query += ` AND category = ?`;
+            countQuery += ` AND category = ?`;
+            params.push(category);
+        }
+        if (status) {
+            query += ` AND status = ?`;
+            countQuery += ` AND status = ?`;
+            params.push(status);
+        }
+
+        query += ` ORDER BY id DESC LIMIT ? OFFSET ?`;
+
+        db.get(countQuery, params, (err, countRow) => {
+            if (err) return res.status(500).json({ success: false, error: err.message });
+            
+            const total = countRow ? countRow.count : 0;
+            db.all(query, [...params, limitNum, offset], (err, rows) => {
+                if (err) return res.status(500).json({ success: false, error: err.message });
+                res.json({ success: true, cards: rows, total, page: pageNum, limit: limitNum });
+            });
+        });
+    });
+
+    app.get('/api/cards/datatable', authMiddleware, (req, res) => {
+        const draw = req.query.draw;
+        const start = parseInt(req.query.start) || 0;
+        const length = parseInt(req.query.length) || 10;
+        const searchVal = req.query.search ? req.query.search.value : '';
+        const category = req.query.category || '';
+        const status = req.query.status || '';
+
+        let query = `SELECT * FROM recharge_cards WHERE 1=1`;
+        let countQuery = `SELECT COUNT(*) as count FROM recharge_cards WHERE 1=1`;
+        let params = [];
+
+        if (category) {
+            query += ` AND category = ?`;
+            countQuery += ` AND category = ?`;
+            params.push(category);
+        }
+        if (status) {
+            query += ` AND status = ?`;
+            countQuery += ` AND status = ?`;
+            params.push(status);
+        }
+
+        if (searchVal) {
+            query += ` AND (pin_code LIKE ? OR serial_number LIKE ? OR value LIKE ?)`;
+            countQuery += ` AND (pin_code LIKE ? OR serial_number LIKE ? OR value LIKE ?)`;
+            params.push(`%${searchVal}%`, `%${searchVal}%`, `%${searchVal}%`);
+        }
+
+        query += ` ORDER BY id DESC LIMIT ? OFFSET ?`;
+
+        db.get(countQuery, params, (err, countRow) => {
+            if (err) return res.json({ draw: draw, recordsTotal: 0, recordsFiltered: 0, data: [], error: err.message });
+            
+            const total = countRow ? countRow.count : 0;
+            db.all(query, [...params, length, start], (err, rows) => {
+                if (err) return res.json({ draw: draw, recordsTotal: 0, recordsFiltered: 0, data: [], error: err.message });
+                res.json({ draw: draw, recordsTotal: total, recordsFiltered: total, data: rows });
+            });
+        });
+    });
+
+    app.post('/api/cards/upload', authMiddleware, (req, res) => {
+        const { category, value, cardsText, purchase_price } = req.body;
+        if (!category || !value || !cardsText) {
+            return res.status(400).json({ success: false, message: 'معطيات غير كافية' });
+        }
+
+        const price = parseFloat(purchase_price) || 0;
+        const lines = cardsText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+        const parsedCards = [];
+
+        lines.forEach(line => {
+            const parts = line.split(/[,\s;\t]+/).map(p => p.trim()).filter(p => p.length > 0);
+            if (parts.length === 0) return;
+
+            let pin = '';
+            let serial = '';
+
+            if (parts.length === 1) {
+                pin = parts[0];
+            } else {
+                const p0IsDigits = /^\d+$/.test(parts[0]);
+                const p1IsDigits = /^\d+$/.test(parts[1]);
+
+                if (p0IsDigits && (parts[0].length === 14 || parts[0].length === 16)) {
+                    pin = parts[0];
+                    serial = parts[1];
+                } else if (p1IsDigits && (parts[1].length === 14 || parts[1].length === 16)) {
+                    pin = parts[1];
+                    serial = parts[0];
+                } else {
+                    pin = parts[0];
+                    serial = parts[1];
+                }
+            }
+
+            if (pin) {
+                parsedCards.push({ pin, serial });
+            }
+        });
+
+        if (parsedCards.length === 0) {
+            return res.status(400).json({ success: false, message: 'لم يتم العثور على بطاقات صالحة في النص المدخل' });
+        }
+
+        let successCount = 0;
+        let failCount = 0;
+        let duplicateCount = 0;
+        let processed = 0;
+
+        const stmt = db.prepare(`INSERT OR IGNORE INTO recharge_cards (category, pin_code, value, serial_number, purchase_price, status) VALUES (?, ?, ?, ?, ?, 'available')`);
+
+        parsedCards.forEach(c => {
+            stmt.run([category, c.pin, parseFloat(value), c.serial || null, price], function(err) {
+                processed++;
+                if (err) {
+                    failCount++;
+                } else if (this.changes > 0) {
+                    successCount++;
+                } else {
+                    duplicateCount++;
+                }
+
+                if (processed === parsedCards.length) {
+                    stmt.finalize();
+                    res.json({
+                        success: true,
+                        total: parsedCards.length,
+                        inserted: successCount,
+                        duplicates: duplicateCount,
+                        failed: failCount
+                    });
+                }
+            });
+        });
+    });
+
+    app.delete('/api/cards/:id', authMiddleware, (req, res) => {
+        const { id } = req.params;
+        db.run(`DELETE FROM recharge_cards WHERE id = ?`, [id], function(err) {
+            if (err) return res.status(500).json({ success: false, error: err.message });
+            res.json({ success: true, deleted: this.changes });
+        });
+    });
+
+    app.post('/api/cards/clear', authMiddleware, (req, res) => {
+        const { category, status } = req.body;
+        if (!category) return res.status(400).json({ success: false, message: 'التصنيف مطلوب' });
+
+        let query = `DELETE FROM recharge_cards WHERE category = ?`;
+        let params = [category];
+
+        if (status) {
+            query += ` AND status = ?`;
+            params.push(status);
+        }
+
+        db.run(query, params, function(err) {
+            if (err) return res.status(500).json({ success: false, error: err.message });
+            res.json({ success: true, cleared: this.changes });
+        });
+    });
+
+    // --- IPC Proxy for Web Interface ---
+    app.post('/api/ipc/:channel', authMiddleware, async (req, res) => {
+        const channel = req.params.channel;
+        if (!ipcHandlers || !ipcHandlers[channel]) {
+            return res.status(404).json({ success: false, message: 'IPC Handler not found: ' + channel });
+        }
+        try {
+            // Provide a mock event object and pass the data
+            const result = await ipcHandlers[channel]({}, req.body.data || req.body);
+            res.json(result);
+        } catch (e) {
+            console.error('[API IPC Error]', channel, e.message);
+            res.status(500).json({ success: false, message: e.message });
+        }
+    });
+
+    // Global Express Error Handler Middleware
+    app.use((err, req, res, next) => {
+        console.error('[API Global Error Catcher]', err);
+        res.status(500).json({ success: false, message: 'حدث خطأ داخلي في الخادم: ' + err.message });
+    });
+
+    // --- Wilayas, Dairas, Communes Endpoints ---
+
+// --- Accounts Endpoints for Cloud Portal ---
+app.get('/getAccounts', authMiddleware, (req, res) => {
+    const db = require('./database.js');
+    db.all("SELECT id, name as fullName, phone_number as phone, email, username, wilaya as wilaya_name_ascii, tier as role, balance as solde, is_admin FROM agents ORDER BY id DESC", [], (err, rows) => {
+        if (err) return res.status(500).json({ success: false, message: err.message });
+        // Send format expected by DataTables: { success: true, data: [...] }
+        res.json({ success: true, data: rows });
+    });
+});
+
+app.post('/addAccount', authMiddleware, (req, res) => {
+    const db = require('./database.js');
+    const { fullName, phone, email, username, password, wilaya, role, daira, city_id } = req.body;
+    db.run("INSERT INTO agents (name, phone_number, email, username, password, wilaya, tier, balance, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, 0, 0)",
+        [fullName, phone, email, username, password, wilaya, role || 'detaillant'], function(err) {
+            if (err) return res.status(500).json({ success: false, message: err.message });
+            res.json({ success: true, message: "تمت إضافة الحساب بنجاح" });
+    });
+});
+
+app.post('/editAccount', authMiddleware, (req, res) => {
+    const db = require('./database.js');
+    const { id, fullName, phone, email, username, password, wilaya, role, daira, city_id } = req.body;
+    if (password) {
+        db.run("UPDATE agents SET name=?, phone_number=?, email=?, username=?, password=?, wilaya=?, tier=? WHERE id=?",
+            [fullName, phone, email, username, password, wilaya, role, id], err => {
+                if (err) return res.status(500).json({ success: false, message: err.message });
+                res.json({ success: true, message: "تم التعديل بنجاح" });
+        });
+    } else {
+        db.run("UPDATE agents SET name=?, phone_number=?, email=?, username=?, wilaya=?, tier=? WHERE id=?",
+            [fullName, phone, email, username, wilaya, role, id], err => {
+                if (err) return res.status(500).json({ success: false, message: err.message });
+                res.json({ success: true, message: "تم التعديل بنجاح" });
+        });
+    }
+});
+
+app.delete('/deleteAccount', authMiddleware, (req, res) => {
+    const db = require('./database.js');
+    const id = req.body.id;
+    db.run("DELETE FROM agents WHERE id=?", [id], err => {
+        if (err) return res.status(500).json({ success: false, message: err.message });
+        res.json({ success: true, message: "تم الحذف بنجاح" });
+    });
+});
+
+app.get('/getWilayas', (req, res) => {
+    try {
+        const data = require('./algeria_cities.json');
+        const wilayas = [];
+        const seen = new Set();
+        data.forEach(item => {
+            if (!seen.has(item.wilaya_code)) {
+                seen.add(item.wilaya_code);
+                wilayas.push({
+                    wilaya_code: item.wilaya_code,
+                    wilaya_name: item.wilaya_name,
+                    wilaya_name_ascii: item.wilaya_name_fr
+                });
+            }
+        });
+        res.json(wilayas);
+    } catch(e) {
+        res.status(500).json({error: {message: "Failed to load algeria_cities.json"}});
+    }
+});
+
+app.get('/getDairas', (req, res) => {
+    const wilaya_name = req.query.wilaya_name;
+    try {
+        const data = require('./algeria_cities.json');
+        const dairas = [];
+        const seen = new Set();
+        data.forEach(item => {
+            if (item.wilaya_name_fr === wilaya_name || item.wilaya_name === wilaya_name) {
+                if (!seen.has(item.daira_name_fr)) {
+                    seen.add(item.daira_name_fr);
+                    dairas.push({
+                        daira_name: item.daira_name,
+                        daira_name_ascii: item.daira_name_fr
+                    });
+                }
+            }
+        });
+        res.json(dairas);
+    } catch(e) {
+        res.status(500).json({error: {message: "Failed to load algeria_cities.json"}});
+    }
+});
+
+app.get('/getCommunes', (req, res) => {
+    const daira_name = req.query.daira_name;
+    try {
+        const data = require('./algeria_cities.json');
+        const communes = [];
+        data.forEach(item => {
+            if (item.daira_name_fr === daira_name || item.daira_name === daira_name) {
+                communes.push({
+                    id: item.id,
+                    commune_name: item.commune_name,
+                    commune_name_ascii: item.commune_name_fr
+                });
+            }
+        });
+        res.json(communes);
+    } catch(e) {
+        res.status(500).json({error: {message: "Failed to load algeria_cities.json"}});
+    }
+});
+
+if (require.main === module) {
+    // Start Server
+
+    const PORT = process.env.API_PORT || 3005;
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`[API Server] Running on http://0.0.0.0:${PORT}`);
+
+        // Start LocalTunnel automatically for cloud access with auto-reconnect
+        const localtunnel = require('localtunnel');
+        let tunnelInstance = null;
+        
+        async function startTunnel() {
+            try {
+                if (tunnelInstance) {
+                    tunnelInstance.close();
+                }
+                tunnelInstance = await localtunnel({ port: PORT, subdomain: 'tobalflexy-app-dz' });
+                console.log(`[Cloud Tunnel] Cloud API available at: ${tunnelInstance.url}`);
+                
+                tunnelInstance.on('close', () => {
+                    console.log('[Cloud Tunnel] Tunnel closed. Reconnecting in 5 seconds...');
+                    setTimeout(startTunnel, 5000);
+                });
+                
+                tunnelInstance.on('error', (err) => {
+                    console.error('[Cloud Tunnel] Tunnel error:', err.message);
+                    tunnelInstance.close(); // will trigger 'close' event and reconnect
+                });
+            } catch (e) {
+                console.error('[Cloud Tunnel] Failed to start localtunnel:', e.message);
+                setTimeout(startTunnel, 5000); // Retry on failure
+            }
+        }
+        
+        startTunnel();
+
+    }).on('error', (e) => {
+        console.error('[API Server] Error starting server:', e.message);
+    });
+};
+
+}

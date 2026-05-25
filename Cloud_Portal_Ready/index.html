@@ -1,0 +1,3732 @@
+<!DOCTYPE html><html lang="ar" class="light-style layout-menu-fixed" dir="rtl" data-theme="theme-default"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>لوحة التحكم - توبال فليكسي</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+  <!-- Core CSS (Sneat) -->
+  <link rel="stylesheet" href="assets/vendor/css/rtl/core.css" class="template-customizer-core-css">
+  <link rel="stylesheet" href="assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css">
+  <link rel="stylesheet" href="assets/css/rtl/demo.css">
+
+  <!-- Core JS -->
+  <script src="assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="assets/vendor/js/bootstrap.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head><body><div class="layout-wrapper layout-content-navbar"><div class="layout-container"><aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo justify-content-center">
+              <a href="/" class="app-brand-link">
+                  <span class="app-brand-logo demo">
+                      <img src="/logos/tobalflexy.png" alt="" style="width: 120px;">
+                  </span>
+                  <span class="app-brand-text demo menu-text ms-2"></span>
+              </a>
+      
+              <a href="javascript:void(0)" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                  <i class="bx bx-chevron-right bx-sm align-middle"></i>
+              </a>
+          </div>
+      
+          <div class="menu-inner-shadow"></div>
+      
+          <ul class="menu-inner py-1">
+              <!-- Dashboard -->
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('dashboard', this)">
+                      <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                      <div data-i18n="Dashboard">الصفحة الرئيسية</div>
+                  </a>
+              </li>
+      
+      
+              <li class="menu-header small text-uppercase">
+                  <span class="menu-header-text">الخدمات</span>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('flexy', this)">
+                      <i class="menu-icon tf-icons bx bx-phone-outgoing"></i>
+                      <div data-i18n="Flexy">فليكسي</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('flexy', this)">
+                      <i class="menu-icon tf-icons bx bxs-phone-outgoing"></i>
+                      <div data-i18n="FlexyBulk">فليكسي جملة</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('idoom', this)">
+                      <i class="menu-icon tf-icons bx bx-world"></i>
+                      <div data-i18n="Idoom">تعبئة ايدوم</div>
+                  </a>
+              </li>
+      
+              <li class="menu-header small text-uppercase">
+                  <span class="menu-header-text">البطاقات</span>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('cards', this)">
+                      <i class="menu-icon tf-icons bx bxs-discount"></i>
+                      <div data-i18n="Vouchers">بطاقات</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('cards', this)">
+                      <i class="menu-icon tf-icons bx bx-history"></i>
+                      <div data-i18n="VouchersOrders">طلبات البطاقات</div>
+                  </a>
+              </li>
+      
+      
+              <li class="menu-header small text-uppercase">
+                  <span class="menu-header-text">العمليات</span>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('transactions', this)">
+                      <i class="menu-icon tf-icons bx bxs-receipt"></i>
+                      <div data-i18n="Transactions">كل العمليات</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('consumption', this)">
+                      <i class="menu-icon tf-icons bx bx-money"></i>
+                      <div data-i18n="Consumption">الاستهلاك</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('contacts', this)">
+                      <i class="menu-icon tf-icons bx bxs-contact"></i>
+                      <div data-i18n="Contacts">دليل الهاتف</div>
+                  </a>
+              </li>
+      
+              <li class="menu-header small text-uppercase">
+                  <span class="menu-header-text">الزبائن</span>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('agents', this)">
+                      <i class="menu-icon tf-icons bx bx-user-circle"></i>
+                      <div data-i18n="Accounts">إدارة الحسابات</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('usersProductsPrice', this)">
+                      <i class="menu-icon tf-icons bx bxs-offer"></i>
+                      <div data-i18n="UsersProfit">نسب الأرباح</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link menu-toggle">
+                      <i class="menu-icon tf-icons bx bx-transfer-alt"></i>
+                      <div data-i18n="Transfers">التحويلات</div>
+                  </a>
+                  <ul class="menu-sub">
+                      <li class="menu-item">
+                          <a href="javascript:void(0)" class="menu-link" onclick="switchTab('sendedTransfers', this)">
+                              <i class="menu-icon tf-icons bx bx-up-arrow-alt"></i>
+                              <div data-i18n="Account">الصادرة</div>
+                          </a>
+                      </li>
+                      <li class="menu-item">
+                          <a href="javascript:void(0)" class="menu-link" onclick="switchTab('receivedTransfers', this)">
+                              <i class="menu-icon tf-icons bx bx-down-arrow-alt"></i>
+                              <div data-i18n="Notifications">الواردة</div>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
+      
+              <li class="menu-header small text-uppercase">
+                  <span class="menu-header-text">المنتجات والخدمات</span>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('products', this)">
+                      <i class="menu-icon tf-icons bx bxs-food-menu"></i>
+                      <div data-i18n="Products">إدارة المنتجات والخدمات</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('disabledProducts', this)">
+                      <i class="menu-icon tf-icons bx bxs-minus-circle"></i>
+                      <div data-i18n="Products">حظر المنتجات</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('uploadVouchers', this)">
+                      <i class="menu-icon tf-icons bx bxs-coupon"></i>
+                      <div data-i18n="UploadVouchers">تحميل القسائم</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('stockVouchers', this)">
+                      <i class="menu-icon tf-icons bx bxs-coin-stack"></i>
+                      <div data-i18n="StockVouchers">مخزون القسائم</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('findVouchers', this)">
+                      <i class="menu-icon tf-icons bx bxs-search"></i>
+                      <div data-i18n="SearchVouchers">البحث عن القسائم</div>
+                  </a>
+              </li>
+      
+              <li class="menu-header small text-uppercase">
+                  <span class="menu-header-text">الإعلانات</span>
+              </li>
+              <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" onclick="switchTab('announces', this)">
+                      <i class="menu-icon tf-icons bx bx-news"></i>
+                      <div data-i18n="Announces">إدارة الإعلانات</div>
+                  </a>
+              </li>
+      
+          </ul>
+      </aside><div class="layout-page"><nav class="layout-navbar container-fluid navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                    <i class="bx bx-menu bx-sm"></i>
+                </a>
+            </div>
+        
+            <div class="navbar-nav-left d-flex align-items-center" id="navbar-collapse">
+                <ul class="navbar-nav flex-row align-items-center">
+                    <button id="hideBalanceBtn" type="button" class="btn btn-sm rounded-pill btn-icon btn-secondary ms-md-4">
+                        <i class="fa-solid fa-eye-slash"></i>
+                    </button>
+                    <h5 class="mt-2 ms-2 text-nowrap">
+                        <span class="d-none d-md-inline ">رصيدي :</span>
+                        <span id="balanceSpan" class="text-success balance add-currency ms-2"></span>
+                    </h5>
+                </ul>
+                <ul class="navbar-nav flex-row align-items-center ms-auto">
+                    <!-- User -->
+        
+                    <li id="notifications_dropdown" class="nav-item navbar-dropdown dropdown-user dropdown me-2">
+                        <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            <button id="notificationAlertBtn" type="button" class="btn btn-md rounded-pill btn-icon">
+                                <i class="fa-regular fa-bell"></i>
+                            </button>
+                        </a>
+                        
+                        <ul class="dropdown-menu dropdown-menu-end p-0" style="min-inline-size: 20rem;">
+                            <li class="dropdown-menu-header border-bottom">
+                                <div class="dropdown-header d-flex align-items-center py-3">
+                                    <h6 class="mb-0 me-auto">إشعارات</h6>
+                                    <div class="d-flex align-items-center h6 mb-0">
+                                        <span id="notification_count" class="badge bg-label-primary"></span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="dropdown-notifications-list scrollable-container ps">
+                                <ul id="notifications_ul" class="list-group list-group-flush">
+                    
+                    
+                                </ul>
+                                <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+                                    <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                                </div>
+                                <div class="ps__rail-y" style="top: 0px; right: 0px;">
+                                    <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    <script>
+                        const TITLES = {
+                            debt: "دَين",
+                            payment: "دفع",
+                            cash: "نقد",
+                            recuperate_debt: "استرداد دَين",
+                            recuperate_payment: "استرداد دفع",
+                            recuperate_cash: "استرداد نقد"
+                        }
+                    
+                    
+                        var racinePath = location.pathname.match(/\/\w+/g)[0];
+                    
+                        function getUnreadNotificationsCount() {
+                            return new Promise((resolve, reject) => {
+                                fetch(racinePath + "/getUnreadNotificationsCount")
+                                    .then((response) => {
+                                        if (response.status == 200) {
+                                            response
+                                                .json()
+                                                .then((body) => {
+                                                    resolve(body);
+                                                })
+                                                .catch(function (error) {
+                                                    reject(error);
+                                                });
+                                        }
+                                    })
+                                    .catch(function (error) {
+                                        reject(error);
+                                    });
+                            });
+                        }
+                    
+                        function getNotifications() {
+                            return new Promise((resolve, reject) => {
+                                fetch(racinePath + "/getNotifications")
+                                    .then((response) => {
+                                        if (response.status == 200) {
+                                            response
+                                                .json()
+                                                .then((body) => {
+                                                    resolve(body);
+                                                })
+                                                .catch(function (error) {
+                                                    reject(error);
+                                                });
+                                        }
+                                    })
+                                    .catch(function (error) {
+                                        reject(error);
+                                    });
+                            });
+                        }
+                    
+                        function displayNotifications() {
+                            getNotifications().then(notifications => {
+                                $("#notifications_ul").html("")
+                                notifications.forEach(notif => {
+                                    let avatarSpan = notif.type == "percentage" ?
+                                        '<span class="avatar-initial rounded-circle bg-label-primary"><i class="fa-solid fa-percent"></i></span>'
+                                        : notif.type == "transfer" ?
+                                            notif.title.includes("recuperate") ?
+                                                '<span class="avatar-initial rounded-circle bg-label-danger"><i class="fa-solid fa-arrow-up"></i></span>'
+                                                : '<span class="avatar-initial rounded-circle bg-label-success"><i class="fa-solid fa-arrow-down"></i></span>'
+                                            : ''
+                                    let readBtn = notif.is_read == false ?
+                                        `<a class="dropdown-notifications-archive read-btn">
+                                            <i class="fa-solid fa-circle text-danger fa-fade"></i>
+                                        </a>`: ''
+                                    if (notif.type == "transfer")
+                                        var content = `لقد تلقيت تحويلًا بقيمة <strong>${formatBalance(notif.content)}</strong>دج`
+                                    else if (notif.type == "percentage")
+                                        var content = `لقد تم تغيير النسبة المئوية الخاصة بك`
+                    
+                                    $("#notifications_ul").append(`
+                                    <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar">
+                                                    ${avatarSpan}
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1 text-uppercase">${TITLES[notif.title] || notif.title}</h6>
+                                                <small class="mb-1 d-block text-body">${content}</small>
+                                                <small class="text-body-secondary">${notif.created_at}</small>
+                                            </div>
+                                            <div class="flex-shrink-0 dropdown-notifications-actions">
+                                                ${readBtn}
+                                            </div>
+                                        </div>
+                                    </li>`);
+                                });
+                            })
+                        }
+                    
+                        function markAsRead() {
+                            fetch(racinePath + "/readNotification", {
+                                method: 'post'
+                            })
+                                .then((response) => {
+                                    if (response.status == 200) {
+                                        response
+                                            .json()
+                                            .then((body) => {
+                                                displayUnreadNotificationsCount()
+                                            })
+                                            .catch(function (error) { });
+                                    }
+                                })
+                                .catch(function (error) { });
+                        }
+                    
+                    
+                        function displayUnreadNotificationsCount() {
+                            getUnreadNotificationsCount().then(notificationsCount => {
+                                $("#notification_count").text(notificationsCount)
+                                if (notificationsCount > 0) $("#notificationAlertBtn").addClass("btn-danger fa-bounce")
+                                else $("#notificationAlertBtn").removeClass("btn-danger fa-bounce")
+                            })
+                        }
+                    
+                        $("#notifications_dropdown").on("show.bs.dropdown", function () {
+                            displayUnreadNotificationsCount()
+                            displayNotifications()
+                        });
+                    
+                        $("#notifications_dropdown").on("hide.bs.dropdown", function () {
+                            if ($("#notification_count").text() > 0)
+                                markAsRead()
+                        });
+                    
+                        $(document).ready(function () {
+                            displayUnreadNotificationsCount()
+                        });
+                    
+                    </script>
+                    <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                        <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                            <div class="avatar avatar-online">
+                                <span class="avatar-initial rounded-circle bg-label-primary avatar-text"></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <div class="avatar avatar-online">
+                                                <span class="avatar-initial rounded-circle bg-label-primary avatar-text"></span>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <span class="fw-semibold d-block">TOBALGSM</span>
+                                            <small class="text-muted">
+        
+                                                موزع
+        
+        
+        
+                                            </small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <div class="dropdown-divider"></div>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="location.href=racinePath + '/profile'">
+                                    <i class="bx bx-user me-2"></i>
+                                    <span class="align-middle">حسابي</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="location.href=racinePath + '/settings'">
+                                    <i class="bx bx-cog me-2"></i>
+                                    <span class="align-middle">إعدادات</span>
+                                </a>
+                            </li>
+                            <li>
+                                <div class="dropdown-divider"></div>
+                            </li>
+                            <a class="dropdown-item" href="#" onclick="location.href=racinePath + '/accountDelegates'">
+                                <i class="bx bxs-user-account"></i>
+                                <span class="align-middle">مندوبي</span>
+                            </a>
+                            <li>
+                                <div class="dropdown-divider"></div>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="javascript:void(0)" onclick="logout()">
+                                    <i class="bx bx-power-off me-2"></i>
+                                    <span class="align-middle">تسجيل الخروج</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--/ User -->
+                </ul>
+            </div>
+        </nav><nav class="navbar fixed-bottom navbar-detached bg-navbar-theme d-lg-none" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; z-index: 1000;">
+            <div class="container-fluid justify-content-between">
+        
+                <a href="javascript:void(0)" type="button" class="btn p-2" onclick="switchTab('flexy', this)"><i class="tf-icons bx bxs-phone-outgoing" style="font-size: 1.3rem;"></i></a>
+                <a href="javascript:void(0)" type="button" class="btn p-2" onclick="switchTab('idoom', this)"><i class="tf-icons bx bx bx-world" style="font-size: 1.3rem;"></i></a>
+        
+                <a href="javascript:void(0)" onclick="switchTab('dashboard', this)">
+                    <img src="/logos/tobalflexy.png" alt="" style="max-width: 5rem; max-height: 2.5rem;">
+                </a>
+        
+                <a href="javascript:void(0)" type="button" class="btn p-2" onclick="switchTab('cards', this)"><i class="tf-icons bx bxs-discount" style="font-size: 1.3rem;"></i></a>
+                <a href="javascript:void(0)" type="button" class="btn p-2" onclick="switchTab('transactions', this)"><i class="tf-icons bx bxs-receipt" style="font-size: 1.3rem;"></i></a>
+        
+            </div>
+        </nav><div class="content-wrapper"><div class="container-fluid grow container-p-y" id="main-content-container"><div id="dashboard-tab" class="tab-panel active"><div class="container-fluid grow container-p-y">
+
+
+            
+            
+
+            <h3 class="m-4"></h3>
+
+<div id="percentagesAccordion" class="accordion-item card bg-transparent mb-3 pourcentage-background-color">
+    <h2 class="accordion-header text-body d-flex justify-content-between bg-transparent" id="accordionIconOne">
+        <button type="button" class="accordion-button collapsed bg-transparent" data-bs-toggle="collapse" data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1" aria-expanded="false">
+            النسب الخاصة بي %
+        </button>
+    </h2>
+
+    <div id="accordionIcon-1" class="accordion-collapse collapse" data-bs-parent="#accordionIcon" style="">
+        <div class="accordion-body">
+            <div class="row">
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_mobilis.png" alt="Mobilis logo" height="30px">
+                                <h6 class="m-0"> فليكسي موبيليس </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="flexy_mobilis"></span> %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_djezzy.png" alt="Djezzy logo" height="30px">
+                                <h6 class="m-0"> فليكسي جيزي </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="flexy_djezzy"></span> %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_ooredoo.png" alt="Ooredoo logo" height="30px">
+                                <h6 class="m-0"> فليكسي اوريدو </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="flexy_ooredoo"></span> %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_mobilis.png" alt="Mobilis logo" height="30px">
+                                <h6 class="m-0"> فليكسي جملة موبيليس </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="flexy_bulk_mobilis"></span> %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_djezzy.png" alt="Djezzy logo" height="30px">
+                                <h6 class="m-0"> فليكسي جملة جيزي </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="flexy_bulk_djezzy"></span> %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_ooredoo.png" alt="Ooredoo logo" height="30px">
+                                <h6 class="m-0"> فليكسي جملة اوريدو </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="flexy_bulk_ooredoo"></span> %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_mobilis.png" alt="Mobilis logo" height="30px">
+                                <h6 class="m-0"> بطاقات موبيليس </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="mobile_mobilis"></span> %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_djezzy.png" alt="Djezzy logo" height="30px">
+                                <h6 class="m-0"> بطاقات جيزي </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="mobile_djezzy"></span>
+                                    %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_ooredoo.png" alt="Ooredoo logo" height="30px">
+                                <h6 class="m-0"> بطاقات اوريدو </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="mobile_ooredoo"></span> %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_idoom_adsl.png" alt="Idoom logo" height="30px">
+                                <h6 class="m-0"> ايدوم ADSL </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="idoom_adsl"></span> %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_idoom_4glte.png" alt="Idoom logo" height="30px">
+                                <h6 class="m-0"> ايدوم 4GLTE </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="idoom_4glte"></span> %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_freefire.png" alt="FreeFire logo" height="30px">
+                                <h6 class="m-0"> FreeFire </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="game_freefire"></span> %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_pubgm.png" alt="PUBG logo" height="30px">
+                                <h6 class="m-0"> PUBG Mobile </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="game_pubgm"></span>
+                                    %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12 mb-1">
+                    <div class="card">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <img src="/images/logo_freefire.png" alt="FreeFire logo" height="30px">
+                                <h6 class="m-0"> FreeFire TopUp </h6>
+                                <h5 class="text-success m-0"><span class="percentageValue" data-type="game_freefire_topup"></span>
+                                    %
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mb-2 g-3 justify-content-end">
+    <label class="col-4 col-md-2 col-form-label text-end">الفئة</label>
+    <div class="col-7 col-md-2">
+        <select class="form-select" id="category_select">
+            <option value="flexy" selected="">فليكسي</option>
+            <option value="flexy_bulk">فليكسي جملة</option>
+            <option value="idoom">ايدوم</option>
+            <option value="mobile">بطاقات الهاتف</option>
+            <option value="game">ألعاب</option>
+        </select>
+    </div>
+
+    <label class="col-4 col-md-2 col-form-label text-end">تم انشائهم بواسطة</label>
+    <div class="col-7 col-md-2">
+        <select class="form-select" id="created_by_select">
+            <option value="">الكل</option>
+            <option value="dbddef09-d624-41c5-904b-6ebe38329842" selected="">أنا</option>
+            <option value="!dbddef09-d624-41c5-904b-6ebe38329842">زبائني</option>
+        </select>
+    </div>
+
+    <label class="col-4 col-md-1 col-form-label text-end">دور</label>
+    <div class="col-7 col-md-2">
+        <select class="form-select" id="role_select">
+            <option value="" selected="">الكل</option>
+            <option value="super_wholesaler">
+                سوبر تاجر الجملة
+            </option>
+            <option value="wholesaler">
+                تاجر الجملة
+            </option>
+            <option value="seller">
+                تاجر
+            </option>
+        </select>
+    </div>
+</div>
+
+<div class="card pt-4 pb-5 px-2">
+    <div class="table-responsive text-nowrap">
+        <table id="usersProductsPriceTable" class="table table-striped">
+        </table>
+    </div>
+</div>
+
+
+<!-- Modal editProductPriceModal -->
+<div class="modal fade" id="editProductPriceModal" tabindex="-1" aria-labelledby="editProductPriceModalLabel" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductPriceModalLabel">تعديل نسبة الربح</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserProductPriceForm">
+                    <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="card-body">
+                            <input type="hidden" name="user_id">
+                            <div class="mb-3 row">
+                                <h5 class="col-sm-3">المستخدم : </h5>
+                                <h5 id="userName" class="col-sm-9 text-danger"></h5>
+                            </div>
+                            <div class="mb-3 row">
+                                <h5 class="col-sm-3 col-4">الخدمة :</h5>
+                                <h5 id="productName" class="col-sm-9 col-8 text-success"></h5>
+                            </div>
+                            <div id="editPercentagesInputs">
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-10 mx-auto">
+                        <div class="row">
+                            <button type="button" class="btn btn-secondary col mx-1" data-bs-dismiss="modal" aria-label="Close">إلغاء</button>
+                            <button type="submit" class="btn btn-primary col mx-1">تعديل</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    const RACINE_PATH = location.pathname.match(/\/\w+/g) ? location.pathname.match(/\/\w+/g)[0] : ''
+
+    const GET_USERS_PROFITS_PATH = RACINE_PATH + '/getUsersProductsPrice'
+    const UPDATE_USER_PRODUCT_PRICE_PATH = RACINE_PATH + '/updateUserProductPrice'
+</script>
+
+
+
+<script>
+    // Used in datatable render function
+    function renderPercentage(data, type, row) {
+        if (data)
+            if (data.min_percentage == data.max_percentage)
+                return data.min_percentage
+            else
+                return `${data.min_percentage} - ${data.max_percentage}`
+    }
+
+    $('#usersProductsPriceTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: GET_USERS_PROFITS_PATH,
+            data: function (data) {
+                // Not send all percentages in the query
+                data.columns.forEach((e, i) => {
+                    if (e.data.startsWith("products_percentage"))
+                        delete data.columns[i]
+                })
+                return data
+            }
+        },
+        columnDefs: [
+            { targets: "_all", className: "dt-right", render: DataTable.render.text() },
+            { targets: "_all", orderable: false },
+            { targets: "_all", autoWidth: false },
+            { targets: "_all", defaultContent: "" }
+        ],
+        "searchCols": [
+            undefined,
+            { "search": "dbddef09-d624-41c5-904b-6ebe38329842" },
+            { "search": "flexy" },
+        ],
+        'columns': [
+            { data: 'created_at', visible: false },
+            { data: 'created_by', visible: false, defaultContent: "" },
+            { data: 'category', visible: false, defaultContent: "" },
+            { title: "المعرف", data: 'short_id', className: "short_id-td" },
+            { title: "دور", data: 'role', className: "role-td" },
+            { title: "اسم المستخدم", data: 'username' },
+            { title: "اسم المحل", data: 'display_name' },
+            { title: "اللقب", data: 'last_name' },
+            { title: "الاسم", data: 'first_name' },
+
+            { title: "فليكسي موبيليس", data: 'products_percentage.flexy.mobilis.percentage', className: "p_flexy percentage" },
+            { title: "فليكسي جيزي", data: 'products_percentage.flexy.djezzy.percentage', className: "p_flexy percentage" },
+            { title: "فليكسي اوريدو", data: 'products_percentage.flexy.ooredoo.percentage', className: "p_flexy percentage" },
+
+            { title: "فليكسي جملة موبيليس", data: 'products_percentage.flexy_bulk.mobilis.percentage', className: "p_flexy_bulk percentage", visible: false },
+            { title: "فليكسي جملة جيزي", data: 'products_percentage.flexy_bulk.djezzy.percentage', className: "p_flexy_bulk percentage", visible: false },
+            { title: "فليكسي جملة اوريدو", data: 'products_percentage.flexy_bulk.ooredoo.percentage', className: "p_flexy_bulk percentage", visible: false },
+
+            { title: "ADSL", data: 'products_percentage.idoom.adsl', render: renderPercentage, className: "p_idoom percentage", visible: false },
+            { title: "4GLTE", data: 'products_percentage.idoom.4glte', render: renderPercentage, className: "p_idoom percentage", visible: false },
+
+            { title: "MOBILIS", data: 'products_percentage.mobile.mobilis', render: renderPercentage, className: "p_mobile percentage", visible: false },
+            { title: "DJEZZY", data: 'products_percentage.mobile.djezzy', render: renderPercentage, className: "p_mobile percentage", visible: false },
+            { title: "OOREDOO", data: 'products_percentage.mobile.ooredoo', render: renderPercentage, className: "p_mobile percentage", visible: false },
+
+            { title: "FreeFire TopUp", data: 'products_percentage.game.freefire_topup', render: renderPercentage, className: "p_game percentage", visible: false },
+            { title: "FreeFire", data: 'products_percentage.game.freefire', render: renderPercentage, className: "p_game percentage", visible: false },
+            { title: "PUBG", data: 'products_percentage.game.pubgm', render: renderPercentage, className: "p_game percentage", visible: false },
+        ],
+        "order": [0, 'desc'],
+        "language": { "url": `/js/ar.json` },
+    });
+</script>
+
+<script>
+    // Filter results on select change with "created_by" column
+    $('#created_by_select').on('change', function () {
+        $('#usersProductsPriceTable').DataTable().columns(1).search($(this).val()).draw();
+    });
+
+    // Filter results on select change with "role" column
+    $('#role_select').on('change', function () {
+        $('#usersProductsPriceTable').DataTable().columns(4).search($(this).val()).draw();
+    });
+
+
+    // Filter columns
+    $('#category_select').on('change', function () {
+        $('#usersProductsPriceTable').DataTable().columns(2).search($(this).val())
+        $('#usersProductsPriceTable').DataTable().columns(".percentage").visible(false)
+        $('#usersProductsPriceTable').DataTable().columns(".p_" + $(this).val()).visible(true)
+        $('#usersProductsPriceTable').DataTable().draw();
+        // Fix width change
+        $("#usersProductsPriceTable").width("100%");
+    });
+</script>
+
+
+
+<script>
+    $('#usersProductsPriceTable').on('draw.dt', function () {
+        $('td.short_id-td').each(function (index) {
+            $(this).html(`<span class="badge bg-dark">${$(this).text()}</span>`)
+        });
+
+        $('td.role-td').each(function () {
+            switch ($(this).text()) {
+                case "distributor":
+                    $(this).html('<span class="badge bg-danger">موزع</span>')
+                    break;
+                case "super_wholesaler":
+                    $(this).html('<span class="badge bg-primary">سوبر تاجر الجملة</span>')
+                    break;
+                case "wholesaler":
+                    $(this).html('<span class="badge bg-info">تاجر الجملة</span>')
+                    break;
+                case "seller":
+                    $(this).html('<span class="badge bg-success">تاجر</span>')
+                    break;
+            }
+        });
+
+        $('td.percentage').each(function () {
+            $(this).text($(this).text() + ' % ')
+            $(this).html('<span class="btn badge bg-dark">' + $(this).text() + '</span>')
+        });
+    })
+</script>
+
+
+<script>
+    var table = $('#usersProductsPriceTable').DataTable();
+    $('#usersProductsPriceTable tbody').on('click', 'td.percentage', function (e) {
+        let data = table.row($(this).parents('tr')).data()
+        if (!data.allow_to_edit_percentage)
+            return Swal.fire(
+                "غير مسموح",
+                "غير مسموح تعديل نسبة هذا المسخدم",
+                'warning'
+            )
+
+        var columns = table.settings().init().columns;
+        var idx = table.cell(this).index().column;
+        var dataName = columns[idx].data
+        var title = table.column(idx).header();
+        var category_name = dataName.split('.')[1]
+        var type_name = dataName.split('.')[2]
+        var product = data.products_percentage[category_name][type_name]
+
+        $('#editProductPriceModal').modal('show')
+        $(`#userName`).text(`${data.first_name} ${data.last_name} (${data.display_name})`)
+        $(`#productName`).text($(title).text())
+
+        $(`#editProductPriceModal input[name="user_id"]`).val(data.id)
+
+        // If product has no sub_type (flexy as example)
+        if (product.product_id) {
+            $("#editPercentagesInputs").html(`
+               <input type="hidden" name="product_id" value="${product.product_id}">
+                <div class="mb-3 row">
+                    <h5 class="col-sm-3 col-4 pt-2">النسبة</h5>
+                    <div class="col-sm-3 col-6">
+                        <div class="input-group input-group-merge">
+                            <span class="input-group-text">%</i></span>
+                            <input type="number" class="form-control" name="percentage" value="${product.percentage}"
+                                placeholder="النسبة" step="0.01"
+                                required>
+                        </div>
+                    </div>
+                </div>`)
+        } else {
+            // If the product has sub_type
+            // Delete max/min percentage
+            delete product.min_percentage
+            delete product.max_percentage
+            $("#editPercentagesInputs").html("")
+            for (const [sub_type, prod] of Object.entries(product)) {
+                $("#editPercentagesInputs").append(`
+                <input type="hidden" name="product_id" value="${prod.product_id}">
+                <div class="mb-3 row">
+                    <h5 class="col-sm-3 col-4 pt-2">${sub_type}</h5>
+                    <div class="col-sm-3 col-6">
+                        <div class="input-group input-group-merge">
+                            <span class="input-group-text">%</i></span>
+                            <input type="number" class="form-control" name="percentage" value="${prod.percentage}"
+                                placeholder="النسبة" step="0.01"
+                                required>
+                        </div>
+                    </div>
+                </div>`
+                )
+            }
+
+        }
+
+    });
+</script>
+
+
+<script>
+    var editProductPriceModal = new bootstrap.Modal(document.getElementById('editProductPriceModal'))
+
+    $("#editUserProductPriceForm").submit(function (event) {
+        event.preventDefault();
+        const data = new URLSearchParams(new FormData(this));
+        $(this).prop("disabled", true);
+        fetch(UPDATE_USER_PRODUCT_PRICE_PATH, {
+            method: 'post',
+            headers: {
+                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+            },
+            body: data
+        })
+            .then(response => {
+                if (response.status == 200) {
+                    response.json().then(body => {
+                        if (body.error)
+                            // alert(`Error: ${body.error.message}`)
+                            Swal.fire(
+                                "خطأ",
+                                body.error.message,
+                                'error'
+                            )
+                        else {
+                            // alert(`Le compte a été modifier avec succès`)
+                            Swal.fire(
+                                "ناجحة",
+                                "تم تعديل النسبة بنجاح",
+                                'success'
+                            )
+                            editProductPriceModal.hide()
+                            $('#usersProductsPriceTable').DataTable().ajax.reload(null, false);
+                        }
+                    })
+                }
+                else {
+                    // alert("Server error !");
+                    Swal.fire(
+                        "خطأ",
+                        "خطأ في الخادم !",
+                        'error'
+                    )
+                }
+                $(this).prop("disabled", false);
+            })
+            .catch(function (error) {
+                console.log('Request failed', error);
+            });
+
+    });
+</script>
+
+
+
+<script>
+    // This function groupes percentages of products from  the same category and type
+    // If the sub_type have differents percentage calculate the min and max 
+    function groupePercentages(data) {
+        const grouped = {};
+
+        // Group items by category and type
+        data.forEach(item => {
+            const { category, type, sub_type, percentage, product_id, price } = item;
+
+            // Initialize category in the grouped structure
+            if (!grouped[category]) {
+                grouped[category] = {};
+            }
+
+            // Initialize type in the category if not present
+            if (!grouped[category][type]) {
+                grouped[category][type] = {
+                    items: [],
+                    min_percentage: null,
+                    max_percentage: null
+                };
+            }
+
+            // Add the item to the type
+            grouped[category][type].items.push({ product_id, sub_type, percentage, price });
+
+            // Update min and max percentages
+            if (percentage !== null) {
+                const currentType = grouped[category][type];
+                currentType.min_percentage = currentType.min_percentage === null
+                    ? percentage
+                    : Math.min(currentType.min_percentage, percentage);
+                currentType.max_percentage = currentType.max_percentage === null
+                    ? percentage
+                    : Math.max(currentType.max_percentage, percentage);
+            }
+        });
+
+        // Convert the grouped structure into an array
+        const result = [];
+
+        Object.keys(grouped).forEach(category => {
+            Object.keys(grouped[category]).forEach(type => {
+                const currentType = grouped[category][type];
+
+                // Replace min and max percentages with a single percentage if they are equal
+                if (currentType.min_percentage === currentType.max_percentage) {
+                    currentType.percentage = currentType.min_percentage == undefined ? "" : currentType.min_percentage;
+                    delete currentType.min_percentage;
+                    delete currentType.max_percentage;
+                }
+
+                // Push the transformed object into the result array
+                result.push({
+                    category,
+                    type,
+                    items: currentType.items,
+                    ...('percentage' in currentType
+                        ? { percentage: currentType.percentage }
+                        : { min_percentage: currentType.min_percentage, max_percentage: currentType.max_percentage })
+                });
+            });
+        });
+
+        return result;
+    }
+
+
+    // Used to get percentage only one time whene the percentages shown
+    var isPercentageUpdated = false
+    function updateProductsPercentage() {
+        fetch(RACINE_PATH + "/getProductsPercentage")
+            .then((response) => {
+                if (response.status == 200) {
+                    response.json().then((body) => {
+                        // console.log(body)
+                        body = groupePercentages(body)
+                        body.forEach(e => {
+                            $(`.percentageValue[data-type='${e.category}_${e.type}']`).text(e.percentage != undefined ? e.percentage : `${e.min_percentage} - ${e.max_percentage}`)
+                        });
+                    });
+                }
+            })
+            .catch(function (error) {
+                console.log("Request failed", error);
+            });
+    }
+
+    $('#percentagesAccordion').on('shown.bs.collapse', function () {
+        if (!isPercentageUpdated) {
+            updateProductsPercentage();
+            isPercentageUpdated = true
+        }
+    })  
+</script>
+
+          </div></div><div id="tab-dashboard" class="tab-panel">
+          <!-- Stats Widgets Grid -->
+          <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 col-12 mb-4"><div class="card h-100 mb-4">
+                <div class="card-body d-flex align-items-center">
+                    <div class="avatar flex-shrink-0 me-3" style="background: rgba(113, 221, 55, 0.15); color: var(--success); width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 0.375rem;">
+                <i class="bx bx-wallet"></i>
+              </div>
+                    <div>
+                        <span class="d-block mb-1 text-muted" style="font-size: 14px;">إجمالي الرصيد (مجموع الشرائح)</span>
+                        <h4 class="card-title text-nowrap mb-2 fw-bold" id="statsTotalBalance">0.00 DA</h4>
+                    </div>
+                </div>
+            </div></div>
+            
+            <div class="col-lg-3 col-md-6 col-12 mb-4"><div class="card h-100 mb-4">
+                <div class="card-body d-flex align-items-center">
+                    <div class="avatar flex-shrink-0 me-3" style="background: rgba(105, 108, 255, 0.15); color: var(--primary); width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 0.375rem;">
+                <i class="bx bx-chip"></i>
+              </div>
+                    <div>
+                        <span class="d-block mb-1 text-muted" style="font-size: 14px;">الشرائح المتصلة</span>
+                        <h4 class="card-title text-nowrap mb-2 fw-bold" id="statsActiveSIMs">0 / 0</h4>
+                    </div>
+                </div>
+            </div></div>
+            
+            <div class="col-lg-3 col-md-6 col-12 mb-4"><div class="card h-100 mb-4">
+                <div class="card-body d-flex align-items-center">
+                    <div class="avatar flex-shrink-0 me-3" style="background: rgba(3, 195, 236, 0.15); color: var(--info); width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 0.375rem;">
+                <i class="bx bx-file"></i>
+              </div>
+                    <div>
+                        <span class="d-block mb-1 text-muted" style="font-size: 14px;">بطاقات إيدوم المتوفرة</span>
+                        <h4 class="card-title text-nowrap mb-2 fw-bold" id="statsIdoomCards">0 بطاقة</h4>
+                    </div>
+                </div>
+            </div></div>
+            
+            <div class="col-lg-3 col-md-6 col-12 mb-4"><div class="card h-100 mb-4">
+                <div class="card-body d-flex align-items-center">
+                    <div class="avatar flex-shrink-0 me-3" style="background: rgba(255, 171, 0, 0.15); color: var(--warning); width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 0.375rem;">
+                <i class="bx bx-package"></i>
+              </div>
+                    <div>
+                        <span class="d-block mb-1 text-muted" style="font-size: 14px;">بطاقات موبيليس المتوفرة</span>
+                        <h4 class="card-title text-nowrap mb-2 fw-bold" id="statsMobilisCards">0 بطاقة</h4>
+                    </div>
+                </div>
+            </div></div>
+          </div>
+          
+          <!-- Recent Transactions -->
+          <div class="card mb-4" style="margin-top: 1.5rem;">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <span class="card-title m-0 fw-bold text-primary">آخر العمليات المنجزة</span>
+              <button class="btn btn-secondary btn-sm" onclick="switchTab('transactions')"><i class="bx bx-list-ul"></i> عرض السجل بالكامل</button>
+            </div>
+            <div class="table-responsive text-nowrap">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>المشترك</th>
+                    <th>المبلغ</th>
+                    <th>المتعامل</th>
+                    <th>النوع</th>
+                    <th>التاريخ</th>
+                    <th>الحالة</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardRecentTxs">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div><div id="tab-flexy" class="tab-panel">
+
+
+            
+            
+
+            <h3 class="mb-3">فليكسي</h3>
+
+
+
+
+<div class="card phoneCard text-center mb-4 mt-4">
+    <div class="row my-4">
+        <div class="col-md-3 col-12 d-flex align-items-center justify-content-md-end justify-content-center mb-md-0 mb-3">
+            <label for="phoneNumber" class="h3 m-0"> رقم الهاتف</label>
+            <button class="btn btn-outline-primary ms-3" data-bs-toggle="modal" data-bs-target="#getContactModal">
+                <i class="fa-solid fa-address-book"></i>
+            </button>
+        </div>
+        <div class="col-md-7 col-12">
+            <div class="d-flex justify-content-center">
+                <div id="phoneNumberInputGroupe" class="input-group input-group-merge">
+                    <input id="phoneNumber" type="tel" class="form-control form-control-lg text-center" placeholder="ox xx xx xx xx" autocomplete="off" autofocus="">
+                    <span class="input-group-text">
+                        <span id="operatorLogo"></span>
+                    </span>
+                </div>
+            </div>
+            <div id="phoneNumber-tooltip" class="text-primary fs-5">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Pills -->
+<div id="flexyPills" class="row" style="display: none;">
+    <div class="col-12">
+        <div class="nav-align-top mb-4">
+            <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
+                <li class="nav-item">
+                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-balance" aria-controls="navs-pills-justified-balance" aria-selected="true">
+                        <i class="tf-icons bx bx-money me-2"></i> رصيد
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-offers" aria-controls="navs-pills-justified-offers" aria-selected="false">
+                        <i class="tf-icons bx bxs-offer me-2"></i> عروض
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <h5 id="packText">
+                    </h5><h6 id="sabbaqliText" class="text-center mb-4 h5 px-0 alert alert-danger text-dark">
+                        هذا الرقم لديه
+                        <span id="sabbaqliAmount" class="text-danger h4"></span><sub> دج </sub>
+                        ديون <span class="text-danger">
+                             </span>
+                    </h6>
+                
+                <div class="tab-pane fade show active" id="navs-pills-justified-balance" role="tabpanel">
+                    <div class="row flex-nowrap text-nowrap align-items-center gap-3" style="overflow-x: auto;">
+                        <button type="button" class="col btn btn-outline-primary preDefinedAmount" data-amount="100">
+                            100 دج
+                        </button>
+                        <button type="button" class="col btn btn-outline-primary preDefinedAmount" data-amount="200">
+                            200 دج
+                        </button>
+                        <button type="button" class="col btn btn-outline-primary preDefinedAmount" data-amount="500">
+                            500 دج
+                        </button>
+                        <button type="button" class="col btn btn-outline-primary preDefinedAmount" data-amount="1000">
+                            1000 دج
+                        </button>
+                        <button type="button" class="col btn btn-outline-primary preDefinedAmount" data-amount="1500">
+                            1500 دج
+                        </button>
+                    </div>
+                    <div class="row my-4">
+                        <div class="col-md-4 col-3 d-flex align-items-center justify-content-md-end justify-content-center">
+                            <label for="amount" class="h4 m-0">المبلغ</label>
+                        </div>
+                        <div class="col-md-6 col-9">
+                            <div class="d-flex justify-content-center">
+                                <div id="amountInputGroupe" class="input-group input-group-merge">
+                                    <input id="amount" type="tel" class="form-control form-control-lg text-center text-success " placeholder="" value="" autocomplete="off" autofocus="">
+                                    <span class="input-group-text">دج</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-grid col-lg-5 order-lg-2 my-2 mx-auto">
+                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input type="radio" class="btn-check" name="flexy_type" id="flexyTypeRadio1" value="Normal" checked="" autocomplete="off">
+                                <label class="btn btn-outline-primary" id="flexyTypeLabel1" for="flexyTypeRadio1">عادي</label>
+                                <input type="radio" class="btn-check" name="flexy_type" id="flexyTypeRadio2" autocomplete="off">
+                                <label class="btn btn-outline-primary" id="flexyTypeLabel2" for="flexyTypeRadio2" value="" style="display: none;"></label>
+                                <input type="radio" class="btn-check" name="flexy_type" id="flexyTypeRadio3" autocomplete="off">
+                                <label class="btn btn-outline-primary" id="flexyTypeLabel3" for="flexyTypeRadio3" value=""></label>
+                            </div>
+                        </div>
+                        <div class="d-grid col-lg-5 order-lg-1 my-2 mx-auto">
+                            <button id="sendBalanceBtn" type="button" class="btn btn-primary">
+                                <span class="tf-icons bx bxs-send me-4"></span> إرسال
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="navs-pills-justified-offers" role="tabpanel">
+                    <div id="offerSpinner" class="text-center m-4">
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div id="offersList" class="list-group mb-5">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <button id="sendOfferBtn" type="button" class="btn btn-primary w-75">
+                            <span class="tf-icons bx bxs-send me-4"></span> إرسال
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Pills -->
+
+
+<h4 class="my-3 mt-5"> آخر العمليات</h4>
+
+<div id="transactionsCard" class="card pt-4 pb-5 px-2">
+    <div class="table-responsive text-nowrap">
+        <table id="flexySubTransactionsTable" class="table table-striped">
+        </table>
+    </div>
+</div>
+
+
+
+<!-- Modal getContactModal -->
+<div class="modal fade" id="getContactModal" tabindex="-1" aria-labelledby="getContactModalLabel" aria-hidden="true" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg mt-5">
+        <div class="modal-content">
+                <div>
+                    <input type="text" class="form-control form-control-lg" id="contact-search-input" placeholder="ادخل اسم الزبون او رقمه" autofocus="">
+                </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="toastError" class="bs-toast toast toast-placement-ex m-2 fade bg-danger top-0 start-50 translate-middle-x" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+    <div class="toast-header">
+        <i class="bx bx-error me-2"></i>
+        <div class="me-auto fw-semibold">خطأ</div>
+        <small></small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+    </div>
+</div>
+
+<div id="toastSuccess" class="bs-toast toast toast-placement-ex m-2 fade bg-success top-0 start-50 translate-middle-x" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+    <div class="toast-header">
+        <i class="bx bx-check me-2"></i>
+        <div class="me-auto fw-semibold">ناجحة</div>
+        <small></small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+        العملية في طور التنفيذ
+    </div>
+</div>
+
+
+<script>
+    const RACINE_PATH = location.pathname.match(/\/\w+/g) ? location.pathname.match(/\/\w+/g)[0] : ''
+
+    const GET_TRANSACTIONS_PATH = RACINE_PATH + '/getAllTransactions'
+</script>
+
+
+<script>
+    const MAX_AMOUNT_LONG = 6
+    var phoneNumber = "";
+    var amount = ""
+
+    $("#phoneNumber").on("keyup change input", function (e) {
+        // Remove contact name if phoneNumber edited
+        $("#phoneNumber-tooltip").text("")
+
+        let value = this.value
+        value = value.replace(/[^0-9]+/g, '');
+        value = value.substr(0, 10)
+
+        phoneNumber = value
+
+        if (value.startsWith('0')) {
+            if (value.startsWith('05')) {
+                $('#operatorLogo').css("background-image", "url(/images/logo_ooredoo.png)");
+                $('#flexyTypeLabel2').text("سبقلي")
+                $('#flexyTypeRadio2').val("Sabbaqli")
+                $('#flexyTypeLabel3').text("الشركات")
+                $('#flexyTypeRadio3').val("Enterprise")
+                $('#flexyTypeLabel2').show()
+            }
+            else if (value.startsWith('06')) {
+                $('#operatorLogo').css("background-image", "url(/images/logo_mobilis.png)");
+                $('#flexyTypeLabel2').text("فاتورة")
+                $('#flexyTypeRadio2').val("Normal")
+                $('#flexyTypeLabel3').text("دولي")
+                $('#flexyTypeRadio3').val("International")
+                $('#flexyTypeLabel2').show()
+            }
+            else if (value.startsWith('07')) {
+                $('#operatorLogo').css("background-image", "url(/images/logo_djezzy.png)");
+                $('#flexyTypeLabel2').text("")
+                $('#flexyTypeRadio2').val("")
+                $('#flexyTypeLabel3').text("فاتورة")
+                $('#flexyTypeRadio3').val("Facture")
+                $('#flexyTypeLabel2').hide()
+            }
+            else {
+                value = "0"
+                $('#operatorLogo').css("background-image", "none");
+                $('#flexyTypeLabel2').text("")
+                $('#flexyTypeRadio2').val("")
+                $('#flexyTypeLabel3').text("")
+                $('#flexyTypeRadio3').val("")
+                $('#flexyTypeLabel2').hide()
+                $("#flexyTypeRadio1").prop("checked", true);
+            }
+        } else {
+            value = ""
+            $('#operatorLogo').css("background-image", "none");
+            $('#flexyTypeLabel2').text("")
+            $('#flexyTypeRadio2').val("")
+            $('#flexyTypeLabel3').text("")
+            $('#flexyTypeRadio3').val("")
+            $('#flexyTypeLabel2').hide()
+            $("#flexyTypeRadio1").prop("checked", true);
+        }
+
+        if (value.length == 10) {
+            $('#flexyPills').show()
+            $('button[data-bs-target="#navs-pills-justified-balance"]').tab('show').trigger('shown');
+            $('button[data-bs-target="#navs-pills-justified-offers"]').prop("disabled", false);
+            $('#amount').focus()
+            $('#sabbaqliText').hide()
+            $("#offersList").html("")
+            $('#offerSpinner').show()
+            scrollToElement('#phoneNumber')
+        } else {
+            $('#flexyPills').hide()
+        }
+
+        let valueFormat = value.match(/\d{1,2}/g)
+        if (valueFormat) valueFormat = valueFormat.join(' ')
+
+        this.value = valueFormat || ""
+    })
+
+
+    $("#amount").on("keyup change input", function (e) {
+        let value = this.value
+        value = value.replace(/[^0-9]+/g, '');
+        value = value.substr(0, MAX_AMOUNT_LONG)
+
+        let valueFormat = formatBalance(value)
+
+        if (valueFormat && valueFormat != "0")
+            this.value = valueFormat
+        else this.value = ""
+
+        amount = value
+    })
+
+    $(".preDefinedAmount").on("click", function (e) {
+        $("#amount").val(this.dataset.amount)
+        $("#amount").change()
+    })
+</script>
+
+
+
+<script>
+    var isLoadingOffers = false
+    $('button[data-bs-toggle="tab"]').on("shown.bs.tab", function (e) {
+        if (e.target.getAttribute("data-bs-target") == "#navs-pills-justified-offers"
+            && $("#offerSpinner").is(":visible") && !isLoadingOffers) {
+            isLoadingOffers = true
+            apiRequest('/api/customer/live-offers', 'POST', { phone: phoneNumber })
+                .then((data) => {
+                    isLoadingOffers = false;
+                    let offersListHtml = "";
+                    if (data && data.success && data.offers) {
+                        if (data.offers.length > 0) {
+                            data.offers.sort((a,b)=>a.price-b.price).forEach((off) => {
+                                offersListHtml += 
+                                    '<label data-bs-toggle="list" data-offer-name="'+off.name+'" data-offer-id="'+off.id+'" data-offer-price="'+off.price+'" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">' +
+                                        '<span class="badge bg-primary fs-big"><span>'+off.price+'</span> دج </span>' +
+                                        off.name +
+                                    '</label>';
+                            });
+                        } else {
+                            offersListHtml = '<label class="list-group-item list-group-item-danger">لا توجد عروض لهذا الرقم</label>';
+                        }
+                    } else {
+                        offersListHtml = '<label class="list-group-item list-group-item-danger">' + (data.message || 'خطأ في جلب العروض') + '</label>';
+                    }
+                    $("#offersList").html(offersListHtml).change();
+                    $('#offerSpinner').hide();
+                })
+                .catch(function (error) {
+                    isLoadingOffers = false;
+                    console.log("Request failed", error);
+                    $("#offersList").html('<label class="list-group-item list-group-item-danger">فشل الاتصال بالخادم</label>').change();
+                    $('#offerSpinner').hide();
+                });
+        }
+    })
+
+    const SAMA_OFFERS_HTML = `
+            <div id="accordionSama" class="accordion accordion-header-primary accordion-without-arrow">
+                <div class="accordion-item card">
+                    <h2 class="accordion-header text-body d-flex justify-content-between align-self-center" id="accordionSamaOne">
+                        <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionSama-1" aria-controls="accordionSama-1">
+                            Sama Mix
+                        </button>
+                    </h2>
+                    <div id="accordionSama-1" class="accordion-collapse collapse" data-bs-parent="#accordionSama" style="">
+                        <div class="accordion-body list-group">
+                            <label data-bs-toggle="list" data-offer-name="Sama Mix 50" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>50</span> دج </span>
+                                Sama Mix 50
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Mix 100" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>100</span> دج </span>
+                                Sama Mix 100
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Mix 500" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>500</span> دج </span>
+                                Sama Mix 500
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Mix 1000" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>1000</span> دج </span>
+                                Sama Mix 1000
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Mix 1500" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>1500</span> دج </span>
+                                Sama Mix 1500
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Mix 2000" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>2000</span> دج </span>
+                                Sama Mix 2000
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item card">
+                    <h2 class="accordion-header text-body d-flex justify-content-between align-self-center" id="accordionSamaTwo">
+                        <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionSama-2" aria-controls="accordionSama-2">
+                            Sama Talk
+                        </button>
+                    </h2>
+                    <div id="accordionSama-2" class="accordion-collapse collapse" data-bs-parent="#accordionSama" style="">
+                        <div class="accordion-body list-group">
+                            <label data-bs-toggle="list" data-offer-name="Sama Talk 500" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>500</span> دج </span>
+                                Sama Talk 500
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Talk 1000" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>1000</span> دج </span>
+                                Sama Talk 1000
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Talk 1500" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>1500</span> دج </span>
+                                Sama Talk 1500
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Talk 2000" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>2000</span> دج </span>
+                                Sama Talk 2000
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item card">
+                    <h2 class="accordion-header text-body d-flex justify-content-between align-self-center" id="accordionSamaThree">
+                        <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionSama-3" aria-expanded="false" aria-controls="accordionSama-3">
+                            Sama Net
+                        </button>
+                    </h2>
+                    <div id="accordionSama-3" class="accordion-collapse collapse" data-bs-parent="#accordionSama" style="">
+                        <div class="accordion-body list-group">
+                            <label data-bs-toggle="list" data-offer-name="Sama Net 500" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>500</span> دج </span>
+                                Sama Net 500
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Net 1000" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>1000</span> دج </span>
+                                Sama Net 1000
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Net 1500" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>1500</span> دج </span>
+                                Sama Net 1500
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Net 2000" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>2000</span> دج </span>
+                                Sama Net 2000
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>       
+    `
+
+    $("#offersList").change(function () {
+        $("#accordionSama-1, #accordionSama-2, #accordionSama-3")
+            .on('hidden.bs.collapse', function () {
+                $("#offersList .active").removeClass("active")
+            })
+    })
+
+</script>
+
+<script>
+    $("#sendBalanceBtn").click(async function () {
+        // console.log({ phoneNumber, amount })
+        if (amount >= 5000) {
+            if (phoneNumber.startsWith('06')) return
+            let swalResult = await Swal.fire({
+                title: `هل تريد إرسال مبلغ <span class="text-danger">${formatBalance(amount)}</span> دج `,
+                input: 'number',
+                inputLabel: `أعد كتابة المبلغ للتأكيد`,
+                inputPlaceholder: "المبلغ",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: "إلغاء",
+                confirmButtonText: "تأكيد",
+                inputValidator: (value) => {
+                    if (value != amount) {
+                        return `أعد كتابة  : <b>${amount}</b>`
+                    }
+                }
+            })
+            if (swalResult.isConfirmed == false) return
+        }
+
+        if (await hasRecentOperationFromTable(phoneNumber)) return
+
+        let type = $("input[name='flexy_type']:checked").val()
+        if (phoneNumber.length == 10)
+            if (amount >= 100 || phoneNumber.startsWith('06') && amount >= 40) {
+                $(this).prop("disabled", true);
+                
+    // Instead of calling the remote PHP endpoint, we call our local JS function
+    const localAmount = amount || $("#amount").val();
+    const localPhone = phoneNumber || $("#phoneNumber").val();
+    // executeRecharge handles the UI loading state and API call
+    executeRecharge('flexy');
+    $(this).prop("disabled", false);
+    return Promise.resolve();
+    
+                })
+                    .then((response) => {
+                        if (response.status == 200) {
+                            response.json().then((body) => {
+                                if (body.error) {
+                                    $('#toastError .toast-body')
+                                        .text(body.error.message_ar || body.error.message)
+                                    $('#toastError').toast('show')
+                                    //$("#phoneNumber").val("").change()
+                                    //$("#amount").val("").change()
+                                } else {
+                                    $('#toastSuccess').toast('show')
+                                    $("#phoneNumber").val("").change()
+                                    $("#amount").val("").change()
+                                    $('#transactionsTable').DataTable().draw()
+                                    $("#phoneNumber").focus()
+                                    // scrollToElement('#transactionsCard', 500)
+                                }
+                                //console.log(body)
+                            });
+                        }
+                        $(this).prop("disabled", false);
+                    })
+                    .catch(function (error) {
+                        console.log("Request failed", error);
+                        $(this).prop("disabled", true);
+                    });
+            }
+    })
+
+</script>
+
+
+<script>
+    $("#sendOfferBtn").click(async function () {
+        let offerName = $("#offersList .active").data("offer-name")
+        // console.log({ phoneNumber, offerName })
+
+        if (await hasRecentOperationFromTable(phoneNumber)) return
+
+        if (phoneNumber.length == 10 && offerName) {
+            $(this).prop("disabled", true);
+            
+    // Store offer in global var for executeRecharge
+    let activeEl = $("#offersList .active");
+        let offerId = activeEl.data("offer-id") || offerName;
+        let offerPrice = activeEl.data("offer-price") || amount;
+        window.selectedOfferData = { type: 'offer', id: offerId, price: offerPrice, name: offerName };
+    executeRecharge('flexy');
+    $(this).prop("disabled", false);
+    return Promise.resolve();
+    
+            })
+                .then((response) => {
+                    if (response.status == 200) {
+                        response.json().then((body) => {
+                            if (body.error) {
+                                $('#toastError .toast-body').text(body.error.message)
+                                $('#toastError').toast('show')
+                                //$("#phoneNumber").val("").change()
+                                //$("#amount").val("").change()
+                            } else {
+                                $('#toastSuccess').toast('show')
+                                $("#phoneNumber").val("").change()
+                                $("#amount").val("").change()
+                                $('#transactionsTable').DataTable().draw()
+                                $("#phoneNumber").focus()
+                                // scrollToElement('#transactionsCard', 500)
+                            }
+                            //console.log(body)
+                        });
+                    }
+                    $(this).prop("disabled", false);
+                })
+                .catch(function (error) {
+                    console.log("Request failed", error);
+                    $(this).prop("disabled", true);
+                });
+        }
+    })
+
+</script>
+
+<script>
+    async function hasRecentOperationFromTable(phoneNumber) {
+        let lastOpeartion = table.data().toArray()[0]
+        if (lastOpeartion && lastOpeartion.param_1 == phoneNumber) {
+            let swalResult = await Swal.fire({
+                html: `هل ترغب في إرسال عملية أخرى إلى هذا الرقم <span class="text-danger"> ${phoneNumber} </span> ؟`,
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: "إلغاء",
+                confirmButtonText: "تأكيد",
+            })
+            if (swalResult.isConfirmed == false) return true
+        }
+    }
+</script>
+
+<script>
+    var isCheckingSabbaqli = false
+    var lastCheckedNumber = ""
+    $('button[data-bs-toggle="tab"]').on("shown.bs.tab", function (e) {
+        if (e.target.getAttribute("data-bs-target") == "#navs-pills-justified-balance"
+            && !isCheckingSabbaqli && phoneNumber.startsWith('05') && lastCheckedNumber != phoneNumber) {
+            // Check sabbaqli from last opeartions before using api
+            let checkSabbaqliFromTable = hasSabbaqliFromTable(phoneNumber)
+            if (checkSabbaqliFromTable) {
+                setTimeout(() => {
+                    $('#sabbaqliText').show()
+                    $('#sabbaqliAmount').text(checkSabbaqliFromTable.sabbaqliAmount)
+                    $("#flexyTypeRadio2").prop("checked", true);
+                    $('button[data-bs-target="#navs-pills-justified-offers"]').prop("disabled", true);
+                }, 100);
+                return
+            }
+            isCheckingSabbaqli = true
+            fetch(RACINE_PATH + "/checkSabbaqli?phoneNbr=" + phoneNumber)
+                .then((response) => {
+                    isCheckingSabbaqli = false
+                    lastCheckedNumber = phoneNumber
+                    if (response.status == 200) {
+                        response.json().then((body) => {
+                            // console.log(body)
+                            if (body.sabbaqliAmount) {
+                                $('#sabbaqliText').show()
+                                $('#sabbaqliAmount').text(body.sabbaqliAmount)
+                                $("#flexyTypeRadio2").prop("checked", true);
+                                $('button[data-bs-target="#navs-pills-justified-offers"]').prop("disabled", true);
+                            }
+                        });
+                    }
+                })
+                .catch(function (error) {
+                    console.log("Request failed", error);
+                });
+        }
+    })
+
+    function hasSabbaqliFromTable(phoneNumber) {
+        let lastOpeartion = table.data().toArray().find(e => e.param_1 == phoneNumber)
+        if (lastOpeartion && lastOpeartion.message.includes("SABBAQLI")) {
+            var sabbaqliAmount = parseInt(lastOpeartion.message.match(/\d+ DA/g)[0]);
+            return { sabbaqliAmount }
+        }
+    }
+</script>
+
+
+<script>
+    // Used to get percentage only one time whene the percentages shown
+    var isPercentageUpdated = false
+    function updateFlexyPercentage() {
+        fetch(RACINE_PATH + "/getFlexyPercentage")
+            .then((response) => {
+                if (response.status == 200) {
+                    response.json().then((body) => {
+                        // console.log(body)
+                        body.forEach(e => {
+                            $(`.percentageValue[data-type='${e.type}']`).text(e.percentage)
+                        });
+                    });
+                }
+            })
+            .catch(function (error) {
+                console.log("Request failed", error);
+            });
+    }
+
+    $('#percentagesAccordion').on('shown.bs.collapse', function () {
+        if (!isPercentageUpdated) {
+            updateFlexyPercentage();
+            isPercentageUpdated = true
+        }
+    })    
+</script>
+
+
+
+<script>
+    $('#transactionsTable').DataTable({
+        processing: false,
+        serverSide: true,
+        ajax: GET_TRANSACTIONS_PATH,
+        columnDefs: [
+            { targets: "_all", className: "dt-right", render: DataTable.render.text() }
+        ],
+        "searchCols": [
+            { "search": "dbddef09-d624-41c5-904b-6ebe38329842" },
+            undefined,
+            { "search": "flexy" },
+        ],
+        'columns': [
+            { data: 'created_by', visible: false, defaultContent: "" },// Used to search for users
+            { data: 'created_at', visible: false },
+            { data: 'category', visible: false },// Used to search for category
+            { title: "النوع", data: 'type', className: "type-td" },
+            { title: "المبلغ", data: 'amount', className: "balance-td add-currency-td" },
+            { title: "الحالة", data: 'status', className: "status-td" },
+            { title: "رقم الهاتف", data: 'param_1', },
+            { title: "إسم العرض", data: 'item_name', className: "item_name-td" },
+            { title: "تفاصيل", data: 'message' },
+            //{ title: 'المبلغ المقتطع', data: 'item_price' },
+            //{ title: 'رصيدي قبل', data: 'balance_before' },
+            //{ title: 'رصيدي بعد', data: 'balance_after' },
+            { title: "تاريخ العملية", data: 'created_at' },
+        ],
+        "order": [1, 'desc'],
+        "language": { "url": `/js/ar.json` },
+        "bInfo": false
+    });
+</script>
+
+<script>
+    // Time to refresh the table whene there is a pending operation
+    const REFRESH_TABLE_TIME = 3_000
+    // Set of penidng opearions (used to playsound)
+    const PENDING_OPERATIONS_SET = new Set();
+
+    var table = $('#transactionsTable').DataTable();
+    $('#transactionsTable').on('draw.dt', function () {
+        $('td.type-td').each(function () {
+            let data = table.row($(this).parents('tr')).data()
+            let sub_type = data.sub_type == "flexy_offer" ? "عرض" : "رصيد"
+
+            switch ($(this).text()) {
+                case "mobilis":
+                    $(this).html('<img src="/images/logo_mobilis.png" alt="Mobilis logo" class="operation-logo"> ' + sub_type)
+                    break;
+                case "djezzy":
+                    $(this).html('<img src="/images/logo_djezzy.png" alt="Djezzy logo" class="operation-logo"> ' + sub_type)
+                    break;
+                case "ooredoo":
+                    $(this).html('<img src="/images/logo_ooredoo.png" alt="Ooredoo logo" class="operation-logo"> ' + sub_type)
+                    break;
+            }
+        });
+
+        $('td.status-td').each(function () {
+            switch ($(this).text()) {
+                case "success":
+                    $(this).html('<span class="badge bg-success">ناجحة</span>')
+                    break;
+                case "error":
+                    $(this).html('<span class="badge bg-danger">فاشلة</span>')
+                    break;
+                case "pending":
+                    $(this).html('<span class="spinner-border text-primary" role="status"></span>')
+                    break;
+            }
+        });
+
+        $('td.item_name-td').each(function () {
+            switch ($(this).text()) {
+                case "Normal":
+                    $(this).html("عادي")
+                    break;
+                case "Sabbaqli":
+                    $(this).html("سبقلي")
+                    break;
+                case "Enterprise":
+                    $(this).html("الشركات")
+                    break;
+                case "International":
+                    $(this).html("دولي")
+                    break;
+                case "Facture":
+                    $(this).html("فاتورة")
+                    break;
+            }
+        });
+
+        // Redraw the table if there is a pending operation
+        for (let i = 0; i < table.data().length; i++) {
+            const e = table.data()[i];
+            if (e.status == 'pending') {
+                setTimeout(() => {
+                    table.ajax.reload(null, false);
+                    updateBalanceSpan()
+                }, REFRESH_TABLE_TIME);
+                break
+            }
+        }
+
+        // Used to playsound
+        for (let i = 0; i < table.data().length; i++) {
+            const e = table.data()[i];
+            if (e.status == 'pending') {
+                PENDING_OPERATIONS_SET.add(e.id)
+            } else if (PENDING_OPERATIONS_SET.has(e.id)) {
+                PENDING_OPERATIONS_SET.delete(e.id)
+                let soundCode = e.status == "success" ? "SUCCESS" : "ERROR"
+                playSound(soundCode)
+            }
+        }
+    })
+</script>
+
+<script>
+    var getContactModal = new bootstrap.Modal(document.getElementById('getContactModal'))
+    document.getElementById('getContactModal')
+        .addEventListener('shown.bs.modal', function (event) {
+            $('#contact-search-input').focus()
+        })
+
+    $('#contact-search-input').autocomplete({
+        filter: RACINE_PATH + '/searchForContacts?type=flexy&q=#QUERY#',
+        onItemRendered(el, item) {
+            let result = JSON.parse(item.text)
+            item.dataset.number = result.number
+            item.dataset.name = result.name
+            item.text = `${result.name} (${result.number})`
+        },
+        onPick(el, item) {
+            getContactModal.hide()
+            $("#phoneNumber").val(item.dataset.number).change()
+            $("#phoneNumber-tooltip").text(item.dataset.name)
+            $('#contact-search-input').val("")
+        }
+    })
+</script>
+
+<style>
+    #phoneNumber {
+        font-size: 3vmax;
+        letter-spacing: 0.2vmax;
+    }
+
+    #operatorLogo {
+        width: 5vmax;
+        height: 5vmax;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    #phoneNumberInputGroupe {
+        width: 35vmax;
+        box-shadow: 0px 0px 10px gray;
+        border-radius: 10px;
+    }
+
+    #phoneNumberInputGroupe .input-group-text {
+        padding: 0.4vmax;
+    }
+
+    #phoneNumberInputGroupe input,
+    #phoneNumberInputGroupe span {
+        border-color: #5f61e6;
+        border-width: 1px;
+    }
+
+    #amount {
+        font-size: 2.5vmax;
+        letter-spacing: 0.2vmax;
+    }
+
+    #amountInputGroupe {
+        width: 20vmax;
+    }
+
+    #amountInputGroupe .input-group-text {
+        font-size: 2vmax;
+    }
+</style>
+
+          </div><div id="tab-idoom" class="tab-panel">
+          <div style="max-width: 850px; margin: 0 auto;">
+            <div class="card mb-4">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <span class="card-title m-0 fw-bold text-primary">تفعيل وشحن إيدوم تلقائياً (Idoom ADSL / Fibre / 4G)</span>
+              </div>
+              <div class="card-body">
+                <div class="recharge-form-box">
+                  <!-- Subscriber Input Group -->
+                  <div class="mb-3">
+                    <label class="form-label" for="idoomPhone">رقم حساب الإنترنت / رقم الهاتف الثابت (إيدوم)</label>
+                    <div style="position: relative;">
+                      <input type="text" class="form-control" id="idoomPhone" placeholder="مثال: 021XXXXXX أو 21321XXXXXX" style="letter-spacing: 2px;" oninput="onIdoomInputChanged()">
+                    </div>
+                  </div>
+
+                  <!-- Invoice/Bill Result Display -->
+                  <div id="idoomBillBox" style="display: none; margin-bottom: 1.25rem; padding: 1rem; background: rgba(105, 108, 255, 0.08); border: 1px dashed var(--primary-color); border-radius: 0.5rem;">
+                    <div style="font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--primary-color); text-align: right;">تفاصيل الفاتورة والحساب:</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; text-align: right;">
+                      <div><strong>رقم الاشتراك:</strong> <span id="idoomBillAccount">---</span></div>
+                      <div><strong>مبلغ الفاتورة المستحق:</strong> <span id="idoomBillAmount" style="color: var(--danger); font-weight: bold;">---</span></div>
+                    </div>
+                  </div>
+                  
+                  <!-- Available Idoom Cards -->
+                  <div id="idoomCardsBox" style="display: none; margin-bottom: 1.25rem;">
+                    <label class="form-label">البطاقات المتوفرة في المخزن (اضغط لاختيار فئة):</label>
+                    <div id="idoomCardsListContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem; max-height: 250px; overflow-y: auto; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 0.375rem; background: #fdfdfd;">
+                      <!-- Dynamically rendered Idoom card values -->
+                    </div>
+                  </div>
+
+                  <!-- Selected Card Value Display -->
+                  <div class="mb-3" id="idoomSelectedValueGroup" style="display: none;">
+                    <label class="form-label">القيمة المحددة للتعبئة (دج)</label>
+                    <input type="text" class="form-control" id="idoomSelectedAmount" readonly="" style="font-size: 1.5rem; font-weight: bold; text-align: center; background: #f8f9fa; padding: 0.5rem;">
+                  </div>
+                  
+                  <!-- Button Triggers -->
+                  <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+                    <button class="btn btn-secondary" id="btnCheckIdoomBill" onclick="checkIdoomBill()" style="flex: 1; padding: 0.75rem; font-size: 1.1rem;"><i class="bx bx-search-alt"></i> فحص الفاتورة</button>
+                    <button class="btn btn-primary" id="btnSubmitIdoom" onclick="executeIdoomActivation()" disabled="" style="flex: 2; padding: 0.75rem; font-size: 1.1rem; font-weight: 600;"><i class="bx bx-paper-plane"></i> شحن وتفعيل تلقائي</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><div id="tab-cards" class="tab-panel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3>بطاقات</h3>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-info" onclick="switchTab('stockVouchers')">
+                        <i class="bx bxs-coin-stack me-1"></i> مخزون القسائم
+                    </button>
+                    <button class="btn btn-primary" onclick="switchTab('uploadVouchers')">
+                        <i class="bx bxs-coupon me-1"></i> تحميل القسائم
+                    </button>
+                </div>
+            </div>
+
+
+<div class="row gap-3 mb-5 justify-content-center">
+    <div class="col-md-1 col-3 "><a href="javascript:void(0)" onclick="alert('واجهة شراء بطاقات إيدوم (تحت التطوير)')">
+            <div class="card bg-transparent h-100 justify-content-center">
+                <img class="card-img" src="/images/logo_idoom_adsl.png" alt="Card image cap">
+            </div>
+        </a>
+    </div>
+    <div class="col-md-1 col-3"> <a href="javascript:void(0)" onclick="alert('واجهة شراء بطاقات الجيل الرابع (تحت التطوير)')">
+            <div class="card bg-transparent h-100 justify-content-center">
+                <img class="card-img" src="/images/logo_idoom_4glte.png" alt="Card image cap">
+            </div>
+        </a>
+    </div>
+    <div class="col-md-1 col-3"><a href="javascript:void(0)" onclick="alert('واجهة شراء بطاقات موبيليس (تحت التطوير)')">
+            <div class="card bg-transparent h-100 justify-content-center">
+                <img class="card-img" src="/images/logo_mobilis.png" alt="Card image cap">
+
+            </div>
+        </a>
+    </div>
+    <div class="col-md-1 col-3">
+        <a href="javascript:void(0)" onclick="alert('واجهة شراء بطاقات جيزي (تحت التطوير)')">
+            <div class="card bg-transparent h-100 justify-content-center">
+                <img class="card-img" src="/images/logo_djezzy.png" alt="Card image cap">
+            </div>
+        </a>
+    </div>
+    <div class="col-md-1 col-3">
+        <a href="javascript:void(0)" onclick="alert('واجهة شراء بطاقات أوريدو (تحت التطوير)')">
+            <div class="card bg-transparent h-100 justify-content-center">
+                <img class="card-img" src="/images/logo_ooredoo.png" alt="Card image cap">
+            </div>
+        </a>
+    </div>
+    <div class="col-md-1 col-3">
+        <a href="javascript:void(0)" onclick="alert('واجهة شراء بطاقات فري فاير (تحت التطوير)')">
+            <div class="card bg-transparent h-100 justify-content-center">
+                <img class="card-img" src="/images/logo_freefire.png" alt="Card image cap">
+            </div>
+        </a>
+    </div>
+    <div class="col-md-1 col-3"><a href="javascript:void(0)" onclick="alert('واجهة شراء بطاقات ببجي (تحت التطوير)')">
+            <div class="card bg-transparent h-100 justify-content-center">
+                <img class="card-img" src="/images/logo_pubgm.png" alt="Card image cap">
+            </div>
+        </a>
+    </div>
+</div>
+
+
+<div class="row p-3 mb-3 text-center justify-content-center">
+
+
+</div>
+
+<style>
+    .card {
+        overflow: hidden;
+    }
+
+    .disabledbutton {
+        pointer-events: none;
+        opacity: 0.4;
+    }
+
+    .no-stock-card-label {
+        position: absolute;
+        z-index: 100;
+        top: 1rem;
+        left: -1.5rem;
+        display: inline-block;
+        padding: 0.25rem 1.5rem;
+        font-size: 1rem;
+        line-height: 1;
+        color: #3d434d;
+        background-color: #ffc322;
+        -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+</style>
+</div><div id="tab-uploadVouchers" class="tab-panel"><h3 class="m-4 mb-0">تحميل القسائم</h3>
+
+
+<div class="d-flex justify-content-end mb-4">
+    <a href="/distributor/pgpKeys" class="btn btn-primary">مفاتيح PGP</a>
+</div>
+
+
+
+<form id="uploadVouchersForm" action="/distributor/uploadVouchersFile" method="POST" enctype="multipart/form-data">
+    <div class="row g-3 mb-5">
+        <div class="col-12 col-md-3">
+            <input type="file" class="form-control" accept=".txt,.csv,.gpg" name="vouchersFile" required="">
+        </div>
+        <div class="col-12 col-md-2">
+            <select class="form-select text-uppercase" id="product_category">
+                <option value="" selected="">فئة القسائم</option>
+                <option value="idoom">ايدوم</option>
+                <option value="mobile">بطاقات الهاتف</option>
+                <option value="game">ألعاب</option>
+            </select>
+        </div>
+        <div class="col-12 col-md-2">
+            <select class="form-select text-uppercase" name="product_id" required="">
+                <option value="" selected="">نوع القسائم</option>
+            </select>
+        </div>
+        <div class="col-12 col-md-1">
+            <select class="form-select text-uppercase" name="file_format" required="">
+                <option value="" selected="">تنسيق الملف</option>
+                <option value="pin,serial">PIN,SERIAL</option>
+                <option value="serial,pin">SERIAL,PIN</option>
+            </select>
+        </div>
+        <div class="col-12 col-md-2">
+            <select class="form-select" name="pgp_key_id">
+                <option value="" selected="">اسم مفتاح PGP</option>
+            </select>
+        </div>
+        <div class="col-12 col-md-2">
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success">تحميل</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="loadingSpinner" style="display: none;">
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-primary m-4" role="status">
+            <span class="sr-only">----</span>
+        </div>
+        <div class="text-primary my-4">
+             تحميل...
+        </div>
+    </div>
+</div>
+
+
+<div class="nav-align-top mb-4">
+    <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#first" type="button" role="tab" aria-selected="true">جميع القسائم المحملة</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#second" type="button" role="tab" aria-selected="false">جميع القسائم الغير مستخدمة</button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="first" role="tabpanel">
+            <h4 class="mb-4">جميع القسائم المحملة</h4>
+
+            <div class="table-responsive text-nowrap">
+                <table id="uploadedVouchersTable" class="table table-striped">
+                </table>
+            </div>
+        </div>
+
+
+        <div class="tab-pane fade" id="second" role="tabpanel">
+            <h4 class="mb-4">جميع القسائم الغير مستخدمة</h4>
+
+
+            <div class="table-responsive text-nowrap">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">تاريخ التحميل</th>
+                            <th scope="col">نوع القسائم</th>
+                            <th scope="col">عدد القسائم</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row"> 2026-05-24 22:22</td>
+                            <td class="text-uppercase">mobile mobilis 2000</td>
+                            <td>600</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779657732181">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-23 23:15</td>
+                            <td class="text-uppercase">idoom 4glte 1000</td>
+                            <td>97</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779574542447">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-23 23:15</td>
+                            <td class="text-uppercase">idoom adsl 2000</td>
+                            <td>82</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779574513333">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-23 23:14</td>
+                            <td class="text-uppercase">idoom adsl 1000</td>
+                            <td>142</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779574480897">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-23 23:14</td>
+                            <td class="text-uppercase">idoom adsl 500</td>
+                            <td>364</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779574458540">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-23 23:13</td>
+                            <td class="text-uppercase">mobile mobilis 2000</td>
+                            <td>300</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779574413939">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-23 14:25</td>
+                            <td class="text-uppercase">mobile mobilis 2000</td>
+                            <td>600</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779542738398">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-23 09:24</td>
+                            <td class="text-uppercase">mobile mobilis 2000</td>
+                            <td>450</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779524671700">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-23 04:34</td>
+                            <td class="text-uppercase">mobile mobilis 2000</td>
+                            <td>278</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779507299466">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-22 22:04</td>
+                            <td class="text-uppercase">game pubgm 600</td>
+                            <td>5</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779483856604">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-22 22:03</td>
+                            <td class="text-uppercase">game pubgm 300</td>
+                            <td>7</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779483834567">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-22 22:03</td>
+                            <td class="text-uppercase">game pubgm 60</td>
+                            <td>96</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779483813251">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-22 12:04</td>
+                            <td class="text-uppercase">mobile mobilis 1000</td>
+                            <td>931</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779447873977">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-21 08:08</td>
+                            <td class="text-uppercase">idoom 4glte 2500</td>
+                            <td>2</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779347317952">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-21 08:06</td>
+                            <td class="text-uppercase">mobile mobilis 100</td>
+                            <td>186</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779347196156">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-20 23:24</td>
+                            <td class="text-uppercase">game freefire 210</td>
+                            <td>448</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779315863868">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-05-18 20:14</td>
+                            <td class="text-uppercase">mobile djezzy 100</td>
+                            <td>139</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1779131648704">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-04-30 08:46</td>
+                            <td class="text-uppercase">game freefire 2180</td>
+                            <td>73</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1777535179975">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-04-30 08:45</td>
+                            <td class="text-uppercase">game freefire 100</td>
+                            <td>146</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1777535155006">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-04-30 08:44</td>
+                            <td class="text-uppercase">game freefire 1060</td>
+                            <td>94</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1777535063154">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-04-30 08:44</td>
+                            <td class="text-uppercase">game freefire 520</td>
+                            <td>104</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1777535040089">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-04-28 23:39</td>
+                            <td class="text-uppercase">idoom 4glte 6500</td>
+                            <td>1</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1777415986975">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-04-28 23:39</td>
+                            <td class="text-uppercase">idoom 4glte 500</td>
+                            <td>30</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1777415958538">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-04-28 23:38</td>
+                            <td class="text-uppercase">game pubgm 6000</td>
+                            <td>1</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1777415909754">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-04-28 23:38</td>
+                            <td class="text-uppercase">game pubgm 3000</td>
+                            <td>2</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1777415890283">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-04-27 10:24</td>
+                            <td class="text-uppercase">idoom adsl 3000</td>
+                            <td>50</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1777281880077">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-04-21 16:11</td>
+                            <td class="text-uppercase">idoom adsl 3000</td>
+                            <td>3</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1776784262447">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-03-29 12:53</td>
+                            <td class="text-uppercase">idoom 4glte 1500</td>
+                            <td>32</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1774785223330">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row"> 2026-03-18 14:53</td>
+                            <td class="text-uppercase">idoom 4glte 3500</td>
+                            <td>1</td>
+                            <td><button class="py-1 btn btn-sm btn-danger delete-vouchers-btn" data-created_at_timestamp="1773841999989">حذف</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    const PRODUCTS = JSON.parse(`[{"id":11,"category":"idoom","type":"4glte","sub_type":"500"},{"id":12,"category":"idoom","type":"4glte","sub_type":"1000"},{"id":45,"category":"idoom","type":"4glte","sub_type":"1200"},{"id":13,"category":"idoom","type":"4glte","sub_type":"1500"},{"id":14,"category":"idoom","type":"4glte","sub_type":"2500"},{"id":15,"category":"idoom","type":"4glte","sub_type":"3500"},{"id":42,"category":"idoom","type":"4glte","sub_type":"6500"},{"id":7,"category":"idoom","type":"adsl","sub_type":"500"},{"id":8,"category":"idoom","type":"adsl","sub_type":"1000"},{"id":9,"category":"idoom","type":"adsl","sub_type":"2000"},{"id":10,"category":"idoom","type":"adsl","sub_type":"3000"},{"id":32,"category":"mobile","type":"djezzy","sub_type":"100"},{"id":16,"category":"mobile","type":"mobilis","sub_type":"100"},{"id":17,"category":"mobile","type":"mobilis","sub_type":"200"},{"id":18,"category":"mobile","type":"mobilis","sub_type":"500"},{"id":19,"category":"mobile","type":"mobilis","sub_type":"1000"},{"id":20,"category":"mobile","type":"mobilis","sub_type":"2000"},{"id":33,"category":"mobile","type":"ooredoo","sub_type":"100"},{"id":44,"category":"mobile","type":"ooredoo","sub_type":"200"},{"id":34,"category":"mobile","type":"ooredoo","sub_type":"500"},{"id":35,"category":"mobile","type":"ooredoo","sub_type":"1000"},{"id":36,"category":"mobile","type":"ooredoo","sub_type":"2000"},{"id":21,"category":"game","type":"freefire","sub_type":"100"},{"id":43,"category":"game","type":"freefire","sub_type":"210"},{"id":22,"category":"game","type":"freefire","sub_type":"310"},{"id":23,"category":"game","type":"freefire","sub_type":"520"},{"id":24,"category":"game","type":"freefire","sub_type":"1060"},{"id":25,"category":"game","type":"freefire","sub_type":"2180"},{"id":26,"category":"game","type":"pubgm","sub_type":"60"},{"id":27,"category":"game","type":"pubgm","sub_type":"300"},{"id":28,"category":"game","type":"pubgm","sub_type":"600"},{"id":29,"category":"game","type":"pubgm","sub_type":"1500"},{"id":30,"category":"game","type":"pubgm","sub_type":"3000"},{"id":31,"category":"game","type":"pubgm","sub_type":"6000"}]`)
+    $("#product_category").change(function () {
+        let products = PRODUCTS.filter(e => e.category == this.value)
+        $('select[name="product_id"]').empty()
+        $('select[name="product_id"]')
+            .append(`<option value="" selected>نوع القسائم</option>`)
+        products.forEach(e => {
+            $('select[name="product_id"]')
+                .append(`<option class="text-uppercase" value="${e.id}">${e.type} ${e.sub_type}</option>`);
+        });
+    })
+</script>
+
+
+
+<script>
+    // To init the selects
+    $(window).on("pageshow", function (event) {
+        $("#uploadVouchersForm")[0].reset()
+    });
+
+    function onSubmit(form) {
+        $(this).find(':input[type=submit]').prop('disabled', true);
+        return false
+    }
+</script>
+
+
+<script>
+    $(".delete-vouchers-btn").on("click", function () {
+        Swal.fire({
+            title: "حذف",
+            text: "هل أنت متأكد أنك تريد حذف هذه القسائم؟",
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: "إلغاء",
+            confirmButtonText: "حذف"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                let owner_id = this.dataset.owner_id
+                let created_at_timestamp = this.dataset.created_at_timestamp
+                let tr = $(this).closest('tr');
+                fetch('/distributor/deleteVouchers', {
+                    method: 'post',
+                    headers: {
+                        "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+                    },
+                    body: `created_at_timestamp=${created_at_timestamp}`
+                })
+                    .then(response => {
+                        if (response.status == 200) {
+                            response.json().then(body => {
+                                if (body.error)
+                                    Swal.fire(
+                                        'Error',
+                                        body.error.message,
+                                        'error'
+                                    )
+                                else {
+                                    // alert(`Le compte a été modifier avec succès`)
+                                    Swal.fire(
+                                        "نجاح",
+                                        "تم حذف القسائم بنجاح",
+                                        'success'
+                                    )
+                                    tr.hide();
+                                    $('#uploadedVouchersTable').DataTable().draw()
+                                }
+                            })
+                        }
+                        $(this).prop("disabled", false);
+                    })
+                    .catch(function (error) {
+                        console.log('Request failed', error);
+                    });
+            }
+        });
+    });
+
+</script>
+
+
+<script>
+    $('#uploadedVouchersTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '/distributor/getAllUploadedVouchers',
+        columnDefs: [
+            { targets: "_all", className: "dt-right", render: DataTable.render.text() },
+        ],
+        'columns': [
+            { data: 'created_at', visible: false },
+            { title: "نوع القسائم", data: 'category', className: "category-td text - uppercase" },
+            { title: "العدد الكلي", data: 'total_nbr' },
+            { title: "غير مستعملة", data: 'unused_nbr' },
+            { title: "الرقم التسلسلي من", data: 'serial_from' },
+            { title: "الرقم التسلسلي الى", data: 'serial_to' },
+            { title: "تاريخ التحميل", data: 'created_at' },
+        ],
+        "order": [0, 'desc'],
+        "bInfo": false,
+        "language": { "url": `/js/ar.json` },
+    });
+</script>
+
+<script>
+    var table = $('#uploadedVouchersTable').DataTable();
+    $('#uploadedVouchersTable').on('draw.dt', function () {
+
+        $('td.category-td').each(function () {
+            let data = table.row($(this).parents('tr')).data()
+            switch ($(this).text()) {
+                case "idoom":
+                    $(this).html(`<img src="/images/logo_idoom_${data.type}.png" alt="Idoom logo" class="operation-logo"> <span class="badge bg-dark">${data.sub_type}</span>`)
+                    break;
+                case "mobile":
+                    $(this).html(`<img src="/images/logo_${data.type}.png" alt="Mobile logo" class="operation-logo"> <span class="badge bg-dark">${data.sub_type}</span>`)
+                    break;
+                case "game":
+                    $(this).html(`<img src="/images/logo_${data.type}.png" alt="Mobile logo" class="operation-logo"> <span class="badge bg-dark">${data.sub_type}</span>`)
+                    break;
+            }
+        });
+
+    })
+</script>
+
+
+
+<script>
+    $('form').submit(function (event) {
+        event.preventDefault()
+        let product_name = $(this).find(':input[name=product_id] option:selected').text().toUpperCase();
+
+        Swal.fire({
+            title: "تحميل",
+            html: `هل تريد تحميل بطاقات <span class="text-danger">${product_name}</span> ؟`,
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonText: "إلغاء",
+            confirmButtonText: "تأكيد",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $(this).find(':input[type=submit]').prop('disabled', true);
+                $('#loadingSpinner').show();
+                $(this).unbind().submit()
+            }
+        })
+    });
+
+    $(document).ready(function() {
+        $('#stockVouchersTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/cards/datatable',
+                type: 'GET',
+                headers: {
+                    "Authorization": "Bearer " + (localStorage.getItem('token') || '')
+                },
+                data: function(d) {
+                    d.category = $('#filterCardCategory').val();
+                    d.status = $('#filterCardStatus').val();
+                }
+            },
+            columns: [
+                { data: 'pin_code', render: function(data) { return '<span class="fw-bold">' + data + '</span>'; } },
+                { data: 'serial_number', render: function(data) { return data || '---'; } },
+                { data: 'category', render: function(data) { return '<span class="badge badge-info">' + data + '</span>'; } },
+                { data: 'value', render: function(data) { return data + ' DA'; } },
+                { data: 'purchase_price', render: function(data, type, row) { return (data || row.value) + ' DA'; } },
+                { data: 'status', render: function(data) { 
+                    const badge = data === 'available' ? 'badge-success' : 'badge-secondary';
+                    const label = data === 'available' ? 'متاحة' : 'مستعملة';
+                    return '<span class="badge ' + badge + '">' + label + '</span>';
+                } },
+                { data: 'id', orderable: false, render: function(data) {
+                    return '<button class="btn btn-icon btn-sm btn-danger" onclick="deleteCard(' + data + ')"><i class="bx bx-trash"></i></button>';
+                } }
+            ],
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json"
+            }
+        });
+        
+        window.loadCardsList = function() {
+            $('#stockVouchersTable').DataTable().ajax.reload();
+        };
+    });
+
+</script>
+
+          
+          </div><div id="tab-stockVouchers" class="tab-panel"><div class="card mb-4">
+              <div class="card-header d-flex justify-content-between align-items-center" style="flex-wrap: wrap; gap: 1rem;">
+                <span class="card-title m-0 fw-bold text-primary">مخزون بطاقات التعبئة</span>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                  <div class="mb-0 me-3" style="transform: translateY(-5px);">
+                      <button type="button" class="btn btn-danger" onclick="downloadStockCSV()"><i class="fa-solid fa-file-csv"></i></button>
+                      <button type="button" class="btn btn-warning" onclick="printStockTable()"><i class="fa-solid fa-print"></i></button>
+                  </div>
+                  <select id="filterCardCategory" class="form-control" style="width: 130px;" onchange="loadCardsList()">
+                    <option value="">جميع الأنواع</option>
+                    <option value="idoom">إيدوم (Idoom)</option>
+                    <option value="Mobilis">موبيليس (Mobilis)</option>
+                  </select>
+                  <select id="filterCardStatus" class="form-control" style="width: 120px;" onchange="loadCardsList()">
+                    <option value="">جميع الحالات</option>
+                    <option value="available">متاحة (Unused)</option>
+                    <option value="used">مستعملة (Sold)</option>
+                  </select>
+                  <button class="btn btn-danger btn-sm" onclick="clearCardsPrompt()"><i class="bx bx-trash"></i> تفريغ</button>
+                </div>
+              </div>
+              <div class="table-responsive text-nowrap">
+                <table id="stockVouchersTable" class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>الكود (PIN)</th>
+                      <th>السيريال (S/N)</th>
+                      <th>النوع</th>
+                      <th>القيمة</th>
+                      <th>سعر الشراء</th>
+                      <th>الحالة</th>
+                      <th>إجراء</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+
+            </div></div><div id="tab-transactions" class="tab-panel">
+          <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center" style="flex-wrap: wrap; gap: 1rem;">
+              <span class="card-title m-0 fw-bold text-primary">سجل العمليات والتحويلات</span>
+              <div style="display: flex; gap: 0.5rem;">
+                <input type="text" class="form-control" id="searchTxPhone" placeholder="بحث برقم الهاتف..." style="width: 180px;" oninput="loadTransactionsList()">
+                <button class="btn btn-secondary btn-sm" onclick="loadTransactionsList()"><i class="bx bx-refresh"></i> تحديث</button>
+              </div>
+            </div>
+            <div class="table-responsive text-nowrap">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>المشترك / الهاتف</th>
+                    <th>المبلغ</th>
+                    <th>المتعامل</th>
+                    <th>النوع</th>
+                    <th>التاريخ</th>
+                    <th>الحالة</th>
+                  </tr>
+                </thead>
+                <tbody id="transactionsTableBody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination" id="transactionsPagination"></div>
+          </div>
+        </div><div id="tab-agents" class="tab-panel">
+<h3 class="m-4">الحسابات <span id="for_username" class="badge bg-primary ms-2"></span></h3>
+
+<div class="row justify-content-end mb-4">
+    <div class="col-12 col-md-10">
+        <!-- Button trigger modal -->
+        <div class="d-grid">
+            <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addAccountModal">
+                إضافة حساب جديد
+            </button>
+
+        </div>
+    </div>
+    <div class="col-6 col-md-2">
+        <div class="d-grid">
+            <button id="referralBtn" type="button" class="btn btn-primary mb-2" data-user_id="eyJ1IjoiZGJkZGVmMDktZDYyNC00MWM1LTkwNGItNmViZTM4MzI5ODQyIiwidCI6MTc3OTY5MjY4NTU1OX0&#x3D;">
+                رابط الإحالة <i class='bx bx-link'></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row mb-2 g-3 justify-content-end">
+    <label class="col-4 col-md-2 col-form-label text-end">تم انشائهم بواسطة</label>
+    <div class="col-7 col-md-2">
+        <select class="form-select" id="created_by_select">
+            <option value="">الكل</option>
+            <option value="dbddef09-d624-41c5-904b-6ebe38329842" selected>انا</option>.
+            <option value="!dbddef09-d624-41c5-904b-6ebe38329842">زبائني</option>
+        </select>
+    </div>
+
+    <label class="col-4 col-md-1 col-form-label text-end">دور</label>
+    <div class="col-7 col-md-2">
+        <select class="form-select" id="role_select">
+            <option value="" selected>الكل</option>
+            <option value="super_wholesaler">
+                سوبر تاجر الجملة
+            </option>
+            <option value="wholesaler">
+                تاجر الجملة
+            </option>
+            <option value="seller">
+                تاجر
+            </option>
+        </select>
+    </div>
+</div>
+
+<div class="card pt-1 pb-5 px-2">
+    <div class="mb-0" style="transform: translate(0%,-40%);">
+        <button type="button" class="btn btn-danger" id="download-table-btn"><i
+                class="fa-solid fa-file-csv"></i></button>
+        <button type="button" class="btn btn-warning" id="print-table-btn"><i class="fa-solid fa-print"></i></button>
+    </div>
+    <div class="table-responsive text-nowrap">
+        <table id="accountsTable" class="table table-striped">
+        </table>
+    </div>
+    <div class="m-4">
+        <h5>عدد الحسابات <span id="accounts-count" class="text-success"></span></h5>
+        <h5 class="add-currency">اجمالي ارصدتهم <span id="accounts-totalBalance"
+                class="text-primary"></span>
+        </h5>
+        <h5 class="add-currency">اجمالي ارباحهم  <span id="accounts-totalBonus"
+                class="text-info"></span></h5>
+        <h5 class="add-currency">اجمالي ديونهم  <span id="accounts-totalDebt"
+                class="text-danger"></span></h5>
+    </div>
+</div>
+
+
+<!-- Modal addAccountModal -->
+<div class="modal fade" id="addAccountModal" tabindex="-1" aria-labelledby="addAccountModalLabel" aria-hidden="true"
+    data-bs-keyboard="false" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAccountModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addAccountForm" autocomplete="off">
+                    <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="card-body">
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">اسم المحل</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="display_name"
+                                        placeholder="اسم المحل" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">الاسم</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="first_name"
+                                        placeholder="الاسم" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">اللقب</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="last_name"
+                                        placeholder="اللقب" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">الولاية</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="wilaya" required>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">الدائرة</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="daira" required>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">البلدية</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="city_id" required>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">بريد إلكتروني</label>
+                                <div class="col-sm-9">
+                                    <input type="email" class="form-control" name="email"
+                                        placeholder="بريد إلكتروني" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">رقم الهاتف</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="phone_nbr"
+                                        placeholder="(05) (06) (07)" pattern="0[567]\d{8}" required>
+                                </div>
+                            </div>
+
+                            <hr />
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">اسم المستخدم</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="username"
+                                        placeholder="اسم المستخدم" pattern=".{6,}" autocapitalize="off"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">كلمة المرور</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="password" autocomplete="new-password"
+                                        autocapitalize="off" placeholder="كلمة المرور" pattern=".{8,}"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">الدور</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="role">
+                                        <option value="super_wholesaler">
+                                            سوبر تاجر الجملة
+                                        </option>
+                                        <option value="wholesaler">
+                                            تاجر الجملة
+                                        </option>
+                                        <option value="seller">
+                                            تاجر
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-10 mx-auto">
+                        <div class="row">
+                            <button type="reset" class="btn btn-secondary col mx-1">مسح</button>
+                            <button type="submit" class="btn btn-success col mx-1">أضف</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal editAccountModal -->
+<div class="modal fade" id="editAccountModal" tabindex="-1" aria-labelledby="editAccountModalLabel" aria-hidden="true"
+    data-bs-keyboard="false" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAccountModalLabel">تعديل معلومات الحساب</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editAccountForm">
+                    <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="card-body">
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">اسم المستخدم</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="username"
+                                        placeholder="اسم المستخدم" readonly>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">كلمة المرور</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="password" autocomplete="new-password"
+                                        autocapitalize="off" placeholder="كلمة المرور" pattern=".{8,}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">اسم المحل</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="display_name"
+                                        placeholder="اسم المحل" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">الاسم</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="first_name"
+                                        placeholder="الاسم" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">اللقب</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="last_name"
+                                        placeholder="اللقب" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">الولاية</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="wilaya" required>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">الدائرة</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="daira" required>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">البلدية</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="city_id" required>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">بريد إلكتروني</label>
+                                <div class="col-sm-9">
+                                    <input type="email" class="form-control" name="email"
+                                        placeholder="بريد إلكتروني" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">رقم الهاتف</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="phone_nbr"
+                                        placeholder="(05) (06) (07)" pattern="0[567]\d{8}" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">الدور</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="role">
+                                        <option value="super_wholesaler">
+                                            سوبر تاجر الجملة
+                                        </option>
+                                        <option value="wholesaler">
+                                            تاجر الجملة
+                                        </option>
+                                        <option value="seller">
+                                            تاجر
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">حالة الحساب</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="status">
+                                        <option value="active">نشيط</option>
+                                        <option value="suspended">معلق</option>
+                                        <option value="banned">محظور</option>
+                                        <option value="deleted">محذوف</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label
+                                    class="col-sm-3 col-form-label">الحد الأقصى للديون (الشحن الذاتي)</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control text-start" name="max_debt"
+                                        placeholder="الحد الأقصى للديون (تفعيل الشحن ذاتي)" min="0"
+                                        step="5000" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">تفعيل الحماية الثنائية</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="enable_email_2fa">
+                                        <option value="on">مفعلة ✅</option>
+                                        <option value="off">غير مفعلة ❌</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">تحويل الارباح</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="allow_transfer_bonus">
+                                        <option value="on">مسموح ✅</option>
+                                        <option value="off">غير مسموح ❌</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">المعرف</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="id" readonly>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 mt-4 row col-10 mx-auto">
+                                <button type="button" class="btn btn-danger"
+                                    id="deleteAccountBtn">حذف</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-10 mx-auto">
+                        <div class="row">
+                            <button type="button" class="btn btn-secondary col mx-1" data-bs-dismiss="modal"
+                                aria-label="Close">إلغاء</button>
+                            <button type="submit" class="btn btn-primary col mx-1">تعديل</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    const RACINE_PATH = location.pathname.match(/\/\w+/g) ? location.pathname.match(/\/\w+/g)[0] : ''
+
+    const GET_ACCOUNTS_PATH = RACINE_PATH + '/getAccounts'
+    const ADD_ACCOUNT_PATH = RACINE_PATH + '/addAccount'
+    const EDIT_ACCOUNT_PATH = RACINE_PATH + '/editAccount'
+    const DELETE_ACCOUNT_PATH = RACINE_PATH + '/deleteAccount'
+</script>
+
+
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const i = urlParams.get('i');
+    const u = urlParams.get('u');
+    const n = urlParams.get('n') && urlParams.get('n') + '-%';
+    if (i && u && n) {
+        $("#for_username").text(u)
+        $("#created_by_select")
+            .empty()
+            .append(`<option value="">الكل</option>
+                    <option value="${i}" selected>هو</option>.
+                    <option value="!${i}">زبائنه</option>`);
+    }
+
+
+    $('#accountsTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: GET_ACCOUNTS_PATH,
+        buttons: ['excel', 'print'],
+        columnDefs: [
+            { targets: "_all", className: "dt-right", render: DataTable.render.text() }
+        ],
+        "searchCols": [
+            { "search": i || "dbddef09-d624-41c5-904b-6ebe38329842" },
+            { "search": n }
+        ],
+        'columns': [
+            { data: 'created_by', visible: false },
+            { title: "معرف الشبكة", data: 'network_id', className: "network_id-td", visible: "distributor" == "admin" },// Used to search for sub-users
+            { data: 'created_at', visible: false },
+            { title: "المعرف", data: 'short_id', className: "short_id-td", orderable: false },
+            { title: "الدور", data: 'role', className: "role-td" },
+            { title: "اسم المستخدم", data: 'username', className: "username-td" },
+            {
+                title: "تفاصيل الحساب",
+                data: null,
+                defaultContent: `<button type="button" class="btn btn-icon btn-primary detail-btn">
+                                    <span class="tf-icons bx bxs-user-detail"></span>
+                                </button>`,
+                orderable: false
+            },
+            { title: "اسم المحل", data: 'display_name' },
+            { title: "اللقب", data: 'last_name' },
+            { title: "الاسم", data: 'first_name' },
+            { title: "الولاية", data: "ar" == "fr" ? 'wilaya_name_ascii' : 'wilaya_name' },
+            { title: "رصيد", data: 'balance', className: "balance-td add-currency-td fw-bold text-success" },
+            { title: "ديون", data: 'debt', className: "balance-td add-currency-td fw-bold text-danger" },
+            { title: "ارباح", data: 'bonus', className: "balance-td add-currency-td fw-bold text-info bonus-td" },
+            { title: "الحد الأقصى للديون", data: 'max_debt', className: "balance-td add-currency-td" },
+            { title: "تاريخ الإنشاء", data: 'created_at' },
+            { title: "حالة الحساب", data: 'status', className: "status-td" },
+            {
+                title: "تعديل",
+                data: null,
+                defaultContent: `<button type="button" class="btn btn-icon btn-warning edit-btn">
+                                    <span class="tf-icons bx bxs-edit-alt"></span>
+                                </button>`,
+                orderable: false
+            },
+        ],
+        "order": [2, 'desc'],
+        "language": { "url": `/js/ar.json` },
+        lengthMenu: [10, 25, 50, 100, 10000]
+    });
+</script>
+
+<script>
+    $("#download-table-btn").on("click", function () {
+        $('#accountsTable').DataTable().button('.buttons-excel').trigger();
+    });
+    $("#print-table-btn").on("click", function () {
+        $('#accountsTable').DataTable().button('.buttons-print').trigger();
+    });
+</script>
+
+<script>
+    $('#accountsTable')
+        .on('xhr.dt', function (e, settings, json, xhr) {
+            $('#accounts-count').text(json.recordsTotal)
+            $('#accounts-totalBalance').text(formatBalance(json.totalBalance))
+            $('#accounts-totalBonus').text(formatBalance(json.totalBonus))
+            $('#accounts-totalDebt').text(formatBalance(json.totalDebt))
+        })
+</script>
+
+<script>
+    // Filter results on select change with "created_by" column
+    $('#created_by_select').on('change', function () {
+        $('#accountsTable').DataTable().columns(0).search($(this).val()).draw();
+    });
+
+    // Filter results on select change with "role" column
+    $('#role_select').on('change', function () {
+        $('#accountsTable').DataTable().columns(4).search($(this).val()).draw();
+    });
+</script>
+
+
+
+<script>
+    var table = $('#accountsTable').DataTable();
+    $('#accountsTable').on('draw.dt', function () {
+        $('td.network_id-td').each(function (index) {
+            $(this).html(`<span class="badge bg-label-dark">${$(this).text()}</span>`)
+        });
+
+        $('td.short_id-td').each(function (index) {
+            $(this).html(`<span class="badge bg-dark">${$(this).text()}</span>`)
+        });
+
+        $('td.username-td').each(function (index) {
+            $(this).html(`<span class="badge bg-label-primary cursor-pointer username-btn">${$(this).text()}</span>`)
+        });
+
+        $('td.status-td').each(function () {
+            switch ($(this).text()) {
+                case "active":
+                    $(this).html('<span class="badge bg-success">نشيط</span>')
+                    break;
+                case "suspended":
+                    $(this).html('<span class="badge bg-warning">معلق</span>')
+                    break;
+                case "banned":
+                    $(this).html('<span class="badge bg-dark">محظور</span>')
+                    break;
+                case "deleted":
+                    $(this).html('<span class="badge bg-danger">محذوف</span>')
+                    break;
+            }
+        });
+
+        $('td.role-td').each(function () {
+            switch ($(this).text()) {
+                case "distributor":
+                    $(this).html('<span class="badge bg-danger">موزع</span>')
+                    break;
+                case "super_wholesaler":
+                    $(this).html('<span class="badge bg-primary">سوبر تاجر الجملة</span>')
+                    break;
+                case "wholesaler":
+                    $(this).html('<span class="badge bg-info">تاجر الجملة</span>')
+                    break;
+                case "seller":
+                    $(this).html('<span class="badge bg-success">تاجر</span>')
+                    break;
+            }
+        });
+
+        $('td.bonus-td').each(function () {
+            let data = table.row($(this).parents('tr')).data()
+            if (!data.allow_transfer_bonus)
+                $(this).addClass('text-warning text-decoration-line-through')
+        });
+    })
+</script>
+
+
+<script>
+    // Get client details
+    var table = $('#accountsTable').DataTable();
+    $('#accountsTable tbody').on('click', '.detail-btn', function (e) {
+        let data = table.row($(this).parents('tr')).data()
+        let user_id = data.id
+        // Go to client details page
+        location.href = RACINE_PATH + "/accountDetails?u=" + user_id
+    })
+    $('#accountsTable tbody').on('click', '.username-btn', function (e) {
+        let data = table.row($(this).parents('tr')).data()
+        let i = data.id
+        let n = data.network_id
+        let u = data.username
+        location.href = RACINE_PATH + `/accounts?i=${i}&n=${n}&u=${u}`
+    })
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        fetch(RACINE_PATH + '/getWilayas')
+            .then(response => {
+                if (response.status == 200) {
+                    response.json().then(body => {
+                        if (body.error)
+                            // alert(`Error: ${body.error.message}`)
+                            Swal.fire(
+                                "خطأ",
+                                body.error.message,
+                                'error'
+                            )
+                        else {
+                            $('select[name="wilaya"]').append(`<option value="">اختر الولاية</option>`);
+                            body.forEach(e => {
+                                $('select[name="wilaya"]').append(`<option value="${e.wilaya_name_ascii}">
+                                      ${e.wilaya_code} - ${"ar" == "fr" ? e.wilaya_name_ascii : e.wilaya_name}
+                                  </option>`);
+                            });
+                        }
+                    })
+                }
+                else {
+                    // alert("Server error !");
+                    Swal.fire(
+                        "خطأ",
+                        "خطأ في الخادم !",
+                        'error'
+                    )
+                }
+            })
+            .catch(function (error) {
+                console.log('Request failed', error);
+            });
+    });
+
+
+    $('select[name="wilaya"]').on('change', function () {
+        let wilaya_name = this.value
+        fetch(RACINE_PATH + '/getDairas?wilaya_name=' + wilaya_name)
+            .then(response => {
+                if (response.status == 200) {
+                    response.json().then(body => {
+                        if (body.error)
+                            // alert(`Error: ${body.error.message}`)
+                            Swal.fire(
+                                "خطأ",
+                                body.error.message,
+                                'error'
+                            )
+                        else {
+                            $('select[name="daira"]').empty()
+                            $('select[name="city_id"]').empty()
+                            $('select[name="daira"]').append(`<option value="">اختر الدائرة</option>`);
+                            body.forEach(e => {
+                                $('select[name="daira"]').append(`<option value="${e.daira_name_ascii}">
+                                       ${"ar" == "fr" ? e.daira_name_ascii : e.daira_name}
+                                  </option>`);
+                            });
+                        }
+                    })
+                }
+                else {
+                    // alert("خطأ في الخادم !");
+                    Swal.fire(
+                        "خطأ",
+                        "خطأ في الخادم !",
+                        'error'
+                    )
+                }
+            })
+            .catch(function (error) {
+                console.log('Request failed', error);
+            });
+    });
+
+    $('select[name="daira"]').on('change', function () {
+        let daira_name = this.value
+        fetch(RACINE_PATH + '/getCommunes?daira_name=' + daira_name)
+            .then(response => {
+                if (response.status == 200) {
+                    response.json().then(body => {
+                        if (body.error)
+                            alert(`خطأ: ${body.error.message}`)
+                        else {
+                            $('select[name="city_id"]').empty()
+                            $('select[name="city_id"]').append(`<option value="">اختر البلدية</option>`);
+                            body.forEach(e => {
+                                $('select[name="city_id"]').append(`<option value="${e.id}">
+                                    ${"ar" == "fr" ? e.commune_name_ascii : e.commune_name}
+                                  </option>`);
+                            });
+                        }
+                    })
+                }
+                else {
+                    // alert("Server error !");
+                    Swal.fire(
+                        "خطأ",
+                        "خطأ في الخادم !",
+                        'error'
+                    )
+                }
+            })
+            .catch(function (error) {
+                console.log('Request failed', error);
+            });
+    });
+
+</script>
+
+<script>
+    var table = $('#accountsTable').DataTable();
+    $('#accountsTable tbody').on('click', '.edit-btn', function (e) {
+        let data = table.row($(this).parents('tr')).data()
+        $('#editAccountModal').modal('show')
+        $(`#editAccountModal input[name="id"]`).val(data.id)
+        $(`#editAccountModal input[name="username"]`).val(data.username)
+        $(`#editAccountModal input[name="password"]`).val(data.password)
+        $(`#editAccountModal input[name="display_name"]`).val(data.display_name)
+        $(`#editAccountModal input[name="first_name"]`).val(data.first_name)
+        $(`#editAccountModal input[name="last_name"]`).val(data.last_name)
+        $(`#editAccountModal input[name="email"]`).val(data.email)
+        $(`#editAccountModal input[name="phone_nbr"]`).val(data.phone_nbr)
+        $(`#editAccountModal select[name="role"]`).val(data.role)
+        $(`#editAccountModal select[name="status"]`).val(data.status)
+        $(`#editAccountModal input[name="max_debt"]`).val(data.max_debt)
+        $(`#editAccountModal select[name="enable_email_2fa"]`).val(data.enable_email_2fa ? "on" : "off")
+        $(`#editAccountModal select[name="allow_transfer_bonus"]`).val(data.allow_transfer_bonus ? "on" : "off")
+
+        if (data.verified_email) {
+            $(`#editAccountModal input[name="email"]`)
+                .addClass("is-valid")
+                .attr('readonly', true);
+        } else {
+            $(`#editAccountModal input[name="email"]`)
+                .removeClass("is-valid")
+                .attr('readonly', false);
+        }
+
+        if (data.verified_phone_nbr) {
+            $(`#editAccountModal input[name="phone_nbr"]`)
+                .addClass("is-valid")
+                .attr('readonly', true);
+        } else {
+            $(`#editAccountModal input[name="phone_nbr"]`)
+                .removeClass("is-valid")
+                .attr('readonly', false);
+        }
+
+        if (["admin", "distributor"].includes(`distributor`)) {
+            $(`#editAccountModal input[name="phone_nbr"]`).removeAttr('readonly')
+            $(`#editAccountModal input[name="email"]`).removeAttr('readonly')
+        }
+
+        $(`#editAccountModal select[name="wilaya"]`).val(data.wilaya_name_ascii)
+        $('#editAccountModal select[name="daira"]')
+            .empty()
+            .append(`<option value="${data.daira_name_ascii || ""}">
+                        ${"ar" == "fr" ? data.daira_name_ascii : data.daira_name || ""}
+                    </option>`);
+        $('#editAccountModal select[name="city_id"]')
+            .empty()
+            .append(`<option value="${data.city_id || ""}">
+                        ${"ar" == "fr" ? data.commune_name_ascii : data.commune_name || ""}
+                    </option>`);
+
+        $('#deleteAccountBtn').data('id', data.id)
+    });
+</script>
+
+<script>
+    var addAccountModal = new bootstrap.Modal(document.getElementById('addAccountModal'))
+
+    $("#addAccountForm").submit(function (event) {
+        event.preventDefault();
+        const data = new URLSearchParams(new FormData(this));
+        $(this).prop("disabled", true);
+        fetch(ADD_ACCOUNT_PATH, {
+            method: 'post',
+            headers: {
+                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+            },
+            body: data
+        })
+            .then(response => {
+                if (response.status == 200) {
+                    response.json().then(body => {
+                        if (body.error)
+                            // alert(`Error: ${body.error.message}`)
+                            Swal.fire(
+                                "خطأ",
+                                body.error.message,
+                                'error'
+                            )
+                        else {
+                            // alert(`Le compte a été ajouter avec succès`)
+                            Swal.fire(
+                                "ناجحة",
+                                "تمت إضافة الحساب بنجاح",
+                                'success'
+                            )
+                            addAccountModal.hide()
+                            $('#accountsTable').DataTable().draw()
+                        }
+                    })
+                }
+                else {
+                    // alert("Server error !");
+                    Swal.fire(
+                        "خطأ",
+                        "خطأ في الخادم !",
+                        'error'
+                    )
+                }
+                $(this).prop("disabled", false);
+            })
+            .catch(function (error) {
+                console.log('Request failed', error);
+            });
+
+    });
+</script>
+
+
+<script>
+    var editAccountModal = new bootstrap.Modal(document.getElementById('editAccountModal'))
+
+    $("#editAccountForm").submit(function (event) {
+        event.preventDefault();
+        const data = new URLSearchParams(new FormData(this));
+        $(this).prop("disabled", true);
+        fetch(EDIT_ACCOUNT_PATH, {
+            method: 'post',
+            headers: {
+                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+            },
+            body: data
+        })
+            .then(response => {
+                if (response.status == 200) {
+                    response.json().then(body => {
+                        if (body.error)
+                            // alert(`Error: ${body.error.message}`)
+                            Swal.fire(
+                                "خطأ",
+                                body.error.message,
+                                'error'
+                            )
+                        else {
+                            // alert(`Le compte a été modifier avec succès`)
+                            Swal.fire(
+                                "ناجحة",
+                                "تم تعديل الحساب بنجاح",
+                                'success'
+                            )
+                            editAccountModal.hide()
+                            $('#accountsTable').DataTable().draw()
+                        }
+                    })
+                }
+                else {
+                    // alert("Server error !");
+                    Swal.fire(
+                        "خطأ",
+                        "خطأ في الخادم !",
+                        'error'
+                    )
+                }
+                $(this).prop("disabled", false);
+            })
+            .catch(function (error) {
+                console.log('Request failed', error);
+            });
+
+    });
+
+
+    $("#deleteAccountBtn").click(function () {
+        Swal.fire({
+            title: "حذف",
+            text: "هل تريد حذف هذا الحساب ؟",
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: "إلغاء",
+            confirmButtonText: "تأكيد"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                let id = $(this).data('id')
+                fetch(DELETE_ACCOUNT_PATH, {
+                    method: 'post',
+                    headers: {
+                        "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+                    },
+                    body: `id=${id}`
+                })
+                    .then(response => {
+                        if (response.status == 200) {
+                            response.json().then(body => {
+                                if (body.error)
+                                    // alert(`Error: ${body.error.message}`)
+                                    Swal.fire(
+                                        'Error',
+                                        body.error.message,
+                                        'error'
+                                    )
+                                else {
+                                    // alert(`Le compte a été supprimé avec succès`)
+                                    Swal.fire(
+                                        "ناجحة",
+                                        "تم حذف الحساب بنجاح",
+                                        'success'
+                                    )
+                                    editAccountModal.hide()
+                                    $('#accountsTable').DataTable().draw()
+                                }
+                            })
+                        }
+                        else {
+                            // alert("Server error !");
+                            Swal.fire(
+                                "خطأ",
+                                "خطأ في الخادم !",
+                                'error'
+                            )
+                        }
+                        $(this).prop("disabled", false);
+                    })
+                    .catch(function (error) {
+                        console.log('Request failed', error);
+                    });
+            }
+        })
+    });
+</script>
+
+
+<script>
+    $("#addAccountModal input[name='email']").on("change", function () {
+        let username = this.value.split('@')[0]
+        $("#addAccountModal input[name='username']").val(username)
+    });
+
+    /*
+        $("#addAccountModal input[name='first_name']").on("change", function () {
+            let first_name = this.value.toLowerCase().replace(/\s/g, "");
+            let password = first_name + Math.floor(Math.random() * 10000);
+            $("#addAccountModal input[name='password']").val(password)
+        });
+    */
+
+    // Do not allow white space in username, email and password inputs
+    const NO_SPACE_INPUTS =
+        'input[name="username"],input[name="email"],input[name="phone_nbr"],input[name="password"],input[name="new_password"]';
+    const LOWERCASE_INPUTS = 'input[name="username"],input[name="email"]';
+
+    $(NO_SPACE_INPUTS).on("keypress", function (e) {
+        if (e.which == 32) return false;
+    });
+
+    $(NO_SPACE_INPUTS).on("keyup paste change input", function (e) {
+        this.value = this.value.replace(/\s/g, "");
+    });
+
+    $(LOWERCASE_INPUTS).on("keyup paste change input", function (e) {
+        this.value = this.value.toLowerCase();
+    });
+</script>
+
+<script>
+    $("#referralBtn").on("click", function () {
+        let user_id = $(this).data("user_id")
+        let referralLink = `${window.location.host}/register?r=${user_id}`
+
+        navigator.clipboard.writeText(referralLink);
+
+
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: "تم نسخ رابط الإحالة بنجاح",
+            showConfirmButton: false,
+            timer: 1500
+        })
+    });
+</script>
+
+          
+<div id="tab-sims" class="tab-panel">
+          <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center" style="flex-wrap: wrap; gap: 1rem;">
+              <span class="card-title m-0 fw-bold text-primary">شرائح الشحن ومفاتيح المودم</span>
+              <button class="btn btn-primary btn-sm" onclick="openAddSimModal()"><i class="bx bx-plus"></i> ربط شريحة جديدة</button>
+            </div>
+            <div class="card-body">
+              <div class="modems-grid-container" id="simsGridContainer">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+          </div>
+        </div><div id="tab-settings" class="tab-panel">
+          <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <span class="card-title m-0 fw-bold text-primary">إعدادات خادم توبال فليكسي</span>
+            </div>
+            <div class="card-body" style="max-width: 600px;">
+              <div id="settingsAlert" class="upload-summary" style="background-color: #e3f2fd; border-color: #90caf9; color: #0d47a1;"></div>
+              
+              <div class="mb-3">
+                <label class="form-label" for="settingsBotToken">توكن بوت التيليجرام (Bot Token)</label>
+                <input type="text" class="form-control" id="settingsBotToken" placeholder="توكن البوت من BotFather">
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label" for="settingsAdminId">معرف الأدمن تيليجرام (Admin Chat ID)</label>
+                <input type="text" class="form-control" id="settingsAdminId" placeholder="معرف شات الأدمن لتلقي الإشعارات">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="settingsAdminSecret">كلمة مرور الآدمن (Admin Secret)</label>
+                <input type="text" class="form-control" id="settingsAdminSecret" placeholder="لتسجيل الدخول للوحة الويب">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="settingsCaptchaKey">مفتاح 2Captcha لحل الكابتشا</label>
+                <input type="text" class="form-control" id="settingsCaptchaKey" placeholder="Captcha API Key">
+              </div>
+              
+              <h5 style="margin: 1.5rem 0 1rem 0; font-weight: 700; color: #566a7f; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">صيغ الأكواد الافتراضية (USSD Templates)</h5>
+              
+              <div class="mb-3">
+                <label class="form-label" for="settingsUssdMobilis">صيغة تحويل موبيليس</label>
+                <input type="text" class="form-control" id="settingsUssdMobilis" value="*630*{phone}*{type}*{amount}*0000#">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="settingsUssdOoredoo">صيغة تحويل أوريدو</label>
+                <input type="text" class="form-control" id="settingsUssdOoredoo" value="*115*{phone}*{amount}*0000#">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="settingsUssdDjezzy">صيغة تحويل جيزي</label>
+                <input type="text" class="form-control" id="settingsUssdDjezzy" value="*760*{phone}*{amount}*00000#">
+              </div>
+              
+              <button class="btn btn-primary w-100" onclick="saveSettings()"><i class="bx bx-save"></i> حفظ وتطبيق الإعدادات</button>
+            </div>
+          </div>
+        </div></div></div></div></div></div>
+  <script src="assets/js/main.js"></script>
+  <script src="js/app.js"></script>
+</body></html>

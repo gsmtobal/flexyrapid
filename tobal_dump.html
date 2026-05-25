@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html lang="ar" class="light-style layout-menu-fixed" dir="rtl" data-theme="theme-default"
+  data-assets-path="/assets/" data-template="vertical-menu-template-free">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+  <link rel="manifest" href="/app.webmanifest">
+  <title>
+    Tobal Flexy
+  </title>
+
+  <meta name="description" content="" />
+
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+
+  <!-- fontawesome CSS -->
+  <link rel="stylesheet" href="/assets/fontawesome/css/fontawesome.min.css" />
+  <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css" />
+
+  <!-- Icons. Uncomment required icon fonts -->
+  <link rel="stylesheet" href="/assets/vendor/fonts/boxicons.css" />
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+  <link rel="stylesheet" href="/assets/vendor/css/rtl/theme-default.css"
+    class="template-customizer-theme-css" />
+  <link rel="stylesheet" href="/assets/css/rtl/demo.css" />
+
+  <!-- Page CSS -->
+  <link rel="stylesheet" href="/assets/vendor/css/rtl/pages/page-auth.css" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <!-- sweetalert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+
+  <!-- Helpers -->
+  <script src="/assets/vendor/js/helpers.js"></script>
+
+  <!-- Core JS -->
+  <script src="/assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="/assets/vendor/libs/popper/popper.js"></script>
+  <script src="/assets/vendor/js/bootstrap.js"></script>
+  <script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+  <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+  <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+  <script src="/assets/js/config.js"></script>
+
+  <!-- APP JS -->
+  <script src="/js/app.js"></script>
+</head>
+
+<body>
+  <!-- Content -->
+
+  <div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+      <div class="authentication-inner">
+
+        <!-- Register -->
+<div class="card">
+    <div class="card-body">
+        <!-- Logo -->
+        <div class="app-brand justify-content-center">
+            <a href="/login" class="app-brand-link gap-2">
+                <span class="app-brand-logo demo">
+                    <img src="/logos/tobalflexy.png" alt="" style="width: 120px;">
+                </span>
+                <span class="app-brand-text demo text-body"></span>
+            </a>
+        </div>
+        <!-- /Logo -->
+        <h4 class="mb-2">مرحبا بكم 👋</h4>
+        <p class="mb-4">
+            يرجى تسجيل الدخول إلى الحساب الخاص بك
+        </p>
+
+        <form id="login-form" class="mb-3" action="/login" method="POST">
+            <input type="hidden" name="auth_token">
+
+            <div class="mb-3">
+                <label for="username" class="form-label">البريد الإلكتروني أو اسم المستخدم أو رقم الهاتف</label>
+                <div class="input-group input-group-merge">
+                    <input type="text" class="form-control" id="username" name="username"
+                        placeholder="أدخل بريدك الإلكتروني أو اسم المستخدم أو رقم الهاتف" autocapitalize="off"
+                        autocomplete="username webauthn" required />
+                    <span class="input-group-text cursor-pointer text-primary">
+                        <span class="d-none" id="saved-username-passkey">
+                            <i class="fa-solid fa-floppy-disk me-2"></i>
+                            <i class="fa-solid fa-fingerprint"></i>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div class="mb-3 form-password-toggle">
+                <div class="d-flex justify-content-between">
+                    <label class="form-label" for="password">كلمة المرور</label>
+                    <a href="/forgotPassword">
+                        <small>هل نسيت كلمة المرور؟</small>
+                    </a>
+                </div>
+                <div class="input-group input-group-merge">
+                    <input type="password" class="form-control" id="password" name="password"
+                        placeholder="أدخل كلمة المرور" aria-describedby="password"
+                        autocomplete="current-password" required />
+                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="remember-me" name="remember_me" />
+                    <label class="form-check-label" for="remember-me">
+                        تذكرني
+                    </label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-primary d-grid w-100" onclick="submitForm()">
+                    تسجيل الدخول
+                </button>
+            </div>
+        </form>
+
+        <!--  Passkey Divider  -->
+        <div class="passkey-divider">
+            <span>or</span>
+        </div>
+
+        <!--  Passkey Login Button  -->
+        <button id="btn-passkey-login" class="btn-passkey mb-3" type="button" onclick="handlePasskeyLogin()">
+            <span class="btn-passkey-icon"><i class="fas fa-fingerprint fa-xl"></i></span>
+            <span class="btn-passkey-label">تسجيل الدخول باستخدام Passkey</span>
+            <span class="btn-passkey-badge"><i class="bx bx-chevron-right"></i></span>
+        </button>
+
+
+
+
+
+
+
+
+
+        <div id="passkey_error_alert" class="alert alert-danger text-center d-none" role="alert">
+        </div>
+
+    </div>
+</div>
+<!-- /Register -->
+
+
+
+<!-- webauthn scripts  -->
+<script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
+<script src="/js/passkey-login.js"></script>
+
+<script>
+    function submitForm() {
+        const form = document.getElementById("login-form");
+        $('input[name="auth_token"]').val(window.localStorage.getItem("auth-token"));
+        const username = $('input[name="username"]').val().trim();
+        const password = $('input[name="password"]').val().trim();
+        if (!username || !password) return;
+        localStorage.removeItem("last-username")
+        form.submit();
+    }
+
+    $('input').change(function () { $('.login-error').alert('close') });
+</script>
+
+
+<script>
+    const savedUsername = localStorage.getItem("last-username");
+    if (!localStorage.getItem("auth-token")) localStorage.setItem("auth-token", "6a070368ecea19ad10be3bafda95dbeb5138086f21a616f4a944050209121e9c")
+    const authToken = localStorage.getItem("auth-token");
+    if (savedUsername) {
+        $("#saved-username-passkey").removeClass("d-none");
+        $("#username").addClass("fw-bold")
+        $("#username").val(savedUsername);
+        $('#username').on('input', function () {
+            $("#saved-username-passkey").addClass("d-none");
+            $("#username").removeClass("fw-bold")
+        });
+    }
+
+    async function handlePasskeyLogin() {
+        $("#passkey_error_alert").addClass("d-none")
+        const username = $('input[name="username"]').val().trim();
+        if (!username) {
+            $("#passkey_error_alert").removeClass("d-none");
+            $("#passkey_error_alert").text("أدخل اسم المستخدم الخاص بك لتسجيل الدخول باستخدام Passkey");
+            return;
+        }
+        const result = await doPasskeyLogin(username, authToken);
+
+        if (!result) return; // silently cancelled
+
+        if (result.error) {
+            $("#passkey_error_alert").removeClass("d-none");
+            $("#passkey_error_alert").text(result.error.message);
+
+        } else if (result.success) {
+            localStorage.setItem("last-username", username)
+            window.location.href = '/';
+        }
+    }
+</script>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- / Content -->
+
+  <!-- Main JS -->
+  <script src="/assets/js/main.js"></script>
+
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+</body>
+
+</html>

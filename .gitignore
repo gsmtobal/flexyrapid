@@ -1,0 +1,7 @@
+node_modules/
+*.sqlite
+*.db
+*.zip
+scratch/
+.env
+dist/

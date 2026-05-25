@@ -1,0 +1,832 @@
+
+
+
+            
+            
+
+            <h3 class="mb-3">فليكسي</h3>
+
+
+
+
+<div class="card phoneCard text-center mb-4 mt-4">
+    <div class="row my-4">
+        <div class="col-md-3 col-12 d-flex align-items-center justify-content-md-end justify-content-center mb-md-0 mb-3">
+            <label for="phoneNumber" class="h3 m-0"> رقم الهاتف</label>
+            <button class="btn btn-outline-primary ms-3" data-bs-toggle="modal" data-bs-target="#getContactModal">
+                <i class="fa-solid fa-address-book"></i>
+            </button>
+        </div>
+        <div class="col-md-7 col-12">
+            <div class="d-flex justify-content-center">
+                <div id="phoneNumberInputGroupe" class="input-group input-group-merge">
+                    <input id="phoneNumber" type="tel" class="form-control form-control-lg text-center" placeholder="ox xx xx xx xx" autocomplete="off" autofocus="">
+                    <span class="input-group-text">
+                        <span id="operatorLogo"></span>
+                    </span>
+                </div>
+            </div>
+            <div id="phoneNumber-tooltip" class="text-primary fs-5">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Pills -->
+<div id="flexyPills" class="row" style="display: none;">
+    <div class="col-12">
+        <div class="nav-align-top mb-4">
+            <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
+                <li class="nav-item">
+                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-balance" aria-controls="navs-pills-justified-balance" aria-selected="true">
+                        <i class="tf-icons bx bx-money me-2"></i> رصيد
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-offers" aria-controls="navs-pills-justified-offers" aria-selected="false">
+                        <i class="tf-icons bx bxs-offer me-2"></i> عروض
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <h5 id="packText">
+                    </h5><h6 id="sabbaqliText" class="text-center mb-4 h5 px-0 alert alert-danger text-dark">
+                        هذا الرقم لديه
+                        <span id="sabbaqliAmount" class="text-danger h4"></span><sub> دج </sub>
+                        ديون <span class="text-danger">
+                             </span>
+                    </h6>
+                
+                <div class="tab-pane fade show active" id="navs-pills-justified-balance" role="tabpanel">
+                    <div class="row flex-nowrap text-nowrap align-items-center gap-3" style="overflow-x: auto;">
+                        <button type="button" class="col btn btn-outline-primary preDefinedAmount" data-amount="100">
+                            100 دج
+                        </button>
+                        <button type="button" class="col btn btn-outline-primary preDefinedAmount" data-amount="200">
+                            200 دج
+                        </button>
+                        <button type="button" class="col btn btn-outline-primary preDefinedAmount" data-amount="500">
+                            500 دج
+                        </button>
+                        <button type="button" class="col btn btn-outline-primary preDefinedAmount" data-amount="1000">
+                            1000 دج
+                        </button>
+                        <button type="button" class="col btn btn-outline-primary preDefinedAmount" data-amount="1500">
+                            1500 دج
+                        </button>
+                    </div>
+                    <div class="row my-4">
+                        <div class="col-md-4 col-3 d-flex align-items-center justify-content-md-end justify-content-center">
+                            <label for="amount" class="h4 m-0">المبلغ</label>
+                        </div>
+                        <div class="col-md-6 col-9">
+                            <div class="d-flex justify-content-center">
+                                <div id="amountInputGroupe" class="input-group input-group-merge">
+                                    <input id="amount" type="tel" class="form-control form-control-lg text-center text-success " placeholder="" value="" autocomplete="off" autofocus="">
+                                    <span class="input-group-text">دج</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-grid col-lg-5 order-lg-2 my-2 mx-auto">
+                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input type="radio" class="btn-check" name="flexy_type" id="flexyTypeRadio1" value="Normal" checked="" autocomplete="off">
+                                <label class="btn btn-outline-primary" id="flexyTypeLabel1" for="flexyTypeRadio1">عادي</label>
+                                <input type="radio" class="btn-check" name="flexy_type" id="flexyTypeRadio2" autocomplete="off">
+                                <label class="btn btn-outline-primary" id="flexyTypeLabel2" for="flexyTypeRadio2" value="" style="display: none;"></label>
+                                <input type="radio" class="btn-check" name="flexy_type" id="flexyTypeRadio3" autocomplete="off">
+                                <label class="btn btn-outline-primary" id="flexyTypeLabel3" for="flexyTypeRadio3" value=""></label>
+                            </div>
+                        </div>
+                        <div class="d-grid col-lg-5 order-lg-1 my-2 mx-auto">
+                            <button id="sendBalanceBtn" type="button" class="btn btn-primary">
+                                <span class="tf-icons bx bxs-send me-4"></span> إرسال
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="navs-pills-justified-offers" role="tabpanel">
+                    <div id="offerSpinner" class="text-center m-4">
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div id="offersList" class="list-group mb-5">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <button id="sendOfferBtn" type="button" class="btn btn-primary w-75">
+                            <span class="tf-icons bx bxs-send me-4"></span> إرسال
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Pills -->
+
+
+<h4 class="my-3 mt-5"> آخر العمليات</h4>
+
+<div id="transactionsCard" class="card pt-4 pb-5 px-2">
+    <div class="table-responsive text-nowrap">
+        <table id="transactionsTable" class="table table-striped">
+        </table>
+    </div>
+</div>
+
+
+
+<!-- Modal getContactModal -->
+<div class="modal fade" id="getContactModal" tabindex="-1" aria-labelledby="getContactModalLabel" aria-hidden="true" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg mt-5">
+        <div class="modal-content">
+                <div>
+                    <input type="text" class="form-control form-control-lg" id="contact-search-input" placeholder="ادخل اسم الزبون او رقمه" autofocus="">
+                </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="toastError" class="bs-toast toast toast-placement-ex m-2 fade bg-danger top-0 start-50 translate-middle-x" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+    <div class="toast-header">
+        <i class="bx bx-error me-2"></i>
+        <div class="me-auto fw-semibold">خطأ</div>
+        <small></small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+    </div>
+</div>
+
+<div id="toastSuccess" class="bs-toast toast toast-placement-ex m-2 fade bg-success top-0 start-50 translate-middle-x" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+    <div class="toast-header">
+        <i class="bx bx-check me-2"></i>
+        <div class="me-auto fw-semibold">ناجحة</div>
+        <small></small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+        العملية في طور التنفيذ
+    </div>
+</div>
+
+
+<script>
+    const RACINE_PATH = location.pathname.match(/\/\w+/g)[0]
+
+    const GET_TRANSACTIONS_PATH = RACINE_PATH + '/getAllTransactions'
+</script>
+
+
+<script>
+    const MAX_AMOUNT_LONG = 6
+    var phoneNumber = "";
+    var amount = ""
+
+    $("#phoneNumber").on("keyup change input", function (e) {
+        // Remove contact name if phoneNumber edited
+        $("#phoneNumber-tooltip").text("")
+
+        let value = this.value
+        value = value.replace(/[^0-9]+/g, '');
+        value = value.substr(0, 10)
+
+        phoneNumber = value
+
+        if (value.startsWith('0')) {
+            if (value.startsWith('05')) {
+                $('#operatorLogo').css("background-image", "url(/images/logo_ooredoo.png)");
+                $('#flexyTypeLabel2').text("سبقلي")
+                $('#flexyTypeRadio2').val("Sabbaqli")
+                $('#flexyTypeLabel3').text("الشركات")
+                $('#flexyTypeRadio3').val("Enterprise")
+                $('#flexyTypeLabel2').show()
+            }
+            else if (value.startsWith('06')) {
+                $('#operatorLogo').css("background-image", "url(/images/logo_mobilis.png)");
+                $('#flexyTypeLabel2').text("فاتورة")
+                $('#flexyTypeRadio2').val("Normal")
+                $('#flexyTypeLabel3').text("دولي")
+                $('#flexyTypeRadio3').val("International")
+                $('#flexyTypeLabel2').show()
+            }
+            else if (value.startsWith('07')) {
+                $('#operatorLogo').css("background-image", "url(/images/logo_djezzy.png)");
+                $('#flexyTypeLabel2').text("")
+                $('#flexyTypeRadio2').val("")
+                $('#flexyTypeLabel3').text("فاتورة")
+                $('#flexyTypeRadio3').val("Facture")
+                $('#flexyTypeLabel2').hide()
+            }
+            else {
+                value = "0"
+                $('#operatorLogo').css("background-image", "none");
+                $('#flexyTypeLabel2').text("")
+                $('#flexyTypeRadio2').val("")
+                $('#flexyTypeLabel3').text("")
+                $('#flexyTypeRadio3').val("")
+                $('#flexyTypeLabel2').hide()
+                $("#flexyTypeRadio1").prop("checked", true);
+            }
+        } else {
+            value = ""
+            $('#operatorLogo').css("background-image", "none");
+            $('#flexyTypeLabel2').text("")
+            $('#flexyTypeRadio2').val("")
+            $('#flexyTypeLabel3').text("")
+            $('#flexyTypeRadio3').val("")
+            $('#flexyTypeLabel2').hide()
+            $("#flexyTypeRadio1").prop("checked", true);
+        }
+
+        if (value.length == 10) {
+            $('#flexyPills').show()
+            $('button[data-bs-target="#navs-pills-justified-balance"]').tab('show').trigger('shown');
+            $('button[data-bs-target="#navs-pills-justified-offers"]').prop("disabled", false);
+            $('#amount').focus()
+            $('#sabbaqliText').hide()
+            $("#offersList").html("")
+            $('#offerSpinner').show()
+            scrollToElement('#phoneNumber')
+        } else {
+            $('#flexyPills').hide()
+        }
+
+        let valueFormat = value.match(/\d{1,2}/g)
+        if (valueFormat) valueFormat = valueFormat.join(' ')
+
+        this.value = valueFormat || ""
+    })
+
+
+    $("#amount").on("keyup change input", function (e) {
+        let value = this.value
+        value = value.replace(/[^0-9]+/g, '');
+        value = value.substr(0, MAX_AMOUNT_LONG)
+
+        let valueFormat = formatBalance(value)
+
+        if (valueFormat && valueFormat != "0")
+            this.value = valueFormat
+        else this.value = ""
+
+        amount = value
+    })
+
+    $(".preDefinedAmount").on("click", function (e) {
+        $("#amount").val(this.dataset.amount)
+        $("#amount").change()
+    })
+</script>
+
+
+
+<script>
+    var isLoadingOffers = false
+    $('button[data-bs-toggle="tab"]').on("shown.bs.tab", function (e) {
+        if (e.target.getAttribute("data-bs-target") == "#navs-pills-justified-offers"
+            && $("#offerSpinner").is(":visible") && !isLoadingOffers) {
+            isLoadingOffers = true
+            fetch(RACINE_PATH + "/getFlexyOffers?phoneNbr=" + phoneNumber)
+                .then((response) => {
+                    isLoadingOffers = false
+                    if (response.status == 200) {
+                        response.json().then((body) => {
+                            // console.log(body)
+                            let offersListHtml = ""
+                            if (body.error) {
+                                offersListHtml =
+                                    `<label class="list-group-item list-group-item-danger">
+                                            ${body.error.message}
+                                    </label>`
+                            }
+                            else if (body.length > 0) {
+                                if (body[0].offerName.startsWith("Sama"))
+                                    offersListHtml = SAMA_OFFERS_HTML
+                                else
+                                    body.forEach(({ offerName, offerAmount }) => {
+                                        offerAmount = formatBalance(offerAmount)
+                                        let offerView = offerName.replace(/\d+_DA\|/g, "")
+                                        offersListHtml +=
+                                            `<label data-bs-toggle="list" data-offer-name="${offerName}"
+                                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                                <span class="badge bg-primary fs-big"><span>${offerAmount}</span> دج </span>
+                                                ${offerView}
+                                            </label>`
+                                    })
+                            } else {
+                                offersListHtml =
+                                    `<label class="list-group-item list-group-item-danger">
+                                               لا توجد عروض لهذا الرقم 
+                                    </label>`
+                            }
+                            $("#offersList").html(offersListHtml).change()
+                            $('#offerSpinner').hide()
+                        });
+                    }
+                })
+                .catch(function (error) {
+                    console.log("Request failed", error);
+                });
+        }
+    })
+
+    const SAMA_OFFERS_HTML = `
+            <div id="accordionSama" class="accordion accordion-header-primary accordion-without-arrow">
+                <div class="accordion-item card">
+                    <h2 class="accordion-header text-body d-flex justify-content-between align-self-center" id="accordionSamaOne">
+                        <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionSama-1" aria-controls="accordionSama-1">
+                            Sama Mix
+                        </button>
+                    </h2>
+                    <div id="accordionSama-1" class="accordion-collapse collapse" data-bs-parent="#accordionSama" style="">
+                        <div class="accordion-body list-group">
+                            <label data-bs-toggle="list" data-offer-name="Sama Mix 50" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>50</span> دج </span>
+                                Sama Mix 50
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Mix 100" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>100</span> دج </span>
+                                Sama Mix 100
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Mix 500" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>500</span> دج </span>
+                                Sama Mix 500
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Mix 1000" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>1000</span> دج </span>
+                                Sama Mix 1000
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Mix 1500" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>1500</span> دج </span>
+                                Sama Mix 1500
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Mix 2000" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>2000</span> دج </span>
+                                Sama Mix 2000
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item card">
+                    <h2 class="accordion-header text-body d-flex justify-content-between align-self-center" id="accordionSamaTwo">
+                        <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionSama-2" aria-controls="accordionSama-2">
+                            Sama Talk
+                        </button>
+                    </h2>
+                    <div id="accordionSama-2" class="accordion-collapse collapse" data-bs-parent="#accordionSama" style="">
+                        <div class="accordion-body list-group">
+                            <label data-bs-toggle="list" data-offer-name="Sama Talk 500" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>500</span> دج </span>
+                                Sama Talk 500
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Talk 1000" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>1000</span> دج </span>
+                                Sama Talk 1000
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Talk 1500" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>1500</span> دج </span>
+                                Sama Talk 1500
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Talk 2000" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>2000</span> دج </span>
+                                Sama Talk 2000
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item card">
+                    <h2 class="accordion-header text-body d-flex justify-content-between align-self-center" id="accordionSamaThree">
+                        <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionSama-3" aria-expanded="false" aria-controls="accordionSama-3">
+                            Sama Net
+                        </button>
+                    </h2>
+                    <div id="accordionSama-3" class="accordion-collapse collapse" data-bs-parent="#accordionSama" style="">
+                        <div class="accordion-body list-group">
+                            <label data-bs-toggle="list" data-offer-name="Sama Net 500" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>500</span> دج </span>
+                                Sama Net 500
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Net 1000" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>1000</span> دج </span>
+                                Sama Net 1000
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Net 1500" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>1500</span> دج </span>
+                                Sama Net 1500
+                            </label><label data-bs-toggle="list" data-offer-name="Sama Net 2000" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+                                <span class="badge bg-primary fs-big"><span>2000</span> دج </span>
+                                Sama Net 2000
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>       
+    `
+
+    $("#offersList").change(function () {
+        $("#accordionSama-1, #accordionSama-2, #accordionSama-3")
+            .on('hidden.bs.collapse', function () {
+                $("#offersList .active").removeClass("active")
+            })
+    })
+
+</script>
+
+<script>
+    $("#sendBalanceBtn").click(async function () {
+        // console.log({ phoneNumber, amount })
+        if (amount >= 5000) {
+            if (phoneNumber.startsWith('06')) return
+            let swalResult = await Swal.fire({
+                title: `هل تريد إرسال مبلغ <span class="text-danger">${formatBalance(amount)}</span> دج `,
+                input: 'number',
+                inputLabel: `أعد كتابة المبلغ للتأكيد`,
+                inputPlaceholder: "المبلغ",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: "إلغاء",
+                confirmButtonText: "تأكيد",
+                inputValidator: (value) => {
+                    if (value != amount) {
+                        return `أعد كتابة  : <b>${amount}</b>`
+                    }
+                }
+            })
+            if (swalResult.isConfirmed == false) return
+        }
+
+        if (await hasRecentOperationFromTable(phoneNumber)) return
+
+        let type = $("input[name='flexy_type']:checked").val()
+        if (phoneNumber.length == 10)
+            if (amount >= 100 || phoneNumber.startsWith('06') && amount >= 40) {
+                $(this).prop("disabled", true);
+                fetch(RACINE_PATH + "/flexyBalance", {
+                    method: 'post',
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify({ phoneNbr: phoneNumber, balance: amount, flexyType: type })
+                })
+                    .then((response) => {
+                        if (response.status == 200) {
+                            response.json().then((body) => {
+                                if (body.error) {
+                                    $('#toastError .toast-body')
+                                        .text(body.error.message_ar || body.error.message)
+                                    $('#toastError').toast('show')
+                                    //$("#phoneNumber").val("").change()
+                                    //$("#amount").val("").change()
+                                } else {
+                                    $('#toastSuccess').toast('show')
+                                    $("#phoneNumber").val("").change()
+                                    $("#amount").val("").change()
+                                    $('#transactionsTable').DataTable().draw()
+                                    $("#phoneNumber").focus()
+                                    // scrollToElement('#transactionsCard', 500)
+                                }
+                                //console.log(body)
+                            });
+                        }
+                        $(this).prop("disabled", false);
+                    })
+                    .catch(function (error) {
+                        console.log("Request failed", error);
+                        $(this).prop("disabled", true);
+                    });
+            }
+    })
+
+</script>
+
+
+<script>
+    $("#sendOfferBtn").click(async function () {
+        let offerName = $("#offersList .active").data("offer-name")
+        // console.log({ phoneNumber, offerName })
+
+        if (await hasRecentOperationFromTable(phoneNumber)) return
+
+        if (phoneNumber.length == 10 && offerName) {
+            $(this).prop("disabled", true);
+            fetch(RACINE_PATH + "/flexyOffer", {
+                method: 'post',
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({ phoneNbr: phoneNumber, offerName: offerName })
+            })
+                .then((response) => {
+                    if (response.status == 200) {
+                        response.json().then((body) => {
+                            if (body.error) {
+                                $('#toastError .toast-body').text(body.error.message)
+                                $('#toastError').toast('show')
+                                //$("#phoneNumber").val("").change()
+                                //$("#amount").val("").change()
+                            } else {
+                                $('#toastSuccess').toast('show')
+                                $("#phoneNumber").val("").change()
+                                $("#amount").val("").change()
+                                $('#transactionsTable').DataTable().draw()
+                                $("#phoneNumber").focus()
+                                // scrollToElement('#transactionsCard', 500)
+                            }
+                            //console.log(body)
+                        });
+                    }
+                    $(this).prop("disabled", false);
+                })
+                .catch(function (error) {
+                    console.log("Request failed", error);
+                    $(this).prop("disabled", true);
+                });
+        }
+    })
+
+</script>
+
+<script>
+    async function hasRecentOperationFromTable(phoneNumber) {
+        let lastOpeartion = table.data().toArray()[0]
+        if (lastOpeartion && lastOpeartion.param_1 == phoneNumber) {
+            let swalResult = await Swal.fire({
+                html: `هل ترغب في إرسال عملية أخرى إلى هذا الرقم <span class="text-danger"> ${phoneNumber} </span> ؟`,
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: "إلغاء",
+                confirmButtonText: "تأكيد",
+            })
+            if (swalResult.isConfirmed == false) return true
+        }
+    }
+</script>
+
+<script>
+    var isCheckingSabbaqli = false
+    var lastCheckedNumber = ""
+    $('button[data-bs-toggle="tab"]').on("shown.bs.tab", function (e) {
+        if (e.target.getAttribute("data-bs-target") == "#navs-pills-justified-balance"
+            && !isCheckingSabbaqli && phoneNumber.startsWith('05') && lastCheckedNumber != phoneNumber) {
+            // Check sabbaqli from last opeartions before using api
+            let checkSabbaqliFromTable = hasSabbaqliFromTable(phoneNumber)
+            if (checkSabbaqliFromTable) {
+                setTimeout(() => {
+                    $('#sabbaqliText').show()
+                    $('#sabbaqliAmount').text(checkSabbaqliFromTable.sabbaqliAmount)
+                    $("#flexyTypeRadio2").prop("checked", true);
+                    $('button[data-bs-target="#navs-pills-justified-offers"]').prop("disabled", true);
+                }, 100);
+                return
+            }
+            isCheckingSabbaqli = true
+            fetch(RACINE_PATH + "/checkSabbaqli?phoneNbr=" + phoneNumber)
+                .then((response) => {
+                    isCheckingSabbaqli = false
+                    lastCheckedNumber = phoneNumber
+                    if (response.status == 200) {
+                        response.json().then((body) => {
+                            // console.log(body)
+                            if (body.sabbaqliAmount) {
+                                $('#sabbaqliText').show()
+                                $('#sabbaqliAmount').text(body.sabbaqliAmount)
+                                $("#flexyTypeRadio2").prop("checked", true);
+                                $('button[data-bs-target="#navs-pills-justified-offers"]').prop("disabled", true);
+                            }
+                        });
+                    }
+                })
+                .catch(function (error) {
+                    console.log("Request failed", error);
+                });
+        }
+    })
+
+    function hasSabbaqliFromTable(phoneNumber) {
+        let lastOpeartion = table.data().toArray().find(e => e.param_1 == phoneNumber)
+        if (lastOpeartion && lastOpeartion.message.includes("SABBAQLI")) {
+            var sabbaqliAmount = parseInt(lastOpeartion.message.match(/\d+ DA/g)[0]);
+            return { sabbaqliAmount }
+        }
+    }
+</script>
+
+
+<script>
+    // Used to get percentage only one time whene the percentages shown
+    var isPercentageUpdated = false
+    function updateFlexyPercentage() {
+        fetch(RACINE_PATH + "/getFlexyPercentage")
+            .then((response) => {
+                if (response.status == 200) {
+                    response.json().then((body) => {
+                        // console.log(body)
+                        body.forEach(e => {
+                            $(`.percentageValue[data-type='${e.type}']`).text(e.percentage)
+                        });
+                    });
+                }
+            })
+            .catch(function (error) {
+                console.log("Request failed", error);
+            });
+    }
+
+    $('#percentagesAccordion').on('shown.bs.collapse', function () {
+        if (!isPercentageUpdated) {
+            updateFlexyPercentage();
+            isPercentageUpdated = true
+        }
+    })    
+</script>
+
+
+
+<script>
+    $('#transactionsTable').DataTable({
+        processing: false,
+        serverSide: true,
+        ajax: GET_TRANSACTIONS_PATH,
+        columnDefs: [
+            { targets: "_all", className: "dt-right", render: DataTable.render.text() }
+        ],
+        "searchCols": [
+            { "search": "dbddef09-d624-41c5-904b-6ebe38329842" },
+            undefined,
+            { "search": "flexy" },
+        ],
+        'columns': [
+            { data: 'created_by', visible: false, defaultContent: "" },// Used to search for users
+            { data: 'created_at', visible: false },
+            { data: 'category', visible: false },// Used to search for category
+            { title: "النوع", data: 'type', className: "type-td" },
+            { title: "المبلغ", data: 'amount', className: "balance-td add-currency-td" },
+            { title: "الحالة", data: 'status', className: "status-td" },
+            { title: "رقم الهاتف", data: 'param_1', },
+            { title: "إسم العرض", data: 'item_name', className: "item_name-td" },
+            { title: "تفاصيل", data: 'message' },
+            //{ title: 'المبلغ المقتطع', data: 'item_price' },
+            //{ title: 'رصيدي قبل', data: 'balance_before' },
+            //{ title: 'رصيدي بعد', data: 'balance_after' },
+            { title: "تاريخ العملية", data: 'created_at' },
+        ],
+        "order": [1, 'desc'],
+        "language": { "url": `/js/ar.json` },
+        "bInfo": false
+    });
+</script>
+
+<script>
+    // Time to refresh the table whene there is a pending operation
+    const REFRESH_TABLE_TIME = 3_000
+    // Set of penidng opearions (used to playsound)
+    const PENDING_OPERATIONS_SET = new Set();
+
+    var table = $('#transactionsTable').DataTable();
+    $('#transactionsTable').on('draw.dt', function () {
+        $('td.type-td').each(function () {
+            let data = table.row($(this).parents('tr')).data()
+            let sub_type = data.sub_type == "flexy_offer" ? "عرض" : "رصيد"
+
+            switch ($(this).text()) {
+                case "mobilis":
+                    $(this).html('<img src="/images/logo_mobilis.png" alt="Mobilis logo" class="operation-logo"> ' + sub_type)
+                    break;
+                case "djezzy":
+                    $(this).html('<img src="/images/logo_djezzy.png" alt="Djezzy logo" class="operation-logo"> ' + sub_type)
+                    break;
+                case "ooredoo":
+                    $(this).html('<img src="/images/logo_ooredoo.png" alt="Ooredoo logo" class="operation-logo"> ' + sub_type)
+                    break;
+            }
+        });
+
+        $('td.status-td').each(function () {
+            switch ($(this).text()) {
+                case "success":
+                    $(this).html('<span class="badge bg-success">ناجحة</span>')
+                    break;
+                case "error":
+                    $(this).html('<span class="badge bg-danger">فاشلة</span>')
+                    break;
+                case "pending":
+                    $(this).html('<span class="spinner-border text-primary" role="status"></span>')
+                    break;
+            }
+        });
+
+        $('td.item_name-td').each(function () {
+            switch ($(this).text()) {
+                case "Normal":
+                    $(this).html("عادي")
+                    break;
+                case "Sabbaqli":
+                    $(this).html("سبقلي")
+                    break;
+                case "Enterprise":
+                    $(this).html("الشركات")
+                    break;
+                case "International":
+                    $(this).html("دولي")
+                    break;
+                case "Facture":
+                    $(this).html("فاتورة")
+                    break;
+            }
+        });
+
+        // Redraw the table if there is a pending operation
+        for (let i = 0; i < table.data().length; i++) {
+            const e = table.data()[i];
+            if (e.status == 'pending') {
+                setTimeout(() => {
+                    table.ajax.reload(null, false);
+                    updateBalanceSpan()
+                }, REFRESH_TABLE_TIME);
+                break
+            }
+        }
+
+        // Used to playsound
+        for (let i = 0; i < table.data().length; i++) {
+            const e = table.data()[i];
+            if (e.status == 'pending') {
+                PENDING_OPERATIONS_SET.add(e.id)
+            } else if (PENDING_OPERATIONS_SET.has(e.id)) {
+                PENDING_OPERATIONS_SET.delete(e.id)
+                let soundCode = e.status == "success" ? "SUCCESS" : "ERROR"
+                playSound(soundCode)
+            }
+        }
+    })
+</script>
+
+<script>
+    var getContactModal = new bootstrap.Modal(document.getElementById('getContactModal'))
+    document.getElementById('getContactModal')
+        .addEventListener('shown.bs.modal', function (event) {
+            $('#contact-search-input').focus()
+        })
+
+    $('#contact-search-input').autocomplete({
+        filter: RACINE_PATH + '/searchForContacts?type=flexy&q=#QUERY#',
+        onItemRendered(el, item) {
+            let result = JSON.parse(item.text)
+            item.dataset.number = result.number
+            item.dataset.name = result.name
+            item.text = `${result.name} (${result.number})`
+        },
+        onPick(el, item) {
+            getContactModal.hide()
+            $("#phoneNumber").val(item.dataset.number).change()
+            $("#phoneNumber-tooltip").text(item.dataset.name)
+            $('#contact-search-input').val("")
+        }
+    })
+</script>
+
+<style>
+    #phoneNumber {
+        font-size: 3vmax;
+        letter-spacing: 0.2vmax;
+    }
+
+    #operatorLogo {
+        width: 5vmax;
+        height: 5vmax;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    #phoneNumberInputGroupe {
+        width: 35vmax;
+        box-shadow: 0px 0px 10px gray;
+        border-radius: 10px;
+    }
+
+    #phoneNumberInputGroupe .input-group-text {
+        padding: 0.4vmax;
+    }
+
+    #phoneNumberInputGroupe input,
+    #phoneNumberInputGroupe span {
+        border-color: #5f61e6;
+        border-width: 1px;
+    }
+
+    #amount {
+        font-size: 2.5vmax;
+        letter-spacing: 0.2vmax;
+    }
+
+    #amountInputGroupe {
+        width: 20vmax;
+    }
+
+    #amountInputGroupe .input-group-text {
+        font-size: 2vmax;
+    }
+</style>
+
+          

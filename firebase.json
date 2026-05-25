@@ -1,0 +1,20 @@
+{
+  "hosting": {
+    "public": "Cloud_Portal_Ready",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "api"
+      }
+    ]
+  },
+  "functions": {
+    "source": ".",
+    "runtime": "nodejs20"
+  }
+}
