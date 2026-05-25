@@ -119,10 +119,15 @@
       const errorMsg = document.getElementById('error-msg');
       errorMsg.style.display = 'none';
 
+      const API_BASE = window.location.hostname.includes('localhost') ? '' : 'https://tobalflexy-app-dz.loca.lt';
+
       try {
-        const response = await fetch('/api/admin/login', {
+        const response = await fetch(API_BASE + '/api/admin/login', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Bypass-Tunnel-Reminder': 'true'
+          },
           body: JSON.stringify({ password })
         });
         
