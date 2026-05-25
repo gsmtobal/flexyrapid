@@ -6,7 +6,8 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-builder",
-    "serve": "node server.js"
+    "serve": "node server.js",
+    "serve:cloud": "node server_cloud.js"
   },
   "dependencies": {
     "@dzcode-io/leblad": "^1.0.3",

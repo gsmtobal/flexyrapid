@@ -21,4 +21,4 @@ ENV PORT=3002
 ENV NODE_ENV=production
 
 # Start the application
-CMD ["npm", "run", "serve"]
+CMD ["npm", "run", "serve:cloud"]

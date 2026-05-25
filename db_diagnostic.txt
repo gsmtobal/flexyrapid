@@ -1,5 +1,5 @@
 === DATABASE DIAGNOSTIC LOG ===
-Date: 2026-05-25T11:37:35.450Z
+Date: 2026-05-25T22:58:07.956Z
 Database Path: C:\Users\wahab phone\AppData\Roaming\tobal-flexy-desktop\superm_clone.db
 
 --- Settings Table ---

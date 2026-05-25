@@ -6,18 +6,23 @@ if (!adminToken && !window.location.pathname.endsWith('login.html')) {
   window.location.href = 'login.html';
 }
 
+const API_BASE = window.location.hostname.includes('localhost') ? '' : 'https://tobalflexy-app-dz.loca.lt';
+
 // Request Helper
 async function apiRequest(url, method = 'GET', body = null) {
   const options = {
     method,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': adminToken
+      'Authorization': adminToken,
+      'Bypass-Tunnel-Reminder': 'true'
     }
   };
   if (body) {
     options.body = JSON.stringify(body);
   }
+  
+  const fullUrl = url.startsWith('http') ? url : API_BASE + url;
   
   try {
     const response = await fetch(url, options);
